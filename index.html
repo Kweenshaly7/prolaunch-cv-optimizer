@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Content Security Policy to allow API calls, styles, and fonts -->
+    <meta http-equiv="Content-Security-Policy"
+          content="default-src 'self';
+                   script-src 'self' 'unsafe-inline' https://cdn.tailwindcss.com https://fonts.googleapis.com;
+                   style-src 'self' 'unsafe-inline' https://fonts.googleapis.com;
+                   font-src 'self' https://fonts.gstatic.com;
+                   connect-src 'self' https://generativelanguage.googleapis.com;
+                   img-src 'self' https://placehold.co data:;
+                   object-src 'none';">
+    <title>ProLaunch CV Optimizer</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Load Playfair Display and Lato fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Lato', sans-serif;
+            background-color: #f8faf9; /* Cloud Gray */
+            color: #124745; /* Forest (Deep Base) */
+        }
+        h1, h2, h3, h4, h5, h6 {
+            font-family: 'Playfair Display', serif;
+        }
+        /* Custom colors based on brand guide */
+        .bg-prolaunch-green { background-color: #7bb640; }
+        .bg-prolaunch-teal { background-color: #19a08c; }
+        .bg-prolaunch-forest { background-color: #124745; }
+        .text-prolaunch-green { color: #7bb640; }
+        .text-prolaunch-teal { color: #19a08c; }
+        .text-prolaunch-forest { color: #124745; }
+        .border-prolaunch-green { border-color: #7bb640; }
+        .border-prolaunch-teal { border-color: #19a08c; }
+
+        .hover\:bg-prolaunch-green-dark:hover { background-color: #6aa335; } /* Slightly darker green for hover */
+        .hover\:bg-prolaunch-teal-dark:hover { background-color: #158f7d; } /* Slightly darker teal for hover */
+    </style>
+</head>
+<body class="min-h-screen flex flex-col">
+
+    <header class="bg-white shadow-sm py-6">
+        <div class="container mx-auto px-4 flex flex-col md:flex-row items-center justify-center md:justify-start space-y-4 md:space-y-0">
+            <!-- Logo Placeholder - Replace src with your actual logo URL -->
+            <img src="Prolaunch-Careers-logo-(2)/200x80/ffffff/124745?text=ProLaunch+Logo" alt="ProLaunch Careers Logo" class="h-16 w-auto md:mr-6">
+            <h1 class="text-3xl md:text-4xl font-bold text-prolaunch-forest text-center md:text-left">
+                ProLaunch Careers CV Optimizer
+            </h1>
+        </div>
+    </header>
+
+    <main class="flex-grow container mx-auto px-4 py-8 max-w-4xl">
+        <div class="bg-white shadow-lg rounded-lg p-6 md:p-8">
+            <p class="text-lg mb-6 text-center text-gray-700">
+                Paste your current CV and the job description you're applying for. Our AI will generate an optimized, professional CV, a matching cover letter, and personalized tips just for you.
+            </p>
+
+            <div class="space-y-6">
+                <!-- Job Role Input -->
+                <div>
+                    <label for="jobRole" class="block text-lg font-semibold text-prolaunch-forest mb-2">
+                        Desired Job Role Title <span class="text-prolaunch-green">*</span>
+                    </label>
+                    <input type="text" id="jobRole" placeholder="e.g., Senior Marketing Manager, Data Analyst"
+                              class="w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-prolaunch-teal focus:border-transparent outline-none"
+                              required>
+                </div>
+
+                <!-- CV Input -->
+                <div>
+                    <label for="cvInput" class="block text-lg font-semibold text-prolaunch-forest mb-2">
+                        Paste Your Current CV <span class="text-prolaunch-green">*</span>
+                    </label>
+                    <textarea id="cvInput" rows="10"
+                              class="w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-prolaunch-teal focus:border-transparent outline-none resize-y"
+                              placeholder="Copy and paste the full text of your CV here..."></textarea>
+                </div>
+
+                <!-- Job Description Input -->
+                <div>
+                    <label for="jdInput" class="block text-lg font-semibold text-prolaunch-forest mb-2">
+                        Paste Job Description (Highly Recommended)
+                    </label>
+                     <p class="text-sm text-gray-500 mb-2">For best results, include the full job post to tailor specifically for it.</p>
+                    <textarea id="jdInput" rows="6"
+                              class="w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-prolaunch-teal focus:border-transparent outline-none resize-y"
+                              placeholder="Copy and paste the job description here..."></textarea>
+                </div>
+
+                <!-- Action Button -->
+                <div class="flex justify-center pt-4">
+                    <button id="generateBtn" onclick="handleGenerate()"
+                            class="bg-prolaunch-green hover:bg-prolaunch-green-dark text-white text-xl font-bold py-4 px-10 rounded-full shadow-md transition duration-300 ease-in-out transform hover:-translate-y-1 flex items-center">
+                        <span>🚀 Launch My Career Docs</span>
+                        <!-- Loading Spinner (Hidden by default) -->
+                        <svg id="loadingSpinner" class="animate-spin ml-3 h-6 w-6 text-white hidden" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Results Section (Hidden initially) -->
+            <div id="resultsArea" class="hidden mt-12 space-y-12 border-t-2 border-gray-100 pt-12">
+
+                <!-- CV Result -->
+                <div>
+                    <div class="flex items-center justify-between mb-4">
+                        <h2 class="text-2xl font-bold text-prolaunch-forest">Optimized CV</h2>
+                         <button onclick="downloadDoc('optimized-cv', 'Optimized_CV.doc')"
+                                class="bg-prolaunch-teal hover:bg-prolaunch-teal-dark text-white font-bold py-2 px-4 rounded-md flex items-center transition duration-300">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
+                                <path fill-rule="evenodd" d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm3.293-7.707a1 1 0 011.414 0L9 10.586V3a1 1 0 112 0v7.586l1.293-1.293a1 1 0 111.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 010-1.414z" clip-rule="evenodd" />
+                            </svg>
+                            Download .DOC
+                        </button>
+                    </div>
+                    <div id="optimized-cv" class="bg-gray-50 p-6 border border-gray-200 rounded-md whitespace-pre-wrap font-mono text-sm h-96 overflow-y-auto"></div>
+                </div>
+
+                <!-- Cover Letter Result -->
+                 <div>
+                    <div class="flex items-center justify-between mb-4">
+                        <h2 class="text-2xl font-bold text-prolaunch-forest">Matching Cover Letter</h2>
+                         <button onclick="downloadDoc('cover-letter', 'Cover_Letter.doc')"
+                                class="bg-prolaunch-teal hover:bg-prolaunch-teal-dark text-white font-bold py-2 px-4 rounded-md flex items-center transition duration-300">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
+                                <path fill-rule="evenodd" d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm3.293-7.707a1 1 0 011.414 0L9 10.586V3a1 1 0 112 0v7.586l1.293-1.293a1 1 0 111.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 010-1.414z" clip-rule="evenodd" />
+                            </svg>
+                            Download .DOC
+                        </button>
+                    </div>
+                    <div id="cover-letter" class="bg-gray-50 p-6 border border-gray-200 rounded-md whitespace-pre-wrap font-mono text-sm h-96 overflow-y-auto"></div>
+                </div>
+
+                <!-- CV Tips & Pointers Result -->
+                <div>
+                    <div class="flex items-center justify-between mb-4">
+                        <h2 class="text-2xl font-bold text-prolaunch-forest">Your Personalized CV Tips</h2>
+                        <button onclick="downloadDoc('cv-tips', 'CV_Tips.doc')"
+                                class="bg-prolaunch-teal hover:bg-prolaunch-teal-dark text-white font-bold py-2 px-4 rounded-md flex items-center transition duration-300">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
+                                <path fill-rule="evenodd" d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm3.293-7.707a1 1 0 011.414 0L9 10.586V3a1 1 0 112 0v7.586l1.293-1.293a1 1 0 111.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 010-1.414z" clip-rule="evenodd" />
+                            </svg>
+                            Download .DOC
+                        </button>
+                    </div>
+                    <div class="bg-blue-50 p-6 border-l-4 border-prolaunch-teal rounded-r-md">
+                        <p class="text-prolaunch-forest mb-4 font-semibold">
+                            Based on your original CV, here are some key areas identified for improvement and why the new version is stronger:
+                        </p>
+                        <div id="cv-tips" class="whitespace-pre-wrap text-gray-800"></div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </main>
+
+    <footer class="bg-prolaunch-forest text-white py-6 text-center">
+        <p class="text-sm md:text-base">
+            Built by <span class="font-bold text-prolaunch-green">Mary-Queen Uchechukwu</span> for <span class="font-bold">ProLaunch Careers</span>
+        </p>
+        <p class="text-xs mt-2 text-gray-300">&copy; <script>document.write(new Date().getFullYear())</script> ProLaunch Careers. All rights reserved.</p>
+    </footer>
+
+    <!-- Toast Notification Container -->
+    <div id="toast" class="fixed bottom-5 right-5 px-6 py-4 rounded-md shadow-lg transform translate-y-full opacity-0 transition-all duration-500 text-white font-semibold z-50"></div>
+
+    <script>
+        // --- CONFIGURATION ---
+        const apiKey = "AIzaSyBHSOcE6vUVRBqTWCGbWo1IeqxD0Tnykd0"; // API created under AI-studio-project
+        const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${apiKey}`;
+
+        // --- DOM ELEMENTS ---
+        const generateBtn = document.getElementById('generateBtn');
+        const loadingSpinner = document.getElementById('loadingSpinner');
+        const resultsArea = document.getElementById('resultsArea');
+        const cvOutput = document.getElementById('optimized-cv');
+        const clOutput = document.getElementById('cover-letter');
+        const tipsOutput = document.getElementById('cv-tips');
+        const toast = document.getElementById('toast');
+
+        // --- MAIN FUNCTION ---
+        async function handleGenerate() {
+            const originalCv = document.getElementById('cvInput').value.trim();
+            const jobDesc = document.getElementById('jdInput').value.trim();
+            const jobRole = document.getElementById('jobRole').value.trim();
+
+            if (!jobRole) {
+                showMessage("Please enter a desired Job Role Title.", true);
+                return;
+            }
+
+            if (!originalCv) {
+                showMessage("Please paste your CV first.", true);
+                return;
+            }
+
+            // --- Set Loading State ---
+            generateBtn.disabled = true;
+            generateBtn.querySelector('span').textContent = "Analyzing & Optimizing...";
+            loadingSpinner.classList.remove('hidden');
+            resultsArea.classList.add('hidden'); // Hide previous results
+
+            try {
+                // 1. Generate CV
+                const cvPrompt = `
+                    Act as an expert professional CV writer and career coach.
+                    Your task is to rewrite the following CV to be highly optimized for Applicant Tracking Systems (ATS) and tailored for the role of "${jobRole}".
+                    ${jobDesc ? `Use the provided job description to identify key skills and keywords to incorporate naturally.` : 'Focus on standard industry keywords and best practices for this role.'}
+
+                    STRICT RULES:
+                    - Use a clean, standard, chronological format.
+                    - NO fancy formatting, tables, columns, or graphics. Plain text only.
+                    - Use standard section headings: Professional Summary, Core Competencies, Professional Experience, Education, Certifications (if any).
+                    - Write a compelling Professional Summary (3-4 lines max) that highlights relevant experience for a ${jobRole} role.
+                    - For 'Professional Experience', use strong action verbs and quantify achievements where possible (e.g., "Increased sales by 20%").
+                    - Ensure standard fonts and simple bullet points are used (represented as standard dashes or asterisks in plain text).
+
+                    DESIRED ROLE: ${jobRole}
+                    JOB DESCRIPTION: ${jobDesc || "Not provided. Optimize for general ${jobRole} role best practices."}
+                    ORIGINAL CV:
+                    ${originalCv}
+                `;
+                const optimizedCvText = await fetchWithRetry(buildPayload(cvPrompt));
+                cvOutput.textContent = optimizedCvText;
+
+                // 2. Generate Cover Letter
+                const clPrompt = `
+                    Act as an expert career coach. Write a professional and compelling cover letter for the role of "${jobRole}", based on the provided CV and Job Description.
+
+                    STRICT RULES:
+                    - The tone should be professional, enthusiastic, and confident.
+                    - It must be tailored SPECIFICALLY to the job description (if provided) and the user's matching skills from their CV.
+                    - Use a standard business letter format.
+                    - Address it to "Hiring Manager" if no name is specifically found in the job description.
+                    - Keep it concise (3-4 paragraphs maximum).
+                    - The opening paragraph should state the position applied for and express strong interest.
+                    - The middle paragraphs should connect the candidate's key achievements (from CV) directly to the requirements in the job description.
+                    - The closing paragraph should reiterate enthusiasm and request an interview.
+
+                    DESIRED ROLE: ${jobRole}
+                    JOB DESCRIPTION: ${jobDesc || "Not provided. Write a general, strong cover letter for a ${jobRole} position."}
+                    CANDIDATE'S CV:
+                    ${originalCv}
+                `;
+                const coverLetterText = await fetchWithRetry(buildPayload(clPrompt));
+                clOutput.textContent = coverLetterText;
+
+                // 3. Generate CV Tips & Pointers
+                const tipsPrompt = `
+                    Act as a senior hiring manager and CV expert. Review the ORIGINAL CV provided below and provide 3-5 specific, actionable tips on how it was improved to create the new optimized version, and what the candidate should keep in mind for future applications for a "${jobRole}" role.
+
+                    FORMAT:
+                    - Provide exactly 3 to 5 bullet points.
+                    - Be encouraging but direct and professional.
+                    - Focus on high-impact areas like: lack of quantified results, vague skills, poor formatting (that might confuse ATS), or irrelevant information that was removed.
+                    - Example tone: "Your original summary was a bit vague. The new version specifically highlights your X years of experience in Y, which instantly grabs a recruiter's attention."
+
+                    DESIRED ROLE: ${jobRole}
+                    ORIGINAL CV TO REVIEW:
+                    ${originalCv}
+                `;
+                const tipsText = await fetchWithRetry(buildPayload(tipsPrompt));
+                tipsOutput.textContent = tipsText;
+
+
+                // --- Show Results ---
+                resultsArea.classList.remove('hidden');
+                // Scroll to results
+                resultsArea.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                showMessage("Success! Your documents are ready.", false);
+
+            } catch (error) {
+                console.error("Error during generation:", error); // Log the full error
+                showMessage(`An error occurred: ${error.message}. Please try again.`, true);
+            } finally {
+                // --- Reset Loading State ---
+                generateBtn.disabled = false;
+                generateBtn.querySelector('span').textContent = "🚀 Launch My Career Docs";
+                loadingSpinner.classList.add('hidden');
+            }
+        }
+
+        // --- HELPER FUNCTIONS ---
+
+        function buildPayload(prompt) {
+            return {
+                contents: [{ parts: [{ text: prompt }] }]
+            };
+        }
+
+        /**
+         * Fetches data from the API with a retry mechanism for robustness.
+         * @param {object} payload - The request body.
+         * @param {number} retries - Number of retry attempts.
+         * @param {number} delay - Delay in ms between retries.
+         * @returns {Promise<string>} - The generated text content.
+         */
+        async function fetchWithRetry(payload, retries = 3, delay = 1000) {
+            // Log the request URL and a payload snippet for debugging
+            console.log(`Attempting to fetch: ${apiUrl.split('?')[0]}?key=...`);
+            // console.log("Payload snippet:", JSON.stringify(payload).substring(0, 100) + "..."); // Optional: log payload
+
+            try {
+                const response = await fetch(apiUrl, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+
+                if (!response.ok) {
+                    // Try to parse a more specific error message from the API response
+                    let errorBody = 'Could not parse error body';
+                    try {
+                        const errorJson = await response.json();
+                        errorBody = errorJson.error ? errorJson.error.message : JSON.stringify(errorJson);
+                    } catch (e) {
+                        // Ignore parsing error, stick with the status text
+                    }
+                    console.error(`API Error (${response.status}):`, errorBody);
+                    throw new Error(`API Error: ${response.status} ${response.statusText}. Details: ${errorBody}`);
+                }
+
+                const result = await response.json();
+                const text = result.candidates?.[0]?.content?.parts?.[0]?.text;
+
+                if (!text) {
+                    console.error("API Success, but no text content received. Full response:", result);
+                    throw new Error("No text content returned from API. Please try again.");
+                }
+
+                return text;
+
+            } catch (error) {
+                console.warn(`Fetch attempt failed. Retries left: ${retries}. Error:`, error);
+
+                if (retries > 0) {
+                    await new Promise(res => setTimeout(res, delay));
+                    return fetchWithRetry(payload, retries - 1, delay * 2); // Exponential backoff
+                } else {
+                    // Re-log the specific error, as this is the most likely culprit
+                    console.error("All fetch retries failed. This is likely a network, CORS, or CSP issue. See details:", error);
+                    // Throw a more descriptive error after all retries fail
+                    throw new Error("Network error or request blocked (CORS/CSP?). Check browser console for more details.");
+                }
+            }
+        }
+
+        function downloadDoc(elementId, filename) {
+            const content = document.getElementById(elementId).innerText;
+            // Simple HTML wrapper to encourage Word to open it correctly as a .doc
+            const htmlContent = `
+                <html xmlns:o='urn:schemas-microsoft-com:office:office' xmlns:w='urn:schemas-microsoft-com:office:word' xmlns='http://www.w3.org/TR/REC-html40'>
+                <head><meta charset='utf-8'><title>${filename}</title>
+                <style>body { font-family: 'Calibri', 'Arial', sans-serif; font-size: 11pt; }</style>
+                </head><body>${content.replace(/\n/g, '<br>')}</body></html>
+            `;
+
+            const blob = new Blob(['\ufeff', htmlContent], {
+                type: 'application/msword'
+            });
+
+            // Create download link
+            const url = URL.createObjectURL(blob);
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = filename;
+            document.body.appendChild(link);
+            link.click();
+
+            // Cleanup
+            document.body.removeChild(link);
+            URL.revokeObjectURL(url);
+        }
+
+        function showMessage(message, isError) {
+            toast.textContent = message;
+            toast.classList.remove('translate-y-full', 'opacity-0', 'bg-prolaunch-green', 'bg-red-500');
+            toast.classList.add(isError ? 'bg-red-500' : 'bg-prolaunch-green');
+
+            // Show toast
+            setTimeout(() => {
+                toast.classList.remove('translate-y-full', 'opacity-0');
+            }, 10);
+
+            // Hide toast after 4 seconds
+            setTimeout(() => {
+                toast.classList.add('translate-y-full', 'opacity-0');
+            }, 4000);
+        }
+    </script>
+</body>
+</html>
