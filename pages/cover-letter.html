@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cover Letter Generator | ProLaunch Careers</title>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+  <style>
+    :root{--green:#7bb640;--green-dark:#6aa335;--teal:#19a08c;--teal-dark:#158f7d;--forest:#124745;--cream:#f7f9f4;--border:#e2ead8;--gray:#6b7280;}
+    *{box-sizing:border-box;margin:0;padding:0;}
+    body{font-family:'DM Sans',sans-serif;background:var(--cream);color:var(--forest);}
+    h1,h2,h3{font-family:'Syne',sans-serif;}
+    nav{background:white;border-bottom:2px solid var(--border);padding:0.85rem 2rem;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;box-shadow:0 2px 12px rgba(18,71,69,0.06);flex-wrap:wrap;gap:0.5rem;}
+    .nav-logo{display:flex;align-items:center;gap:0.65rem;text-decoration:none;}
+    .nav-logo img{height:40px;}
+    .nav-logo span{font-family:'Syne',sans-serif;font-weight:800;font-size:1rem;color:var(--forest);}
+    .nav-links{display:flex;align-items:center;gap:0.5rem;flex-wrap:wrap;}
+    .nav-pill{font-family:'Syne',sans-serif;font-size:0.78rem;font-weight:700;color:var(--forest);text-decoration:none;padding:0.35rem 0.85rem;border-radius:50px;border:1.5px solid var(--border);transition:all 0.2s;white-space:nowrap;}
+    .nav-pill:hover,.nav-pill.active{background:var(--teal);color:white;border-color:var(--teal);}
+    .page-header{background:linear-gradient(135deg,#0f3d3b 0%,var(--teal-dark) 100%);color:white;padding:3rem 2rem 2.5rem;text-align:center;}
+    .badge{display:inline-block;background:rgba(25,160,140,0.25);border:1px solid rgba(25,160,140,0.5);color:#6ee7d8;font-size:0.72rem;font-weight:700;padding:0.3rem 0.9rem;border-radius:50px;margin-bottom:1rem;letter-spacing:0.07em;text-transform:uppercase;}
+    .page-header h1{font-size:clamp(1.8rem,4vw,2.8rem);font-weight:800;margin-bottom:0.6rem;}
+    .page-header p{color:rgba(255,255,255,0.7);font-size:0.95rem;max-width:480px;margin:0 auto;line-height:1.6;}
+    main{max-width:860px;margin:0 auto;padding:2.5rem 1.5rem;}
+    .card{background:white;border-radius:20px;padding:2rem;border:2px solid var(--border);margin-bottom:1.5rem;}
+    label{display:block;font-family:'Syne',sans-serif;font-weight:700;font-size:0.9rem;color:var(--forest);margin-bottom:0.5rem;}
+    .req{color:var(--teal);}
+    input[type=text],textarea,select{width:100%;padding:0.8rem 1rem;border:2px solid #e2e8f0;border-radius:12px;font-family:'DM Sans',sans-serif;font-size:0.9rem;color:var(--forest);outline:none;transition:border-color 0.2s;resize:vertical;appearance:none;}
+    input[type=text]:focus,textarea:focus,select:focus{border-color:var(--teal);}
+    .hint{font-size:0.8rem;color:#9ca3af;margin-bottom:0.5rem;}
+    .two-col{display:grid;grid-template-columns:1fr 1fr;gap:1.25rem;}
+    @media(max-width:540px){.two-col{grid-template-columns:1fr;}}
+    .btn-generate{width:100%;background:var(--teal);color:white;font-family:'Syne',sans-serif;font-weight:800;font-size:1.05rem;padding:1rem 2rem;border-radius:50px;border:none;cursor:pointer;transition:all 0.2s;display:flex;align-items:center;justify-content:center;gap:0.75rem;box-shadow:0 4px 20px rgba(25,160,140,0.3);}
+    .btn-generate:hover:not(:disabled){background:var(--teal-dark);transform:translateY(-2px);}
+    .btn-generate:disabled{opacity:0.7;cursor:not-allowed;}
+    .spinner{width:20px;height:20px;border:3px solid rgba(255,255,255,0.3);border-top-color:white;border-radius:50%;animation:spin 0.7s linear infinite;display:none;}
+    @keyframes spin{to{transform:rotate(360deg);}}
+    .results{display:none;margin-top:2rem;}
+    .result-block{background:white;border-radius:20px;border:2px solid var(--border);overflow:hidden;margin-bottom:1.5rem;}
+    .result-header{display:flex;align-items:center;justify-content:space-between;padding:1.25rem 1.5rem;border-bottom:2px solid var(--border);}
+    .result-header h3{font-size:1rem;font-weight:700;color:var(--forest);}
+    .btn-download{background:var(--teal);color:white;font-family:'Syne',sans-serif;font-weight:700;font-size:0.8rem;padding:0.45rem 1rem;border-radius:50px;border:none;cursor:pointer;transition:all 0.2s;}
+    .btn-download:hover{background:var(--teal-dark);}
+    .result-body{padding:1.5rem;font-size:0.875rem;line-height:1.8;white-space:pre-wrap;color:#374151;max-height:500px;overflow-y:auto;background:#fafafa;}
+    footer{background:var(--forest);color:white;padding:1.75rem 2rem;text-align:center;margin-top:3rem;}
+    footer p{font-size:0.83rem;color:rgba(255,255,255,0.6);}
+    footer span{color:var(--green);font-weight:700;}
+    @media(max-width:500px){.nav-logo span{display:none;}.nav-pill{font-size:0.7rem;padding:0.28rem 0.65rem;}}
+  </style>
+</head>
+<body>
+  <nav>
+    <a href="dashboard.html" class="nav-logo">
+      <img src="../logo2.png" alt="ProLaunch">
+      <span>ProLaunch Careers</span>
+    </a>
+    <div class="nav-links">
+      <a href="cv-optimizer.html" class="nav-pill">📄 Resume</a>
+      <a href="cover-letter.html" class="nav-pill active">✉️ Cover Letter</a>
+      <a href="interview-prep.html" class="nav-pill">🎯 Interview</a>
+      <a href="career-insights.html" class="nav-pill">💡 Insights</a>
+    </div>
+  </nav>
+
+  <div class="page-header">
+    <div class="badge">✉️ Cover Letter Generator</div>
+    <h1>Write My Cover Letter</h1>
+    <p>Generate a compelling, job-specific cover letter that connects your experience directly to what the employer wants.</p>
+  </div>
+
+  <main>
+    <div class="card">
+      <div class="two-col" style="margin-bottom:1.5rem;">
+        <div>
+          <label for="jobRole">Job Role / Title <span class="req">*</span></label>
+          <input type="text" id="jobRole" placeholder="e.g., Marketing Manager">
+        </div>
+        <div>
+          <label for="companyName">Company Name <span style="color:#9ca3af;font-weight:400;">(Optional)</span></label>
+          <input type="text" id="companyName" placeholder="e.g., Flutterwave">
+        </div>
+      </div>
+      <div style="margin-bottom:1.5rem;">
+        <label for="cvInput">Paste Your CV <span class="req">*</span></label>
+        <textarea id="cvInput" rows="8" placeholder="Copy and paste your CV here..."></textarea>
+      </div>
+      <div style="margin-bottom:1.5rem;">
+        <label for="jdInput">Paste Job Description <span style="color:#9ca3af;font-weight:400;">(Highly Recommended)</span></label>
+        <p class="hint">The more specific the job description, the more tailored your cover letter will be.</p>
+        <textarea id="jdInput" rows="6" placeholder="Paste the full job description here..."></textarea>
+      </div>
+      <div style="margin-bottom:2rem;">
+        <label for="toneSelect">Tone</label>
+        <select id="toneSelect">
+          <option value="professional and confident">Professional & Confident (Default)</option>
+          <option value="enthusiastic and energetic">Enthusiastic & Energetic</option>
+          <option value="formal and structured">Formal & Structured</option>
+          <option value="warm and personable">Warm & Personable</option>
+        </select>
+      </div>
+      <button class="btn-generate" id="generateBtn" onclick="handleGenerate()">
+        <span id="btnText">✉️ Generate My Cover Letter</span>
+        <div class="spinner" id="spinner"></div>
+      </button>
+    </div>
+
+    <div class="results" id="results">
+      <div class="result-block">
+        <div class="result-header">
+          <h3>✉️ Your Cover Letter</h3>
+          <button class="btn-download" onclick="downloadDoc('cover-letter-output','Cover_Letter.doc')">⬇ Download .DOC</button>
+        </div>
+        <div class="result-body" id="cover-letter-output"></div>
+      </div>
+    </div>
+  </main>
+
+  <footer>
+    <p>Built by <span>Mary-Queen Uchechukwu</span> for ProLaunch Careers</p>
+    <p style="margin-top:0.3rem;">&copy; <script>document.write(new Date().getFullYear())</script> ProLaunch Careers. All rights reserved.</p>
+  </footer>
+
+  <script src="../shared.js"></script>
+  <script>
+    // Premium gate
+    if (!PL.hasBiodata()) { window.location.href = '../index.html'; }
+    else if (!PL.isPremium()) { window.location.href = 'dashboard.html'; }
+
+    // Pre-fill from saved profile
+    window.addEventListener('DOMContentLoaded', () => {
+      const user = PL.getBiodata();
+      if (user?.role) document.getElementById('jobRole').value = user.role;
+      if (user?.cvText && user.cvText.length > 50) document.getElementById('cvInput').value = user.cvText;
+    });
+
+    async function handleGenerate() {
+      const jobRole = document.getElementById('jobRole').value.trim();
+      const company = document.getElementById('companyName').value.trim();
+      const cv = document.getElementById('cvInput').value.trim();
+      const jd = document.getElementById('jdInput').value.trim();
+      const tone = document.getElementById('toneSelect').value;
+      if (!jobRole) { PL.toast('Please enter a Job Role.', 'error'); return; }
+      if (!cv) { PL.toast('Please paste your CV.', 'error'); return; }
+      setLoading(true);
+      document.getElementById('results').style.display = 'none';
+      try {
+        const text = await PL.callAI(`Write a ${tone} cover letter for the role of "${jobRole}"${company ? ` at ${company}` : ''}.
+Rules: Address to "${company ? `the Hiring Manager at ${company}` : 'Hiring Manager'}". Standard business letter format. 3-4 paragraphs. Opening states role and strong interest. Middle connects candidate achievements to job requirements. Closing requests interview.
+JOB DESCRIPTION: ${jd || 'Not provided — write a strong general cover letter.'}
+CANDIDATE CV: ${cv}`);
+        document.getElementById('cover-letter-output').textContent = text;
+        document.getElementById('results').style.display = 'block';
+        document.getElementById('results').scrollIntoView({ behavior: 'smooth' });
+        PL.toast('✅ Cover letter ready!', 'success');
+      } catch (e) { PL.toast(e.message, 'error'); }
+      finally { setLoading(false); }
+    }
+
+    function setLoading(on) {
+      document.getElementById('generateBtn').disabled = on;
+      document.getElementById('btnText').textContent = on ? 'Writing your letter...' : '✉️ Generate My Cover Letter';
+      document.getElementById('spinner').style.display = on ? 'block' : 'none';
+    }
+
+    function downloadDoc(id, filename) {
+      const content = document.getElementById(id).innerText;
+      PL.downloadDoc(content, filename);
+    }
+  </script>
+</body>
+</html>
