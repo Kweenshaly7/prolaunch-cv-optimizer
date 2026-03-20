@@ -11,7 +11,7 @@ export default async function handler(req, res) {
   if (!prompt) return res.status(400).json({ error: "Prompt is required." });
 
   const apiKey = process.env.GOOGLE_API_KEY;
-  const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`;
+  const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-latest:generateContent?key=${apiKey}`;
 
   try {
     const response = await fetch(apiUrl, {
