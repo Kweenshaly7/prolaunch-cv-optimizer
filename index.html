@@ -1,288 +1,446 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <!-- Content Security Policy to allow API calls, styles, and fonts -->
-    <meta http-equiv="Content-Security-Policy"
-          content="default-src 'self';
-                   script-src 'self' 'unsafe-inline' https://cdn.tailwindcss.com https://fonts.googleapis.com;
-                   style-src 'self' 'unsafe-inline' https://fonts.googleapis.com;
-                   font-src 'self' https://fonts.gstatic.com;
-                   connect-src 'self' https://generativelanguage.googleapis.com;
-                   img-src 'self' https://placehold.co data:;
-                   object-src 'none';">
-    <title>ProLaunch CV Optimizer</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Load Playfair Display and Lato fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
-    <style>
-        body {
-            font-family: 'Lato', sans-serif;
-            background-color: #7bb640; /* Cloud Gray */
-            color: #124745; /* Forest (Deep Base) */
-        }
-        h1, h2, h3, h4, h5, h6 {
-            font-family: 'Playfair Display', serif;
-        }
-        /* Custom colors based on brand guide */
-        .bg-prolaunch-green { background-color: #7bb640; }
-        .bg-prolaunch-teal { background-color: #19a08c; }
-        .bg-prolaunch-forest { background-color: #124745; }
-        .text-prolaunch-green { color: #7bb640; }
-        .text-prolaunch-teal { color: #19a08c; }
-        .text-prolaunch-forest { color: #124745; }
-        .border-prolaunch-green { border-color: #7bb640; }
-        .border-prolaunch-teal { border-color: #19a08c; }
-
-        .hover\:bg-prolaunch-green-dark:hover { background-color: #6aa335; } /* Slightly darker green for hover */
-        .hover\:bg-prolaunch-teal-dark:hover { background-color: #158f7d; } /* Slightly darker teal for hover */
-    </style>
-</head>
-<body class="min-h-screen flex flex-col">
-
-    <header class="bg-white shadow-sm py-6">
-        <div class="container mx-auto px-4 flex flex-col md:flex-row items-center justify-center md:justify-start space-y-4 md:space-y-0">
-            <!-- Logo Placeholder - Replace src with your actual logo URL -->
-            <img src="logo2.png" alt="ProLaunch Careers Logo" class="h-16 w-auto md:mr-6">
-            <h1 class="text-3xl md:text-4xl font-bold text-prolaunch-forest text-center md:text-left">
-                ProLaunch Careers CV Optimizer
-            </h1>
-        </div>
-    </header>
-
-    <main class="flex-grow container mx-auto px-4 py-8 max-w-4xl">
-        <div class="bg-white shadow-lg rounded-lg p-6 md:p-8">
-            <p class="text-lg mb-6 text-center text-gray-700">
-                Paste your current CV and the job description you're applying for. Our AI will generate an optimized, professional CV, a matching cover letter, and personalized tips just for you.
-            </p>
-
-            <div class="space-y-6">
-                <!-- Job Role Input -->
-                <div>
-                    <label for="jobRole" class="block text-lg font-semibold text-prolaunch-forest mb-2">
-                        Desired Job Role Title <span class="text-prolaunch-green">*</span>
-                    </label>
-                    <input type="text" id="jobRole" placeholder="e.g., Senior Marketing Manager, Data Analyst"
-                              class="w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-prolaunch-teal focus:border-transparent outline-none"
-                              required>
-                </div>
-
-                <!-- CV Input -->
-                <div>
-                    <label for="cvInput" class="block text-lg font-semibold text-prolaunch-forest mb-2">
-                        Paste Your Current CV <span class="text-prolaunch-green">*</span>
-                    </label>
-                    <textarea id="cvInput" rows="10"
-                              class="w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-prolaunch-teal focus:border-transparent outline-none resize-y"
-                              placeholder="Copy and paste the full text of your CV here..."></textarea>
-                </div>
-
-                <!-- Job Description Input -->
-                <div>
-                    <label for="jdInput" class="block text-lg font-semibold text-prolaunch-forest mb-2">
-                        Paste Job Description (Highly Recommended)
-                    </label>
-                     <p class="text-sm text-gray-500 mb-2">For best results, include the full job post to tailor specifically for it.</p>
-                    <textarea id="jdInput" rows="6"
-                              class="w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-prolaunch-teal focus:border-transparent outline-none resize-y"
-                              placeholder="Copy and paste the job description here..."></textarea>
-                </div>
-
-                <!-- Action Button -->
-                <div class="flex justify-center pt-4">
-                    <button id="generateBtn" onclick="handleGenerate()"
-                            class="bg-prolaunch-green hover:bg-prolaunch-green-dark text-white text-xl font-bold py-4 px-10 rounded-full shadow-md transition duration-300 ease-in-out transform hover:-translate-y-1 flex items-center">
-                        <span>🚀 Launch My Career Docs</span>
-                        <!-- Loading Spinner (Hidden by default) -->
-                        <svg id="loadingSpinner" class="animate-spin ml-3 h-6 w-6 text-white hidden" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                        </svg>
-                    </button>
-                </div>
-            </div>
-
-            <!-- Results Section (Hidden initially) -->
-            <div id="resultsArea" class="hidden mt-12 space-y-12 border-t-2 border-gray-100 pt-12">
-
-                <!-- CV Result -->
-                <div>
-                    <div class="flex items-center justify-between mb-4">
-                        <h2 class="text-2xl font-bold text-prolaunch-forest">Optimized CV</h2>
-                         <button onclick="downloadDoc('optimized-cv', 'Optimized_CV.doc')"
-                                class="bg-prolaunch-teal hover:bg-prolaunch-teal-dark text-white font-bold py-2 px-4 rounded-md flex items-center transition duration-300">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
-                                <path fill-rule="evenodd" d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm3.293-7.707a1 1 0 011.414 0L9 10.586V3a1 1 0 112 0v7.586l1.293-1.293a1 1 0 111.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 010-1.414z" clip-rule="evenodd" />
-                            </svg>
-                            Download .DOC
-                        </button>
-                    </div>
-                    <div id="optimized-cv" class="bg-gray-50 p-6 border border-gray-200 rounded-md whitespace-pre-wrap font-mono text-sm h-96 overflow-y-auto"></div>
-                </div>
-
-                <!-- Cover Letter Result -->
-                 <div>
-                    <div class="flex items-center justify-between mb-4">
-                        <h2 class="text-2xl font-bold text-prolaunch-forest">Matching Cover Letter</h2>
-                         <button onclick="downloadDoc('cover-letter', 'Cover_Letter.doc')"
-                                class="bg-prolaunch-teal hover:bg-prolaunch-teal-dark text-white font-bold py-2 px-4 rounded-md flex items-center transition duration-300">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
-                                <path fill-rule="evenodd" d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm3.293-7.707a1 1 0 011.414 0L9 10.586V3a1 1 0 112 0v7.586l1.293-1.293a1 1 0 111.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 010-1.414z" clip-rule="evenodd" />
-                            </svg>
-                            Download .DOC
-                        </button>
-                    </div>
-                    <div id="cover-letter" class="bg-gray-50 p-6 border border-gray-200 rounded-md whitespace-pre-wrap font-mono text-sm h-96 overflow-y-auto"></div>
-                </div>
-
-                <!-- CV Tips & Pointers Result -->
-                <div>
-                    <div class="flex items-center justify-between mb-4">
-                        <h2 class="text-2xl font-bold text-prolaunch-forest">Your Personalized CV Tips</h2>
-                        <button onclick="downloadDoc('cv-tips', 'CV_Tips.doc')"
-                                class="bg-prolaunch-teal hover:bg-prolaunch-teal-dark text-white font-bold py-2 px-4 rounded-md flex items-center transition duration-300">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
-                                <path fill-rule="evenodd" d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm3.293-7.707a1 1 0 011.414 0L9 10.586V3a1 1 0 112 0v7.586l1.293-1.293a1 1 0 111.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 010-1.414z" clip-rule="evenodd" />
-                            </svg>
-                            Download .DOC
-                        </button>
-                    </div>
-                    <div class="bg-blue-50 p-6 border-l-4 border-prolaunch-teal rounded-r-md">
-                        <p class="text-prolaunch-forest mb-4 font-semibold">
-                            Based on your original CV, here are some key areas identified for improvement and why the new version is stronger:
-                        </p>
-                        <div id="cv-tips" class="whitespace-pre-wrap text-gray-800"></div>
-                    </div>
-                </div>
-
-            </div>
-        </div>
-    </main>
-
-    <footer class="bg-prolaunch-forest text-white py-6 text-center">
-        <p class="text-sm md:text-base">
-            Built by <span class="font-bold text-prolaunch-green">Mary-Queen Uchechukwu</span> for <span class="font-bold">ProLaunch Careers</span>
-        </p>
-        <p class="text-xs mt-2 text-gray-300">&copy; <script>document.write(new Date().getFullYear())</script> ProLaunch Careers. All rights reserved.</p>
-    </footer>
-
-    <!-- Toast Notification Container -->
-    <div id="toast" class="fixed bottom-5 right-5 px-6 py-4 rounded-md shadow-lg transform translate-y-full opacity-0 transition-all duration-500 text-white font-semibold z-50"></div>
-
-    <script>
-        // --- DOM ELEMENTS ---
-const generateBtn = document.getElementById('generateBtn');
-const loadingSpinner = document.getElementById('loadingSpinner');
-const resultsArea = document.getElementById('resultsArea');
-const cvOutput = document.getElementById('optimized-cv');
-const clOutput = document.getElementById('cover-letter');
-const tipsOutput = document.getElementById('cv-tips');
-const toast = document.getElementById('toast');
-
-// --- MAIN FUNCTION ---
-async function handleGenerate() {
-    const originalCv = document.getElementById('cvInput').value.trim();
-    const jobDesc = document.getElementById('jdInput').value.trim();
-    const jobRole = document.getElementById('jobRole').value.trim();
-
-    if (!jobRole) { showMessage("Please enter a desired Job Role Title.", true); return; }
-    if (!originalCv) { showMessage("Please paste your CV first.", true); return; }
-
-    generateBtn.disabled = true;
-    generateBtn.querySelector('span').textContent = "Analyzing & Optimizing...";
-    loadingSpinner.classList.remove('hidden');
-    resultsArea.classList.add('hidden');
-
-    try {
-        const cvPrompt = `Act as an expert professional CV writer and career coach.
-Your task is to rewrite the following CV to be highly optimized for ATS and tailored for the role of "${jobRole}".
-${jobDesc ? `Use the provided job description to identify key skills and keywords to incorporate naturally.` : ''}
-STRICT RULES:
-- Clean, standard, chronological format. NO fancy formatting, tables, or columns.
-- Standard section headings: Professional Summary, Core Competencies, Professional Experience, Education, Certifications (if any).
-- Compelling Professional Summary (3-4 lines max).
-- Strong action verbs and quantified achievements where possible.
-DESIRED ROLE: ${jobRole}
-JOB DESCRIPTION: ${jobDesc || "Not provided."}
-ORIGINAL CV: ${originalCv}`;
-
-        const clPrompt = `Act as an expert career coach. Write a professional cover letter for the role of "${jobRole}".
-STRICT RULES:
-- Professional, enthusiastic, confident tone.
-- Standard business letter format. Address to "Hiring Manager".
-- 3-4 paragraphs maximum.
-DESIRED ROLE: ${jobRole}
-JOB DESCRIPTION: ${jobDesc || "Not provided."}
-CANDIDATE'S CV: ${originalCv}`;
-
-        const tipsPrompt = `Act as a senior hiring manager and CV expert. Review this CV and provide 3-5 specific, actionable improvement tips for a "${jobRole}" role.
-FORMAT: Exactly 3-5 bullet points. Be encouraging but direct.
-DESIRED ROLE: ${jobRole}
-ORIGINAL CV: ${originalCv}`;
-
-        const [optimizedCvText, coverLetterText, tipsText] = await Promise.all([
-            callAPI(cvPrompt),
-            callAPI(clPrompt),
-            callAPI(tipsPrompt)
-        ]);
-
-        cvOutput.textContent = optimizedCvText;
-        clOutput.textContent = coverLetterText;
-        tipsOutput.textContent = tipsText;
-
-        resultsArea.classList.remove('hidden');
-        resultsArea.scrollIntoView({ behavior: 'smooth', block: 'start' });
-        showMessage("Success! Your documents are ready.", false);
-
-    } catch (error) {
-        console.error("Error:", error);
-        showMessage(`An error occurred: ${error.message}. Please try again.`, true);
-    } finally {
-        generateBtn.disabled = false;
-        generateBtn.querySelector('span').textContent = "🚀 Launch My Career Docs";
-        loadingSpinner.classList.add('hidden');
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ProLaunch Careers | AI Career Tools</title>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,400&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --green: #7bb640; --green-dark: #6aa335; --green-pale: #f0f7e8;
+      --teal: #19a08c; --teal-dark: #158f7d;
+      --forest: #124745; --forest-light: #1a5f5c;
+      --cream: #f7f9f4; --white: #ffffff;
+      --gray: #6b7280; --border: #e2ead8;
     }
-}
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body { font-family: 'DM Sans', sans-serif; background: var(--cream); color: var(--forest); overflow-x: hidden; }
+    h1,h2,h3,h4,h5 { font-family: 'Syne', sans-serif; }
 
-// --- CALLS YOUR SECURE BACKEND PROXY ---
-async function callAPI(prompt) {
-    const response = await fetch("/api/generate", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ prompt })
+    /* ─── NAV ─── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      background: rgba(255,255,255,0.95); backdrop-filter: blur(12px);
+      border-bottom: 1.5px solid var(--border);
+      padding: 0.9rem 2rem;
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .nav-brand { display: flex; align-items: center; gap: 0.65rem; text-decoration: none; }
+    .nav-brand img { height: 38px; }
+    .nav-brand span { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 1rem; color: var(--forest); }
+    .nav-btn {
+      background: var(--green); color: white;
+      font-family: 'Syne', sans-serif; font-weight: 700; font-size: 0.85rem;
+      padding: 0.55rem 1.4rem; border-radius: 50px; text-decoration: none;
+      border: none; cursor: pointer; transition: all 0.2s;
+    }
+    .nav-btn:hover { background: var(--green-dark); transform: translateY(-1px); }
+
+    /* ─── HERO ─── */
+    .hero {
+      min-height: 100vh;
+      display: grid; grid-template-columns: 1fr 1fr; align-items: center;
+      gap: 3rem; padding: 7rem 4rem 4rem;
+      max-width: 1200px; margin: 0 auto;
+    }
+    .hero-left { }
+    .hero-pill {
+      display: inline-flex; align-items: center; gap: 0.4rem;
+      background: var(--green-pale); border: 1.5px solid rgba(123,182,64,0.3);
+      color: var(--green-dark); font-size: 0.75rem; font-weight: 700;
+      padding: 0.3rem 0.9rem; border-radius: 50px;
+      letter-spacing: 0.06em; text-transform: uppercase; margin-bottom: 1.5rem;
+    }
+    .hero h1 {
+      font-size: clamp(2.4rem, 4.5vw, 3.6rem); font-weight: 800;
+      line-height: 1.08; letter-spacing: -0.03em; margin-bottom: 1.25rem;
+    }
+    .hero h1 em { font-style: normal; color: var(--green); }
+    .hero-sub {
+      font-size: 1.05rem; color: var(--gray); line-height: 1.65;
+      max-width: 440px; margin-bottom: 2rem;
+    }
+    .hero-features { display: flex; flex-direction: column; gap: 0.6rem; margin-bottom: 2rem; }
+    .hero-feat {
+      display: flex; align-items: center; gap: 0.6rem;
+      font-size: 0.9rem; color: var(--forest); font-weight: 500;
+    }
+    .feat-dot {
+      width: 20px; height: 20px; min-width: 20px;
+      background: var(--green); border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 0.65rem; color: white;
+    }
+    .hero-scroll { font-size: 0.8rem; color: var(--gray); display: flex; align-items: center; gap: 0.4rem; }
+
+    /* ─── FORM CARD ─── */
+    .form-card {
+      background: white; border-radius: 24px;
+      border: 2px solid var(--border);
+      padding: 2.25rem 2rem;
+      box-shadow: 0 20px 60px rgba(18,71,69,0.1);
+      position: relative; overflow: hidden;
+    }
+    .form-card::before {
+      content: ''; position: absolute; top: 0; left: 0; right: 0; height: 4px;
+      background: linear-gradient(90deg, var(--green), var(--teal));
+    }
+    .form-card h3 { font-size: 1.25rem; font-weight: 800; margin-bottom: 0.35rem; }
+    .form-card p { font-size: 0.85rem; color: var(--gray); margin-bottom: 1.5rem; }
+    .form-group { margin-bottom: 1.1rem; }
+    .form-group label {
+      display: block; font-family: 'Syne', sans-serif;
+      font-weight: 700; font-size: 0.82rem; color: var(--forest);
+      margin-bottom: 0.4rem; letter-spacing: 0.01em;
+    }
+    .form-group label span { color: var(--green); }
+    .form-group input, .form-group select {
+      width: 100%; padding: 0.75rem 1rem;
+      border: 2px solid var(--border); border-radius: 12px;
+      font-family: 'DM Sans', sans-serif; font-size: 0.9rem;
+      color: var(--forest); outline: none; transition: border-color 0.2s;
+      background: white; appearance: none;
+    }
+    .form-group input:focus, .form-group select:focus { border-color: var(--green); }
+    .form-group input::placeholder { color: #b0bab0; }
+    .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 0.85rem; }
+    .btn-submit {
+      width: 100%; background: var(--forest); color: white;
+      font-family: 'Syne', sans-serif; font-weight: 800; font-size: 1rem;
+      padding: 0.95rem; border-radius: 50px; border: none; cursor: pointer;
+      transition: all 0.2s; margin-top: 0.5rem;
+      display: flex; align-items: center; justify-content: center; gap: 0.5rem;
+      box-shadow: 0 4px 16px rgba(18,71,69,0.2);
+    }
+    .btn-submit:hover { background: var(--forest-light); transform: translateY(-2px); }
+    .form-note { font-size: 0.75rem; color: var(--gray); text-align: center; margin-top: 0.85rem; line-height: 1.5; }
+    .upload-zone { width:100%; border:2px dashed var(--border); border-radius:12px; padding:1.25rem 1rem; text-align:center; cursor:pointer; transition:all 0.2s; background:var(--cream); position:relative; }
+    .upload-zone:hover, .upload-zone.dragover { border-color:var(--green); background:var(--green-pale); }
+    .upload-zone input[type=file] { position:absolute; inset:0; opacity:0; cursor:pointer; width:100%; height:100%; }
+    .upload-icon { font-size:1.5rem; margin-bottom:0.35rem; }
+    .upload-text { font-size:0.82rem; color:var(--gray); line-height:1.4; }
+    .upload-text strong { color:var(--green); }
+    .upload-filename { display:none; align-items:center; gap:0.5rem; background:var(--green-pale); border:1.5px solid rgba(123,182,64,0.35); border-radius:10px; padding:0.6rem 0.9rem; font-size:0.82rem; color:var(--forest); font-weight:600; margin-top:0.5rem; }
+    .upload-filename.show { display:flex; }
+    .upload-clear { background:none; border:none; cursor:pointer; color:#9ca3af; font-size:1rem; margin-left:auto; line-height:1; }
+    .upload-clear:hover { color:#ef4444; }
+
+    /* ─── TOOLS PREVIEW ─── */
+    .tools-section {
+      background: var(--forest);
+      padding: 5rem 2rem;
+    }
+    .tools-inner { max-width: 1100px; margin: 0 auto; }
+    .section-eyebrow {
+      font-family: 'Syne', sans-serif; font-size: 0.72rem; font-weight: 700;
+      letter-spacing: 0.1em; text-transform: uppercase;
+      color: rgba(123,182,64,0.8); margin-bottom: 0.75rem;
+    }
+    .section-title-light { font-size: clamp(1.8rem, 3vw, 2.5rem); font-weight: 800; color: white; margin-bottom: 0.75rem; }
+    .section-sub-light { font-size: 0.95rem; color: rgba(255,255,255,0.55); max-width: 460px; line-height: 1.6; margin-bottom: 3rem; }
+    .tools-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 1.25rem; }
+    .tool-tile {
+      border-radius: 16px; padding: 1.5rem;
+      border: 1.5px solid rgba(255,255,255,0.08);
+      background: rgba(255,255,255,0.04);
+      transition: all 0.2s;
+    }
+    .tool-tile:hover { background: rgba(255,255,255,0.08); border-color: rgba(123,182,64,0.3); }
+    .tool-tile.free-tool {
+      background: rgba(123,182,64,0.1);
+      border-color: rgba(123,182,64,0.35);
+    }
+    .tile-icon { font-size: 1.6rem; margin-bottom: 0.85rem; }
+    .tile-badge {
+      display: inline-block; font-size: 0.65rem; font-weight: 800;
+      padding: 0.2rem 0.55rem; border-radius: 50px; margin-bottom: 0.6rem;
+      letter-spacing: 0.07em; text-transform: uppercase;
+    }
+    .badge-free { background: rgba(123,182,64,0.25); color: #a8d96b; }
+    .badge-premium { background: rgba(245,158,11,0.2); color: #fcd34d; }
+    .tool-tile h4 { font-size: 0.95rem; font-weight: 700; color: white; margin-bottom: 0.4rem; }
+    .tool-tile p { font-size: 0.82rem; color: rgba(255,255,255,0.5); line-height: 1.5; }
+
+    /* ─── FOOTER ─── */
+    footer {
+      background: #0a2e2d; color: white;
+      padding: 2rem; text-align: center;
+    }
+    footer p { font-size: 0.82rem; color: rgba(255,255,255,0.45); }
+    footer span { color: var(--green); font-weight: 700; }
+
+    /* ─── ANIMATIONS ─── */
+    @keyframes fadeUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+    .fade-1 { animation: fadeUp 0.5s 0.1s ease both; }
+    .fade-2 { animation: fadeUp 0.5s 0.2s ease both; }
+    .fade-3 { animation: fadeUp 0.5s 0.3s ease both; }
+    .fade-4 { animation: fadeUp 0.5s 0.4s ease both; }
+    .fade-5 { animation: fadeUp 0.5s 0.5s ease both; }
+
+    /* ─── RESPONSIVE ─── */
+    @media (max-width: 768px) {
+      .hero { grid-template-columns: 1fr; padding: 6rem 1.5rem 3rem; gap: 2rem; min-height: auto; }
+      .hero-sub, .hero-features { display: none; }
+      nav { padding: 0.75rem 1rem; }
+      .nav-brand span { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+  <nav>
+    <a href="index.html" class="nav-brand">
+      <img src="logo2.png" alt="ProLaunch Careers">
+      <span>ProLaunch Careers</span>
+    </a>
+    <button class="nav-btn" onclick="document.getElementById('signup-form').scrollIntoView({behavior:'smooth'})">Get Started Free</button>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-left">
+      <h1 class="fade-1">Your Career,<br><em>Launched</em><br>with ProLaunch Careers</h1>
+      <p class="hero-sub fade-2">
+        Free CV analysis plus premium AI tools for resume building, cover letters, interview prep, and career insights — built for African professionals.
+      </p>
+      <div class="hero-features fade-3">
+        <div class="hero-feat"><div class="feat-dot">✓</div> Free CV Analyzer — no payment needed</div>
+        <div class="hero-feat"><div class="feat-dot">✓</div> Premium suite for just ₦1,000</div>
+        <div class="hero-feat"><div class="feat-dot">✓</div> ATS-optimized outputs you can download</div>
+        <div class="hero-feat"><div class="feat-dot">✓</div> Built for Nigerian & African job seekers</div>
+      </div>
+      <div class="hero-scroll fade-4">↓ Fill the form to get started</div>
+    </div>
+
+    <!-- BIODATA FORM -->
+    <div class="form-card fade-3" id="signup-form">
+      <h3>Start Your Career Journey</h3>
+      <p>Fill in your details to access your free CV Analysis tool.</p>
+
+      <div class="two-col">
+        <div class="form-group">
+          <label for="fname">First Name <span>*</span></label>
+          <input type="text" id="fname" placeholder="e.g. Adaeze">
+        </div>
+        <div class="form-group">
+          <label for="lname">Last Name <span>*</span></label>
+          <input type="text" id="lname" placeholder="e.g. Okonkwo">
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="email">Email Address <span>*</span></label>
+        <input type="email" id="email" placeholder="yourname@email.com">
+      </div>
+
+      <div class="form-group">
+        <label for="role">Target Job Role <span>*</span></label>
+        <input type="text" id="role" placeholder="e.g. Data Analyst, Product Manager">
+      </div>
+
+      <div class="form-group">
+        <label for="level">Experience Level <span>*</span></label>
+        <select id="level">
+          <option value="">— Select your level —</option>
+          <option value="Student / Fresh Graduate">Student / Fresh Graduate</option>
+          <option value="Entry-Level (0–2 years)">Entry-Level (0–2 years)</option>
+          <option value="Mid-Level (3–5 years)">Mid-Level (3–5 years)</option>
+          <option value="Senior (6–10 years)">Senior (6–10 years)</option>
+          <option value="Executive / Director">Executive / Director</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label for="cvUpload">Upload Your CV <span>*</span></label>
+        <div class="upload-zone" id="upload-zone">
+          <input type="file" id="cvUpload" accept=".pdf,.doc,.docx,.txt" onchange="handleFileSelect(this)">
+          <div class="upload-icon">📎</div>
+          <div class="upload-text"><strong>Click to upload</strong> or drag & drop<br>PDF, DOC, DOCX or TXT · Max 5MB</div>
+        </div>
+        <div class="upload-filename" id="upload-filename">
+          <span>📄</span>
+          <span id="filename-text"></span>
+          <button class="upload-clear" onclick="clearFile(event)" title="Remove file">✕</button>
+        </div>
+      </div>
+
+      <button class="btn-submit" onclick="handleSignup()">
+        <span id="submit-text">🚀 Access Free CV Analyzer</span>
+      </button>
+      <p class="form-note">🔒 Your data is safe. No spam. Upgrade to premium anytime for ₦1,000.</p>
+    </div>
+  </section>
+
+  <!-- TOOLS PREVIEW -->
+  <section class="tools-section">
+    <div class="tools-inner">
+      <div class="section-eyebrow">What's Inside</div>
+      <h2 class="section-title-light">Free Access + Premium Suite</h2>
+      <p class="section-sub-light">Start free, upgrade when you're ready.</p>
+      <div class="tools-grid">
+        <div class="tool-tile free-tool">
+          <div class="tile-icon">🔍</div>
+          <div class="tile-badge badge-free">Free</div>
+          <h4>CV Analyzer</h4>
+          <p>Get instant feedback on your CV's strengths, weaknesses, and ATS score for your target role.</p>
+        </div>
+        <div class="tool-tile">
+          <div class="tile-icon">📄</div>
+          <div class="tile-badge badge-premium">Premium — ₦1,000</div>
+          <h4>Resume Builder</h4>
+          <p>Full ATS-optimized resume rewrite tailored to your exact job description.</p>
+        </div>
+        <div class="tool-tile">
+          <div class="tile-icon">✉️</div>
+          <div class="tile-badge badge-premium">Premium</div>
+          <h4>Cover Letter</h4>
+          <p>Job-specific cover letter that connects your experience to the role.</p>
+        </div>
+        <div class="tool-tile">
+          <div class="tile-icon">🎯</div>
+          <div class="tile-badge badge-premium">Premium</div>
+          <h4>Interview Prep</h4>
+          <p>10 generated questions with model answers for your specific role.</p>
+        </div>
+        <div class="tool-tile">
+          <div class="tile-icon">💡</div>
+          <div class="tile-badge badge-premium">Premium</div>
+          <h4>Career Insights</h4>
+          <p>Salary benchmarks, in-demand skills, and a personalised 90-day action plan.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <p>Built by <span>Mary-Queen Uchechukwu</span> for ProLaunch Careers</p>
+    <p style="margin-top:0.3rem">&copy; <script>document.write(new Date().getFullYear())</script> ProLaunch Careers. All rights reserved.</p>
+  </footer>
+
+  <script src="shared.js"></script>
+  <script>
+    // If user already has biodata, redirect to dashboard
+    window.addEventListener('DOMContentLoaded', () => {
+      if (PL.hasBiodata()) {
+        window.location.href = 'pages/dashboard.html';
+      }
     });
 
-    const data = await response.json();
-    if (!response.ok) throw new Error(data.error || "API request failed");
-    return data.text;
-}
+    // ── File upload handling ──
+    let cvFileText = null;
+    let cvFileName = null;
 
-function downloadDoc(elementId, filename) {
-    const content = document.getElementById(elementId).innerText;
-    const htmlContent = `
-        <html xmlns:o='urn:schemas-microsoft-com:office:office' xmlns:w='urn:schemas-microsoft-com:office:word' xmlns='http://www.w3.org/TR/REC-html40'>
-        <head><meta charset='utf-8'><title>${filename}</title>
-        <style>body { font-family: 'Calibri', 'Arial', sans-serif; font-size: 11pt; }</style>
-        </head><body>${content.replace(/\n/g, '<br>')}</body></html>`;
-    const blob = new Blob(['\ufeff', htmlContent], { type: 'application/msword' });
-    const url = URL.createObjectURL(blob);
-    const link = document.createElement('a');
-    link.href = url;
-    link.download = filename;
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-    URL.revokeObjectURL(url);
-}
+    function handleFileSelect(input) {
+      const file = input.files[0];
+      if (!file) return;
+      if (file.size > 5 * 1024 * 1024) {
+        PL.toast('File too large. Max 5MB.', 'error');
+        input.value = ''; return;
+      }
+      const ext = file.name.split('.').pop().toLowerCase();
+      const allowed = ['pdf','doc','docx','txt'];
+      if (!allowed.includes(ext)) {
+        PL.toast('Unsupported file type. Please upload PDF, DOC, DOCX or TXT.', 'error');
+        input.value = ''; return;
+      }
+      cvFileName = file.name;
+      cvFileText = null; // will be filled after server parse
+      document.getElementById('filename-text').textContent = file.name;
+      document.getElementById('upload-filename').classList.add('show');
+    }
 
-function showMessage(message, isError) {
-    toast.textContent = message;
-    toast.classList.remove('translate-y-full', 'opacity-0', 'bg-prolaunch-green', 'bg-red-500');
-    toast.classList.add(isError ? 'bg-red-500' : 'bg-prolaunch-green');
-    setTimeout(() => toast.classList.remove('translate-y-full', 'opacity-0'), 10);
-    setTimeout(() => toast.classList.add('translate-y-full', 'opacity-0'), 4000);
-}
-    </script>
+    function clearFile(e) {
+      e.preventDefault();
+      document.getElementById('cvUpload').value = '';
+      document.getElementById('upload-filename').classList.remove('show');
+      cvFileText = null;
+      cvFileName = null;
+    }
+
+    // ── Server-side parsing ───────────────────────────────────────────────────
+    async function parseCVFile(file) {
+      const formData = new FormData();
+      formData.append('cv', file);
+      const res = await fetch('/api/parse-cv', { method: 'POST', body: formData });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || 'Could not parse file');
+      return data.text;
+    }
+
+    // Drag & drop
+    const zone = document.getElementById('upload-zone');
+    zone.addEventListener('dragover', (e) => { e.preventDefault(); zone.classList.add('dragover'); });
+    zone.addEventListener('dragleave', () => zone.classList.remove('dragover'));
+    zone.addEventListener('drop', (e) => {
+      e.preventDefault(); zone.classList.remove('dragover');
+      const file = e.dataTransfer.files[0];
+      if (file) {
+        const input = document.getElementById('cvUpload');
+        const dt = new DataTransfer(); dt.items.add(file); input.files = dt.files;
+        handleFileSelect(input);
+      }
+    });
+
+    async function handleSignup() {
+      const fname     = document.getElementById('fname').value.trim();
+      const lname     = document.getElementById('lname').value.trim();
+      const email     = document.getElementById('email').value.trim();
+      const role      = document.getElementById('role').value.trim();
+      const level     = document.getElementById('level').value;
+      const fileInput = document.getElementById('cvUpload');
+
+      if (!fname || !lname) { PL.toast('Please enter your full name.', 'error'); return; }
+      if (!email || !email.includes('@')) { PL.toast('Please enter a valid email.', 'error'); return; }
+      if (!role)  { PL.toast('Please enter your target job role.', 'error'); return; }
+      if (!level) { PL.toast('Please select your experience level.', 'error'); return; }
+      if (!fileInput.files[0]) { PL.toast('Please upload your CV.', 'error'); return; }
+
+      const btn = document.getElementById('submit-text');
+      btn.textContent = 'Parsing CV...';
+      btn.parentElement.disabled = true;
+
+      try {
+        // ── Parse CV on server ─────────────────────────────────────────────
+        const parsedText = await parseCVFile(fileInput.files[0]);
+        cvFileText = parsedText;
+
+        btn.textContent = 'Saving...';
+
+        const userData = {
+          name: `${fname} ${lname}`,
+          fname, lname, email, role, level,
+          cvFileName: fileInput.files[0].name,
+          cvText: cvFileText,
+          joinedAt: new Date().toISOString()
+        };
+
+        PL.saveBiodata(userData);
+        PL.sendToSheets(userData);
+
+        PL.toast('CV parsed! Redirecting...', 'success');
+        setTimeout(() => { window.location.href = 'pages/dashboard.html'; }, 1000);
+
+      } catch (err) {
+        // Parse failed — still allow signup, user can paste CV manually
+        console.warn('CV parse failed:', err.message);
+        PL.toast(`CV parsing failed: ${err.message}`, 'warn');
+
+        const userData = {
+          name: `${fname} ${lname}`,
+          fname, lname, email, role, level,
+          cvFileName: fileInput.files[0].name,
+          cvText: '', // will paste manually on analyzer page
+          joinedAt: new Date().toISOString()
+        };
+        PL.saveBiodata(userData);
+        PL.sendToSheets(userData);
+        setTimeout(() => { window.location.href = 'pages/dashboard.html'; }, 2000);
+      } finally {
+        btn.textContent = '🚀 Access Free CV Analyzer';
+        btn.parentElement.disabled = false;
+      }
+    }
+  </script>
 </body>
 </html>
