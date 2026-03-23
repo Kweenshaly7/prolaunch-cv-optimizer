@@ -3,7 +3,7 @@
 const PL = {
 
   // ── Google Apps Script Web App URL (replace after setup) ──
-  SHEETS_URL: 'https://script.google.com/macros/s/AKfycbym_6LZz39SwCV8F8smkilUCxEqbTOy-A9IJ5YiTbffqBdbri5Bjxy2ZN5k8bzwU3Kd/exec',
+  SHEETS_URL: 'YOUR_GOOGLE_APPS_SCRIPT_URL_HERE',
 
   // ── Selar payment link ──
   SELAR_LINK: 'https://selar.com/premium-access',
@@ -28,9 +28,45 @@ const PL = {
     return u && u.name && u.email && u.level && u.role;
   },
 
-  // ── Grant premium access (timestamp-based) ──
+  // ── Grant premium access (timestamp-based + persisted to Sheets) ──
   grantPremium() {
-    localStorage.setItem('pl_premium', Date.now().toString());
+    const ts = Date.now().toString();
+    localStorage.setItem('pl_premium', ts);
+    // Also persist to Google Sheets so returning users can recover access
+    const user = this.getBiodata();
+    if (user && user.email) {
+      this.sendToSheets({ action: 'savePremium', email: user.email, paidAt: ts });
+    }
+  },
+
+  // ── Lookup returning user by email via Apps Script ──
+  async lookupUser(email) {
+    try {
+      const res = await fetch('/api/lookup-user', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: email.toLowerCase().trim() })
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || 'Lookup failed');
+      return data; // { found, user, premium }
+    } catch (e) {
+      console.warn('User lookup failed:', e.message);
+      return { found: false };
+    }
+  },
+
+  // ── Restore a returning user's session from lookup result ──
+  restoreSession(lookupResult) {
+    if (!lookupResult.found) return false;
+    // Restore biodata
+    const userData = { ...lookupResult.user, returning: true };
+    this.saveBiodata(userData);
+    // Restore premium if still active
+    if (lookupResult.premium && lookupResult.premium.active) {
+      localStorage.setItem('pl_premium', lookupResult.premium.timestamp.toString());
+    }
+    return true;
   },
 
   // ── Check if premium is active ──
@@ -108,6 +144,35 @@ const PL = {
     const data = await res.json();
     if (!res.ok) throw new Error(data.error || 'API error');
     return data.text;
+  },
+
+  // ── Get optimized CV saved by the Resume Builder ──
+  // Returns { cvText, jobRole, jd } or null
+  getOptimizedCV() {
+    try { return JSON.parse(localStorage.getItem('pl_optimized_cv')) || null; }
+    catch { return null; }
+  },
+
+  // ── Best CV text to prefill other tools ──
+  // Prefers the optimized output; falls back to the original uploaded CV
+  getBestCV() {
+    const opt = this.getOptimizedCV();
+    if (opt && opt.cvText && opt.cvText.length > 50) return opt.cvText;
+    const user = this.getBiodata();
+    return (user?.cvText && user.cvText.length > 50) ? user.cvText : '';
+  },
+
+  // ── Best job role to prefill ──
+  getBestRole() {
+    const opt = this.getOptimizedCV();
+    if (opt && opt.jobRole) return opt.jobRole;
+    return this.getBiodata()?.role || '';
+  },
+
+  // ── Best job description to prefill ──
+  getBestJD() {
+    const opt = this.getOptimizedCV();
+    return opt?.jd || '';
   },
 
   // ── Download content as .doc ──
