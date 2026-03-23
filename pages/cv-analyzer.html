@@ -4,18 +4,18 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>CV Analyzer | ProLaunch Careers</title>
-  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;800&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
   <style>
     :root{--green:#7bb640;--green-dark:#6aa335;--green-pale:#f0f7e8;--teal:#19a08c;--teal-dark:#158f7d;--forest:#124745;--forest-light:#1a5f5c;--cream:#f7f9f4;--border:#e2ead8;--gray:#6b7280;--amber:#f59e0b;}
     *{box-sizing:border-box;margin:0;padding:0;}
-    body{font-family:'DM Sans',sans-serif;background:var(--cream);color:var(--forest);}
-    h1,h2,h3,h4{font-family:'Syne',sans-serif;}
+    body{font-family:'Lato',sans-serif;background:var(--cream);color:var(--forest);}
+    h1,h2,h3,h4{font-family:'Playfair Display',sans-serif;}
     nav{background:white;border-bottom:1.5px solid var(--border);padding:0.85rem 2rem;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;box-shadow:0 2px 10px rgba(18,71,69,0.05);flex-wrap:wrap;gap:0.5rem;}
     .nav-brand{display:flex;align-items:center;gap:0.6rem;text-decoration:none;}
     .nav-brand img{height:36px;}
-    .nav-brand span{font-family:'Syne',sans-serif;font-weight:800;font-size:0.95rem;color:var(--forest);}
+    .nav-brand span{font-family:'Playfair Display',sans-serif;font-weight:800;font-size:0.95rem;color:var(--forest);}
     .nav-links{display:flex;align-items:center;gap:0.5rem;flex-wrap:wrap;}
-    .nav-pill{font-family:'Syne',sans-serif;font-size:0.76rem;font-weight:700;color:var(--forest);text-decoration:none;padding:0.32rem 0.8rem;border-radius:50px;border:1.5px solid var(--border);transition:all 0.2s;white-space:nowrap;}
+    .nav-pill{font-family:'Playfair Display',sans-serif;font-size:0.76rem;font-weight:700;color:var(--forest);text-decoration:none;padding:0.32rem 0.8rem;border-radius:50px;border:1.5px solid var(--border);transition:all 0.2s;white-space:nowrap;}
     .nav-pill:hover{background:var(--forest);color:white;border-color:var(--forest);}
     .nav-pill.active{background:var(--green);color:white;border-color:var(--green);}
     .page-header{background:linear-gradient(135deg,#1a3d1a 0%,var(--forest) 50%,var(--forest-light) 100%);color:white;padding:2.75rem 2rem 2.25rem;text-align:center;}
@@ -24,12 +24,12 @@
     .page-header p{color:rgba(255,255,255,0.65);font-size:0.92rem;max-width:460px;margin:0 auto;line-height:1.6;}
     main{max-width:860px;margin:0 auto;padding:2.5rem 1.5rem;}
     .card{background:white;border-radius:20px;padding:2rem;border:2px solid var(--border);margin-bottom:1.5rem;}
-    label{display:block;font-family:'Syne',sans-serif;font-weight:700;font-size:0.85rem;color:var(--forest);margin-bottom:0.4rem;}
+    label{display:block;font-family:'Playfair Display',sans-serif;font-weight:700;font-size:0.85rem;color:var(--forest);margin-bottom:0.4rem;}
     .req{color:var(--green);}
-    input[type=text],textarea{width:100%;padding:0.75rem 1rem;border:2px solid #e2e8e2;border-radius:12px;font-family:'DM Sans',sans-serif;font-size:0.9rem;color:var(--forest);outline:none;transition:border-color 0.2s;resize:vertical;}
+    input[type=text],textarea{width:100%;padding:0.75rem 1rem;border:2px solid #e2e8e2;border-radius:12px;font-family:'Lato',sans-serif;font-size:0.9rem;color:var(--forest);outline:none;transition:border-color 0.2s;resize:vertical;}
     input[type=text]:focus,textarea:focus{border-color:var(--green);}
     .hint{font-size:0.78rem;color:#9ca3af;margin-bottom:0.45rem;}
-    .btn-analyze{width:100%;background:var(--green);color:white;font-family:'Syne',sans-serif;font-weight:800;font-size:1.05rem;padding:1rem;border-radius:50px;border:none;cursor:pointer;transition:all 0.2s;display:flex;align-items:center;justify-content:center;gap:0.6rem;box-shadow:0 4px 18px rgba(123,182,64,0.28);}
+    .btn-analyze{width:100%;background:var(--green);color:white;font-family:'Playfair Display',sans-serif;font-weight:800;font-size:1.05rem;padding:1rem;border-radius:50px;border:none;cursor:pointer;transition:all 0.2s;display:flex;align-items:center;justify-content:center;gap:0.6rem;box-shadow:0 4px 18px rgba(123,182,64,0.28);}
     .btn-analyze:hover:not(:disabled){background:var(--green-dark);transform:translateY(-2px);}
     .btn-analyze:disabled{opacity:0.7;cursor:not-allowed;}
     .spinner{width:18px;height:18px;border:2.5px solid rgba(255,255,255,0.3);border-top-color:white;border-radius:50%;animation:spin 0.7s linear infinite;display:none;}
@@ -39,7 +39,7 @@
     /* Score card */
     .score-card{background:linear-gradient(135deg,var(--forest) 0%,var(--forest-light) 100%);border-radius:20px;padding:2rem;color:white;margin-bottom:1.25rem;display:flex;align-items:center;gap:2rem;flex-wrap:wrap;}
     .score-circle{min-width:90px;height:90px;border-radius:50%;display:flex;flex-direction:column;align-items:center;justify-content:center;border:4px solid rgba(255,255,255,0.2);background:rgba(255,255,255,0.08);}
-    .score-num{font-family:'Syne',sans-serif;font-size:1.8rem;font-weight:800;line-height:1;}
+    .score-num{font-family:'Playfair Display',sans-serif;font-size:1.8rem;font-weight:800;line-height:1;}
     .score-label{font-size:0.65rem;color:rgba(255,255,255,0.6);text-transform:uppercase;letter-spacing:0.05em;margin-top:0.15rem;}
     .score-meta h3{font-size:1.1rem;font-weight:800;margin-bottom:0.25rem;}
     .score-meta p{font-size:0.875rem;color:rgba(255,255,255,0.65);line-height:1.5;}
@@ -58,7 +58,7 @@
     .premium-cta{background:linear-gradient(135deg,#2d1f00,#7a4f00);border-radius:20px;padding:1.75rem 2rem;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1.25rem;margin-top:1.5rem;}
     .premium-cta h3{font-size:1.05rem;font-weight:800;color:white;margin-bottom:0.25rem;}
     .premium-cta p{font-size:0.84rem;color:rgba(255,255,255,0.65);}
-    .btn-premium{background:var(--amber);color:white;font-family:'Syne',sans-serif;font-weight:800;font-size:0.92rem;padding:0.7rem 1.6rem;border-radius:50px;border:none;cursor:pointer;white-space:nowrap;transition:all 0.2s;box-shadow:0 4px 14px rgba(245,158,11,0.3);}
+    .btn-premium{background:var(--amber);color:white;font-family:'Playfair Display',sans-serif;font-weight:800;font-size:0.92rem;padding:0.7rem 1.6rem;border-radius:50px;border:none;cursor:pointer;white-space:nowrap;transition:all 0.2s;box-shadow:0 4px 14px rgba(245,158,11,0.3);}
     .btn-premium:hover{background:#d97706;}
 
     footer{background:var(--forest);color:white;padding:1.75rem;text-align:center;margin-top:3rem;}
@@ -247,39 +247,55 @@
       document.getElementById('results').style.display = 'none';
 
       try {
-        const raw = await PL.callAI(`You are a senior ATS specialist and career coach. Analyze this CV for a "${jobRole}" role.
-${jd ? `Job Description: ${jd}` : ''}
-CV: ${cv}
+        // Truncate CV to prevent token overload (keep first 4000 chars)
+        const cvTruncated = cv.length > 4000 ? cv.substring(0, 4000) + '...' : cv;
+        const jdTruncated = jd.length > 1500 ? jd.substring(0, 1500) + '...' : jd;
 
-Return ONLY valid JSON (no markdown, no explanation):
+        const raw = await PL.callAI(`You are a senior ATS specialist and career coach. Analyze this CV for a "${jobRole}" role.
+${jdTruncated ? `Job Description:\n${jdTruncated}` : ''}
+
+CV:
+${cvTruncated}
+
+IMPORTANT: Respond ONLY with a valid JSON object. No markdown fences, no explanation, no text before or after the JSON.
+
 {
-  "ats_score": <number 0-100>,
-  "verdict": "<one short verdict e.g. 'Needs Work' / 'Good Foundation' / 'Strong CV'>",
-  "summary": "<2 sentences summarizing the CV's overall fit for the role>",
-  "strengths": "<3-4 bullet points (use • character) of what the CV does well>",
-  "gaps": "<3-4 bullet points of key weaknesses or missing elements>",
-  "missing_keywords": "<list of 6-8 important keywords/skills missing from the CV for this role, as bullet points>",
-  "quick_wins": "<3-4 specific, actionable improvements the person can make today to improve their CV>",
-  "recommendation": "<3 sentences of honest overall advice — what to prioritize, what's working, and what the next step should be>"
+  "ats_score": 72,
+  "verdict": "Good Foundation",
+  "summary": "Two sentences about overall fit.",
+  "strengths": "• Point one\n• Point two\n• Point three",
+  "gaps": "• Point one\n• Point two\n• Point three",
+  "missing_keywords": "• Keyword one\n• Keyword two\n• Keyword three\n• Keyword four",
+  "quick_wins": "• Action one\n• Action two\n• Action three",
+  "recommendation": "Three sentences of honest advice."
 }`);
 
-        const cleaned = raw.replace(/```json|```/g, '').trim();
-        const data = JSON.parse(cleaned);
+        // Robust JSON extraction — handles markdown fences, leading text, trailing text
+        let cleaned = raw.trim();
+        // Strip markdown code fences
+        cleaned = cleaned.replace(/^```(?:json)?\s*/i, '').replace(/\s*```\s*$/, '');
+        // Extract JSON object if there's surrounding text
+        const jsonMatch = cleaned.match(/\{[\s\S]*\}/);
+        if (!jsonMatch) throw new Error('No JSON object found in response');
+        const data = JSON.parse(jsonMatch[0]);
+
+        // Validate required fields exist
+        if (data.ats_score === undefined) throw new Error('Missing ats_score in response');
 
         // Score
-        const score = data.ats_score;
+        const score = Number(data.ats_score);
         const scoreEl = document.getElementById('score-num');
         scoreEl.textContent = score + '%';
         scoreEl.style.color = score >= 70 ? '#7bb640' : score >= 45 ? '#f59e0b' : '#ef4444';
-        document.getElementById('score-verdict').textContent = data.verdict;
-        document.getElementById('score-summary').textContent = data.summary;
+        document.getElementById('score-verdict').textContent = data.verdict || '—';
+        document.getElementById('score-summary').textContent = data.summary || '—';
 
         // Blocks
-        document.getElementById('strengths-output').textContent = data.strengths;
-        document.getElementById('gaps-output').textContent = data.gaps;
-        document.getElementById('keywords-output').textContent = data.missing_keywords;
-        document.getElementById('quickwins-output').textContent = data.quick_wins;
-        document.getElementById('recommendation-output').textContent = data.recommendation;
+        document.getElementById('strengths-output').textContent = data.strengths || '—';
+        document.getElementById('gaps-output').textContent = data.gaps || '—';
+        document.getElementById('keywords-output').textContent = data.missing_keywords || '—';
+        document.getElementById('quickwins-output').textContent = data.quick_wins || '—';
+        document.getElementById('recommendation-output').textContent = data.recommendation || '—';
 
         document.getElementById('results').style.display = 'block';
         document.getElementById('results').scrollIntoView({ behavior:'smooth' });
@@ -291,8 +307,15 @@ Return ONLY valid JSON (no markdown, no explanation):
 
         PL.toast('✅ Analysis complete!', 'success');
       } catch(e) {
-        PL.toast('Error analyzing CV. Please try again.', 'error');
-        console.error(e);
+        console.error('Analysis error:', e);
+        // Specific error messages to help diagnose
+        if (e.message && e.message.includes('API')) {
+          PL.toast('API error — please check your connection and try again.', 'error');
+        } else if (e.message && e.message.includes('JSON')) {
+          PL.toast('Analysis returned unexpected format. Please try again.', 'error');
+        } else {
+          PL.toast('Error analyzing CV. Please try again.', 'error');
+        }
       } finally { setLoading(false); }
     }
 
