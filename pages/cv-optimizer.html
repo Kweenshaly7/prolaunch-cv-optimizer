@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>AI Resume Builder | ProLaunch Careers</title>
+  <title>Resume Builder | ProLaunch Careers</title>
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;800&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
   <style>
     :root{--green:#7bb640;--green-dark:#6aa335;--teal:#19a08c;--teal-dark:#158f7d;--forest:#124745;--cream:#f7f9f4;--border:#e2ead8;--gray:#6b7280;}
@@ -142,6 +142,20 @@
       if (prev?.jd) document.getElementById('jdInput').value = prev.jd;
     });
 
+    // ── Name verification helper ─────────────────────────────────────────────
+    async function verifyCVName(registeredName, cvText) {
+      const prompt = 'Extract the full name of the person this CV belongs to. Return ONLY the name as plain text — no explanation, no punctuation, just the name exactly as it appears at the top of the CV.\n\nCV:\n' + cvText.substring(0, 1500);
+      try {
+        const res = await PL.callAI(prompt);
+        const cvName  = (res || '').trim().toLowerCase().replace(/[^a-z\s]/g, '');
+        const regName = registeredName.trim().toLowerCase().replace(/[^a-z\s]/g, '');
+        const cvTokens  = cvName.split(/\s+/).filter(Boolean).sort();
+        const regTokens = regName.split(/\s+/).filter(Boolean).sort();
+        const allMatch  = regTokens.every(t => cvTokens.includes(t));
+        return { match: allMatch, cvName: res.trim() };
+      } catch (e) { return { match: true }; }
+    }
+
     async function handleGenerate() {
       const jobRole = document.getElementById('jobRole').value.trim();
       const cv = document.getElementById('cvInput').value.trim();
@@ -149,6 +163,18 @@
       if (!jobRole) { PL.toast('Please enter a Job Role Title.', 'error'); return; }
       if (!cv) { PL.toast('Please paste your CV.', 'error'); return; }
       setLoading(true);
+
+      // ── Verify CV belongs to the registered user ────────────────────────
+      const user = PL.getBiodata();
+      if (user && user.name) {
+        document.getElementById('btnText').textContent = 'Verifying identity...';
+        const nameCheck = await verifyCVName(user.name, cv);
+        if (!nameCheck.match) {
+          setLoading(false);
+          PL.toast('The name on this CV ("' + nameCheck.cvName + '") does not match your registered name ("' + user.name + '"). Please use your own CV.', 'error');
+          return;
+        }
+      }
       document.getElementById('results').style.display = 'none';
       try {
         const [cvText, clText, tipsText] = await Promise.all([
