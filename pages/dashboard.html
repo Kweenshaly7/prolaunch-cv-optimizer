@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Dashboard | ProLaunch Careers</title>
-  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;800&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
   <style>
     :root {
       --green:#7bb640;--green-dark:#6aa335;--green-pale:#f0f7e8;
@@ -14,18 +14,18 @@
       --amber:#f59e0b;
     }
     *{box-sizing:border-box;margin:0;padding:0;}
-    body{font-family:'DM Sans',sans-serif;background:var(--cream);color:var(--forest);}
-    h1,h2,h3,h4{font-family:'Syne',sans-serif;}
+    body{font-family:'Lato',sans-serif;background:var(--cream);color:var(--forest);}
+    h1,h2,h3,h4{font-family:'Playfair Display',sans-serif;}
 
     /* NAV */
     nav{background:white;border-bottom:1.5px solid var(--border);padding:0.85rem 2rem;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;box-shadow:0 2px 12px rgba(18,71,69,0.05);}
     .nav-brand{display:flex;align-items:center;gap:0.6rem;text-decoration:none;}
     .nav-brand img{height:36px;}
-    .nav-brand span{font-family:'Syne',sans-serif;font-weight:800;font-size:0.95rem;color:var(--forest);}
+    .nav-brand span{font-family:'Playfair Display',sans-serif;font-weight:800;font-size:0.95rem;color:var(--forest);}
     .nav-right{display:flex;align-items:center;gap:0.75rem;}
     .user-chip{background:var(--green-pale);border:1.5px solid rgba(123,182,64,0.3);padding:0.35rem 0.9rem;border-radius:50px;font-size:0.8rem;font-weight:600;color:var(--forest);}
-    .premium-badge{background:var(--amber);color:white;font-family:'Syne',sans-serif;font-weight:700;font-size:0.72rem;padding:0.3rem 0.75rem;border-radius:50px;letter-spacing:0.04em;}
-    .btn-logout{background:transparent;border:1.5px solid var(--border);color:var(--gray);font-family:'Syne',sans-serif;font-weight:700;font-size:0.78rem;padding:0.35rem 0.85rem;border-radius:50px;cursor:pointer;transition:all 0.2s;}
+    .premium-badge{background:var(--amber);color:white;font-family:'Playfair Display',sans-serif;font-weight:700;font-size:0.72rem;padding:0.3rem 0.75rem;border-radius:50px;letter-spacing:0.04em;}
+    .btn-logout{background:transparent;border:1.5px solid var(--border);color:var(--gray);font-family:'Playfair Display',sans-serif;font-weight:700;font-size:0.78rem;padding:0.35rem 0.85rem;border-radius:50px;cursor:pointer;transition:all 0.2s;}
     .btn-logout:hover{border-color:var(--forest);color:var(--forest);}
 
     /* HERO STRIP */
@@ -34,7 +34,7 @@
     .dash-header h1{font-size:clamp(1.5rem,3vw,2rem);font-weight:800;}
     .dash-header h1 span{color:var(--green);}
     .dash-header p{color:rgba(255,255,255,0.65);font-size:0.9rem;margin-top:0.3rem;}
-    .premium-timer{background:rgba(245,158,11,0.2);border:1px solid rgba(245,158,11,0.4);color:#fcd34d;padding:0.5rem 1rem;border-radius:50px;font-size:0.8rem;font-weight:700;font-family:'Syne',sans-serif;}
+    .premium-timer{background:rgba(245,158,11,0.2);border:1px solid rgba(245,158,11,0.4);color:#fcd34d;padding:0.5rem 1rem;border-radius:50px;font-size:0.8rem;font-weight:700;font-family:'Playfair Display',sans-serif;}
 
     /* MAIN */
     main{max-width:1100px;margin:0 auto;padding:2.5rem 1.5rem;}
@@ -54,7 +54,7 @@
     .free-icon{width:56px;height:56px;background:var(--green-pale);border-radius:16px;display:flex;align-items:center;justify-content:center;font-size:1.6rem;}
     .free-card h3{font-size:1.15rem;font-weight:800;margin-bottom:0.2rem;}
     .free-card p{font-size:0.875rem;color:var(--gray);max-width:380px;line-height:1.5;}
-    .btn-free{background:var(--green);color:white;font-family:'Syne',sans-serif;font-weight:800;font-size:0.9rem;padding:0.7rem 1.6rem;border-radius:50px;white-space:nowrap;transition:all 0.2s;}
+    .btn-free{background:var(--green);color:white;font-family:'Playfair Display',sans-serif;font-weight:800;font-size:0.9rem;padding:0.7rem 1.6rem;border-radius:50px;white-space:nowrap;transition:all 0.2s;}
     .btn-free:hover{background:var(--green-dark);}
 
     /* PREMIUM SECTION */
@@ -69,7 +69,7 @@
     .card-icon{width:46px;height:46px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:1.35rem;margin-bottom:1rem;}
     .tool-card h3{font-size:0.95rem;font-weight:700;margin-bottom:0.4rem;}
     .tool-card p{font-size:0.82rem;color:var(--gray);line-height:1.5;margin-bottom:1rem;}
-    .card-action{font-family:'Syne',sans-serif;font-size:0.78rem;font-weight:700;}
+    .card-action{font-family:'Playfair Display',sans-serif;font-size:0.78rem;font-weight:700;}
     .card-action.locked-text{color:var(--amber);}
     .card-action.open-text{color:var(--teal);}
 
@@ -81,7 +81,7 @@
     }
     .upgrade-banner h3{font-size:1.15rem;font-weight:800;color:white;margin-bottom:0.3rem;}
     .upgrade-banner p{font-size:0.875rem;color:rgba(255,255,255,0.65);}
-    .btn-upgrade{background:var(--amber);color:white;font-family:'Syne',sans-serif;font-weight:800;font-size:0.95rem;padding:0.75rem 1.75rem;border-radius:50px;text-decoration:none;white-space:nowrap;transition:all 0.2s;border:none;cursor:pointer;box-shadow:0 4px 16px rgba(245,158,11,0.35);}
+    .btn-upgrade{background:var(--amber);color:white;font-family:'Playfair Display',sans-serif;font-weight:800;font-size:0.95rem;padding:0.75rem 1.75rem;border-radius:50px;text-decoration:none;white-space:nowrap;transition:all 0.2s;border:none;cursor:pointer;box-shadow:0 4px 16px rgba(245,158,11,0.35);}
     .btn-upgrade:hover{background:#d97706;transform:translateY(-1px);}
 
     footer{background:var(--forest);color:white;padding:1.75rem;text-align:center;margin-top:3rem;}
