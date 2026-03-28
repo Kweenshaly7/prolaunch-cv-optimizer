@@ -346,7 +346,7 @@
         const nameCheck = await verifyCVName(fullName, parsedText);
 
         if (!nameCheck.match) {
-          btn.disabled = false; text.textContent = 'Access Free CV Analyzer';
+          btn.disabled = false; text.textContent = '🚀 Access Free CV Analyzer';
           PL.toast('The name on your CV ("' + nameCheck.cvName + '") does not match your registered name ("' + fullName + '"). Please upload your own CV.', 'error');
           document.getElementById('fname').style.borderColor = '#ef4444';
           document.getElementById('lname').style.borderColor = '#ef4444';
@@ -357,24 +357,44 @@
           return;
         }
 
-        // Step 3 — Save & redirect
-        text.textContent = 'Saving...';
+        // Step 3 — Save & sync
+        text.textContent = 'Saving your profile...';
+
+        // Build the full user object — cvText is kept here for localStorage only
         const userData = { name: fullName, fname, lname, email, role, level, cvFileName: fileInput.files[0].name, cvText: cvFileText, joinedAt: new Date().toISOString() };
+
+        // FIX (Bug 1, 2, 7):
+        //   Bug 1 — action:'register' added so Apps Script knows what to do
+        //   Bug 2 — cvText stripped from Sheets payload (stays in localStorage via saveBiodata)
+        //            to prevent Google Sheets 50k-char cell limit overflow causing silent failures
+        //   Bug 7 — await added so errors are caught and shown to the user
         PL.saveBiodata(userData);
-        PL.sendToSheets(userData);
+        const { cvText: _drop, ...sheetPayload } = userData;
+        await PL.sendToSheets({ action: 'register', ...sheetPayload });
+
         PL.toast('CV verified! Redirecting...', 'success');
         setTimeout(() => { window.location.href = 'pages/dashboard.html'; }, 1000);
 
       } catch (err) {
         console.warn('Signup error:', err.message);
-        PL.toast('CV parsing failed: ' + err.message, 'warn');
-        // Graceful fallback — allow signup, user pastes CV manually on analyzer page
-        const userData = { name: fname + ' ' + lname, fname, lname, email, role, level, cvFileName: fileInput.files[0].name, cvText: '', joinedAt: new Date().toISOString() };
-        PL.saveBiodata(userData);
-        PL.sendToSheets(userData);
-        setTimeout(() => { window.location.href = 'pages/dashboard.html'; }, 2000);
+
+        // If biodata was already saved locally, Sheets sync failed — let user in with warning
+        if (PL.hasBiodata()) {
+          PL.toast('Profile saved! Cloud sync failed — your data is stored locally.', 'warn');
+          setTimeout(() => { window.location.href = 'pages/dashboard.html'; }, 2000);
+        } else {
+          // CV parsing failed before anything was saved — graceful fallback
+          PL.toast('CV parsing failed: ' + err.message + '. You can paste your CV manually.', 'warn');
+          const fallbackData = { name: fname + ' ' + lname, fname, lname, email, role, level, cvFileName: fileInput.files[0].name, cvText: '', joinedAt: new Date().toISOString() };
+          PL.saveBiodata(fallbackData);
+          // FIX (Bug 1): action:'register' on fallback path too
+          const { cvText: _fd, ...fallbackSheet } = fallbackData;
+          PL.sendToSheets({ action: 'register', ...fallbackSheet })
+            .catch(e => console.warn('Fallback Sheets sync failed:', e.message));
+          setTimeout(() => { window.location.href = 'pages/dashboard.html'; }, 2500);
+        }
       } finally {
-        btn.disabled = false; text.textContent = 'Access Free CV Analyzer';
+        btn.disabled = false; text.textContent = '🚀 Access Free CV Analyzer';
       }
     }
   </script>
