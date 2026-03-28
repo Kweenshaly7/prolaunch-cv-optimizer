@@ -29,10 +29,11 @@ const PL = {
   grantPremium() {
     const ts = Date.now().toString();
     localStorage.setItem('pl_premium', ts);
-    // Also persist to Google Sheets so returning users can recover access
     const user = this.getBiodata();
     if (user && user.email) {
-      this.sendToSheets({ action: 'savePremium', email: user.email, paidAt: ts });
+      // Fire-and-forget for premium grant — failure is non-critical here
+      this.sendToSheets({ action: 'savePremium', email: user.email, paidAt: ts })
+        .catch(e => console.warn('Premium Sheets sync failed:', e.message));
     }
   },
 
@@ -56,10 +57,8 @@ const PL = {
   // ── Restore a returning user's session from lookup result ──
   restoreSession(lookupResult) {
     if (!lookupResult.found) return false;
-    // Restore biodata
     const userData = { ...lookupResult.user, returning: true };
     this.saveBiodata(userData);
-    // Restore premium if still active
     if (lookupResult.premium && lookupResult.premium.active) {
       localStorage.setItem('pl_premium', lookupResult.premium.timestamp.toString());
     }
@@ -84,28 +83,25 @@ const PL = {
     return `${h}h ${m}m`;
   },
 
-  // ── Send biodata to Google Sheets via Vercel Backend ──
+  // ── Send data to Google Sheets via Vercel Backend ──
+  // FIX (Bug 7): Now re-throws on failure so callers can catch and surface errors
   async sendToSheets(data) {
-    try {
-      const res = await fetch('/api/save-sheet', {
-        method: 'POST',
-        // Because we are talking to our own Vercel API, we can safely use standard JSON
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(data)
-      });
+    const res = await fetch('/api/save-sheet', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data)
+    });
 
-      const result = await res.json();
+    const result = await res.json();
 
-      if (!res.ok) {
-        throw new Error(result.error || 'Backend responded with an error');
-      }
-      
-      console.log('Successfully backed up user to Sheets!');
-    } catch (e) { 
-      console.warn('Sheets sync failed:', e.message); 
+    if (!res.ok) {
+      throw new Error(result.error || 'Backend responded with an error');
     }
+
+    console.log('Successfully synced to Sheets:', data.action || '');
+    return result;
   },
-  
+
   // ── Build Selar URL with email prefilled ──
   getSelarUrl() {
     const user = this.getBiodata();
@@ -153,14 +149,12 @@ const PL = {
   },
 
   // ── Get optimized CV saved by the Resume Builder ──
-  // Returns { cvText, jobRole, jd } or null
   getOptimizedCV() {
     try { return JSON.parse(localStorage.getItem('pl_optimized_cv')) || null; }
     catch { return null; }
   },
 
   // ── Best CV text to prefill other tools ──
-  // Prefers the optimized output; falls back to the original uploaded CV
   getBestCV() {
     const opt = this.getOptimizedCV();
     if (opt && opt.cvText && opt.cvText.length > 50) return opt.cvText;
