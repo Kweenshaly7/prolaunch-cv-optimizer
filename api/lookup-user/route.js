@@ -1,31 +1,45 @@
-// api/lookup-user.js
-// ─────────────────────────────────────────────────────────────────────────────
-// Looks up a returning user by email via the Google Apps Script Web App.
-// Returns their saved profile + whether active premium exists.
-//
-// The Apps Script must handle action=lookup (see GOOGLE_SHEETS_SETUP.gs update).
-// ─────────────────────────────────────────────────────────────────────────────
+import { NextResponse } from 'next/server';
 
-export default async function handler(req, res) {
-  res.setHeader('Access-Control-Allow-Origin', '*');
-  res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
-  res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+// ── Handle CORS Preflight Requests ───────────────────────────────────────────
+// App Router handles OPTIONS requests via this named export
+export async function OPTIONS() {
+  return new NextResponse(null, {
+    status: 200,
+    headers: {
+      'Access-Control-Allow-Origin': '*',
+      'Access-Control-Allow-Methods': 'POST, OPTIONS',
+      'Access-Control-Allow-Headers': 'Content-Type',
+    },
+  });
+}
 
-  if (req.method === 'OPTIONS') return res.status(200).end();
-  if (req.method !== 'POST') return res.status(405).json({ error: 'Method not allowed' });
-
-  const { email } = req.body;
-  if (!email) return res.status(400).json({ error: 'Email is required.' });
-
-  // FIXED: Check for either variable name just in case
-  const sheetsUrl = process.env.GOOGLE_SCRIPT_URL || process.env.SHEETS_URL;
-  if (!sheetsUrl) return res.status(500).json({ error: 'Sheets URL not configured.' });
+// ── Handle POST Requests ─────────────────────────────────────────────────────
+export async function POST(request) {
+  // Reusable headers for our POST responses
+  const corsHeaders = {
+    'Access-Control-Allow-Origin': '*',
+    'Access-Control-Allow-Methods': 'POST, OPTIONS',
+    'Access-Control-Allow-Headers': 'Content-Type',
+  };
 
   try {
+    // Parse incoming JSON body
+    const body = await request.json();
+    const { email } = body;
+
+    if (!email) {
+      return NextResponse.json({ error: 'Email is required.' }, { status: 400, headers: corsHeaders });
+    }
+
+    const sheetsUrl = process.env.GOOGLE_SCRIPT_URL || process.env.SHEETS_URL;
+    if (!sheetsUrl) {
+      console.error("Missing Sheets URL in environment variables.");
+      return NextResponse.json({ error: 'Sheets URL not configured.' }, { status: 500, headers: corsHeaders });
+    }
+
     // ── Query Google Sheets for user profile ──────────────────────────────────
     const profileRes = await fetch(sheetsUrl, {
       method: 'POST',
-      // FIXED: Disguise as text/plain to prevent Google Apps Script from returning an HTML error page
       headers: { 'Content-Type': 'text/plain;charset=utf-8' },
       body: JSON.stringify({ action: 'lookup', email: email.toLowerCase().trim() })
     });
@@ -36,16 +50,13 @@ export default async function handler(req, res) {
     try {
       result = JSON.parse(text);
     } catch (parseError) {
-      // If we log the text here, you can see exactly what Google is complaining about in your Vercel logs!
       console.error('Failed to parse Google response. Raw response:', text);
-      return res.status(404).json({ found: false, message: 'User not found or database error.' });
+      return NextResponse.json({ found: false, message: 'User not found or database error.' }, { status: 404, headers: corsHeaders });
     }
 
     if (!result.found) {
-      return res.status(200).json({ found: false });
+      return NextResponse.json({ found: false }, { status: 200, headers: corsHeaders });
     }
-
-    // ... (Keep the rest of your premium check code exactly the same below here) ...
 
     // ── Check premium status ───────────────────────────────────────────────────
     const ACCESS_DURATION = 24 * 60 * 60 * 1000; // 24 hours in ms
@@ -66,7 +77,7 @@ export default async function handler(req, res) {
       }
     }
 
-    return res.status(200).json({
+    return NextResponse.json({
       found: true,
       user: {
         name:      result.name      || '',
@@ -82,10 +93,10 @@ export default async function handler(req, res) {
         timestamp: premiumTimestamp,
         timeLeft:  premiumTimeLeft
       }
-    });
+    }, { status: 200, headers: corsHeaders });
 
   } catch (err) {
     console.error('Lookup error:', err);
-    return res.status(500).json({ error: 'Could not reach the database. Please try again.' });
+    return NextResponse.json({ error: 'Could not reach the database. Please try again.' }, { status: 500, headers: corsHeaders });
   }
 }
