@@ -2,9 +2,6 @@
 
 const PL = {
 
-  // ── Google Apps Script Web App URL (replace after setup) ──
-  SHEETS_URL: 'YOUR_GOOGLE_APPS_SCRIPT_URL_HERE',
-
   // ── Selar payment link ──
   SELAR_LINK: 'https://selar.com/premium-access',
 
@@ -87,19 +84,28 @@ const PL = {
     return `${h}h ${m}m`;
   },
 
-  // ── Send biodata to Google Sheets via Apps Script ──
+  // ── Send biodata to Google Sheets via Vercel Backend ──
   async sendToSheets(data) {
-    if (!this.SHEETS_URL || this.SHEETS_URL.includes('YOUR_GOOGLE')) return;
     try {
-      await fetch(this.SHEETS_URL, {
+      const res = await fetch('/api/save-sheet', {
         method: 'POST',
-        mode: 'no-cors',
+        // Because we are talking to our own Vercel API, we can safely use standard JSON
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(data)
       });
-    } catch (e) { console.warn('Sheets sync failed:', e); }
-  },
 
+      const result = await res.json();
+
+      if (!res.ok) {
+        throw new Error(result.error || 'Backend responded with an error');
+      }
+      
+      console.log('Successfully backed up user to Sheets!');
+    } catch (e) { 
+      console.warn('Sheets sync failed:', e.message); 
+    }
+  },
+  
   // ── Build Selar URL with email prefilled ──
   getSelarUrl() {
     const user = this.getBiodata();
