@@ -1,29 +1,18 @@
+// api/lookup-user/route.js
 import { NextResponse } from 'next/server';
 
-// ── Handle CORS Preflight Requests ───────────────────────────────────────────
-// App Router handles OPTIONS requests via this named export
+const corsHeaders = {
+  'Access-Control-Allow-Origin': '*',
+  'Access-Control-Allow-Methods': 'POST, OPTIONS',
+  'Access-Control-Allow-Headers': 'Content-Type',
+};
+
 export async function OPTIONS() {
-  return new NextResponse(null, {
-    status: 200,
-    headers: {
-      'Access-Control-Allow-Origin': '*',
-      'Access-Control-Allow-Methods': 'POST, OPTIONS',
-      'Access-Control-Allow-Headers': 'Content-Type',
-    },
-  });
+  return new NextResponse(null, { status: 200, headers: corsHeaders });
 }
 
-// ── Handle POST Requests ─────────────────────────────────────────────────────
 export async function POST(request) {
-  // Reusable headers for our POST responses
-  const corsHeaders = {
-    'Access-Control-Allow-Origin': '*',
-    'Access-Control-Allow-Methods': 'POST, OPTIONS',
-    'Access-Control-Allow-Headers': 'Content-Type',
-  };
-
   try {
-    // Parse incoming JSON body
     const body = await request.json();
     const { email } = body;
 
@@ -33,11 +22,10 @@ export async function POST(request) {
 
     const sheetsUrl = process.env.GOOGLE_SCRIPT_URL || process.env.SHEETS_URL;
     if (!sheetsUrl) {
-      console.error("Missing Sheets URL in environment variables.");
+      console.error('Missing Sheets URL in environment variables.');
       return NextResponse.json({ error: 'Sheets URL not configured.' }, { status: 500, headers: corsHeaders });
     }
 
-    // ── Query Google Sheets for user profile ──────────────────────────────────
     const profileRes = await fetch(sheetsUrl, {
       method: 'POST',
       headers: { 'Content-Type': 'text/plain;charset=utf-8' },
@@ -46,20 +34,22 @@ export async function POST(request) {
 
     const text = await profileRes.text();
     let result;
-    
+
     try {
       result = JSON.parse(text);
     } catch (parseError) {
       console.error('Failed to parse Google response. Raw response:', text);
-      return NextResponse.json({ found: false, message: 'User not found or database error.' }, { status: 404, headers: corsHeaders });
+      return NextResponse.json(
+        { found: false, message: 'User not found or database error.' },
+        { status: 404, headers: corsHeaders }
+      );
     }
 
     if (!result.found) {
       return NextResponse.json({ found: false }, { status: 200, headers: corsHeaders });
     }
 
-    // ── Check premium status ───────────────────────────────────────────────────
-    const ACCESS_DURATION = 24 * 60 * 60 * 1000; // 24 hours in ms
+    const ACCESS_DURATION = 24 * 60 * 60 * 1000;
     let premiumActive = false;
     let premiumTimestamp = null;
     let premiumTimeLeft = null;
@@ -80,13 +70,13 @@ export async function POST(request) {
     return NextResponse.json({
       found: true,
       user: {
-        name:      result.name      || '',
-        fname:     result.fname     || result.name?.split(' ')[0] || '',
-        lname:     result.lname     || result.name?.split(' ').slice(1).join(' ') || '',
-        email:     result.email     || email,
-        role:      result.role      || '',
-        level:     result.level     || '',
-        joinedAt:  result.joinedAt  || ''
+        name:     result.name     || '',
+        fname:    result.fname    || result.name?.split(' ')[0] || '',
+        lname:    result.lname    || result.name?.split(' ').slice(1).join(' ') || '',
+        email:    result.email    || email,
+        role:     result.role     || '',
+        level:    result.level    || '',
+        joinedAt: result.joinedAt || ''
       },
       premium: {
         active:    premiumActive,
@@ -97,6 +87,9 @@ export async function POST(request) {
 
   } catch (err) {
     console.error('Lookup error:', err);
-    return NextResponse.json({ error: 'Could not reach the database. Please try again.' }, { status: 500, headers: corsHeaders });
+    return NextResponse.json(
+      { error: 'Could not reach the database. Please try again.' },
+      { status: 500, headers: corsHeaders }
+    );
   }
 }
