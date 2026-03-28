@@ -1,29 +1,31 @@
 // api/lookup-user/route.js
-import { NextResponse } from 'next/server';
+// Vercel serverless function — looks up a returning user by email from Google Sheets
 
-const corsHeaders = {
-  'Access-Control-Allow-Origin': '*',
-  'Access-Control-Allow-Methods': 'POST, OPTIONS',
-  'Access-Control-Allow-Headers': 'Content-Type',
-};
+export default async function handler(req, res) {
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
 
-export async function OPTIONS() {
-  return new NextResponse(null, { status: 200, headers: corsHeaders });
-}
+  if (req.method === 'OPTIONS') return res.status(200).end();
+  if (req.method !== 'POST') return res.status(405).json({ error: 'Method not allowed' });
 
-export async function POST(request) {
   try {
-    const body = await request.json();
-    const { email } = body;
+    let body = req.body;
+    if (typeof body === 'string') {
+      try { body = JSON.parse(body); } catch {
+        return res.status(400).json({ error: 'Invalid JSON body' });
+      }
+    }
 
+    const { email } = body || {};
     if (!email) {
-      return NextResponse.json({ error: 'Email is required.' }, { status: 400, headers: corsHeaders });
+      return res.status(400).json({ error: 'Email is required.' });
     }
 
     const sheetsUrl = process.env.GOOGLE_SCRIPT_URL || process.env.SHEETS_URL;
     if (!sheetsUrl) {
       console.error('Missing Sheets URL in environment variables.');
-      return NextResponse.json({ error: 'Sheets URL not configured.' }, { status: 500, headers: corsHeaders });
+      return res.status(500).json({ error: 'Sheets URL not configured.' });
     }
 
     const profileRes = await fetch(sheetsUrl, {
@@ -39,16 +41,14 @@ export async function POST(request) {
       result = JSON.parse(text);
     } catch (parseError) {
       console.error('Failed to parse Google response. Raw response:', text);
-      return NextResponse.json(
-        { found: false, message: 'User not found or database error.' },
-        { status: 404, headers: corsHeaders }
-      );
+      return res.status(404).json({ found: false, message: 'User not found or database error.' });
     }
 
     if (!result.found) {
-      return NextResponse.json({ found: false }, { status: 200, headers: corsHeaders });
+      return res.status(200).json({ found: false });
     }
 
+    // ── Check premium status ──────────────────────────────────────────────────
     const ACCESS_DURATION = 24 * 60 * 60 * 1000;
     let premiumActive = false;
     let premiumTimestamp = null;
@@ -67,7 +67,7 @@ export async function POST(request) {
       }
     }
 
-    return NextResponse.json({
+    return res.status(200).json({
       found: true,
       user: {
         name:     result.name     || '',
@@ -83,13 +83,10 @@ export async function POST(request) {
         timestamp: premiumTimestamp,
         timeLeft:  premiumTimeLeft
       }
-    }, { status: 200, headers: corsHeaders });
+    });
 
   } catch (err) {
     console.error('Lookup error:', err);
-    return NextResponse.json(
-      { error: 'Could not reach the database. Please try again.' },
-      { status: 500, headers: corsHeaders }
-    );
+    return res.status(500).json({ error: 'Could not reach the database. Please try again.' });
   }
 }
