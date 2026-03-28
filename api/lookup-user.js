@@ -17,29 +17,35 @@ export default async function handler(req, res) {
   const { email } = req.body;
   if (!email) return res.status(400).json({ error: 'Email is required.' });
 
-  const sheetsUrl = process.env.SHEETS_URL;
+  // FIXED: Check for either variable name just in case
+  const sheetsUrl = process.env.GOOGLE_SCRIPT_URL || process.env.SHEETS_URL;
   if (!sheetsUrl) return res.status(500).json({ error: 'Sheets URL not configured.' });
 
   try {
     // ── Query Google Sheets for user profile ──────────────────────────────────
     const profileRes = await fetch(sheetsUrl, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      // FIXED: Disguise as text/plain to prevent Google Apps Script from returning an HTML error page
+      headers: { 'Content-Type': 'text/plain;charset=utf-8' },
       body: JSON.stringify({ action: 'lookup', email: email.toLowerCase().trim() })
     });
 
-    // Apps Script returns text/plain with JSON body
     const text = await profileRes.text();
     let result;
+    
     try {
       result = JSON.parse(text);
-    } catch {
-      return res.status(404).json({ found: false, message: 'User not found.' });
+    } catch (parseError) {
+      // If we log the text here, you can see exactly what Google is complaining about in your Vercel logs!
+      console.error('Failed to parse Google response. Raw response:', text);
+      return res.status(404).json({ found: false, message: 'User not found or database error.' });
     }
 
     if (!result.found) {
       return res.status(200).json({ found: false });
     }
+
+    // ... (Keep the rest of your premium check code exactly the same below here) ...
 
     // ── Check premium status ───────────────────────────────────────────────────
     const ACCESS_DURATION = 24 * 60 * 60 * 1000; // 24 hours in ms
