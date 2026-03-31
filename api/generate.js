@@ -18,8 +18,8 @@ export default async function handler(req, res) {
     return res.status(500).json({ error: "Server misconfiguration: API key not set." });
   }
 
-  // FIX: corrected invalid model name "gemini-flash-latest" → "gemini-1.5-flash"
-  const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`;
+  // FIX: corrected invalid model name "gemini-1.5-flash" → "gemini-2.0-flash"
+  const apiUrl = `https://generativelanguage.googleapis.com/v1/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
 
   try {
     const response = await fetch(apiUrl, {
