@@ -51,8 +51,4 @@ export default async function handler(req, res) {
     console.error('Error forwarding to Sheets:', error);
     return res.status(500).json({ error: 'Failed to connect to the database.' });
   }
-<<<<<<< HEAD
 }
-=======
-}
->>>>>>> staging

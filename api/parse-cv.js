@@ -85,8 +85,4 @@ export default async function handler(req, res) {
       error: `Could not parse the file: ${err.message}. Please paste your CV text manually.`,
     });
   }
-<<<<<<< HEAD
 }
-=======
-}
->>>>>>> staging
