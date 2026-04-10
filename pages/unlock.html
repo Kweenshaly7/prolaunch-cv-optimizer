@@ -62,6 +62,10 @@
     /* Checkout button — single, below plans */
     .checkout-wrap{text-align:center;margin-bottom:2rem;}
     .checkout-note{font-size:0.82rem;color:var(--gray);margin-bottom:0.85rem;line-height:1.5;}
+    .btn-plan{display:block;width:100%;background:var(--forest);color:white;font-family:'Playfair Display',sans-serif;font-weight:800;font-size:0.9rem;padding:0.8rem;border-radius:50px;border:none;cursor:pointer;transition:all 0.2s;margin-top:1rem;box-shadow:0 4px 14px rgba(18,71,69,0.2);}
+    .btn-plan:hover{background:var(--forest-light);transform:translateY(-1px);}
+    .btn-plan.green{background:var(--green);box-shadow:0 4px 14px rgba(123,182,64,0.3);}
+    .btn-plan.green:hover{background:#6aa335;}
     .btn-checkout{display:inline-flex;align-items:center;gap:0.5rem;background:var(--forest);color:white;font-family:'Playfair Display',sans-serif;font-weight:800;font-size:1.05rem;padding:0.95rem 2.5rem;border-radius:50px;text-decoration:none;transition:all 0.2s;border:none;cursor:pointer;box-shadow:0 6px 20px rgba(18,71,69,0.25);}
     .btn-checkout:hover{background:var(--forest-light);transform:translateY(-2px);box-shadow:0 8px 28px rgba(18,71,69,0.3);}
     .btn-checkout .arrow{transition:transform 0.2s;}
@@ -147,6 +151,7 @@
             <div class="feat"><span class="feat-check">✓</span> Download .docx results</div>
             <div class="feat"><span class="feat-check">✓</span> Best for quick applications</div>
           </div>
+          <button class="btn-plan" onclick="goToPlan('24h')">Get 24-Hour Access →</button>
         </div>
 
         <!-- 7-Day (popular) -->
@@ -165,6 +170,7 @@
             <div class="feat"><span class="feat-check">✓</span> Download .docx results</div>
             <div class="feat"><span class="feat-check">✓</span> Full report history</div>
           </div>
+          <button class="btn-plan green" onclick="goToPlan('7day')">Get 7-Day Access →</button>
         </div>
 
         <!-- 30-Day -->
@@ -182,23 +188,21 @@
             <div class="feat"><span class="feat-check">✓</span> Download .docx results</div>
             <div class="feat"><span class="feat-check">✓</span> Full report history</div>
           </div>
+          <button class="btn-plan" onclick="goToPlan('30day')">Get 30-Day Access →</button>
         </div>
 
       </div>
 
-      <!-- Single checkout CTA -->
+      <!-- Per-plan checkout note -->
       <div class="checkout-wrap">
         <p class="checkout-note">
-          Clicking below takes you to <strong>Selar</strong> — Nigeria's trusted payment platform.<br>
-          Select your preferred plan on the checkout page, complete payment, and you'll be redirected back automatically.
+          Each button takes you directly to <strong>Selar</strong> for that plan.<br>
+          Complete payment and you'll be redirected back instantly — no waiting.
         </p>
-        <a href="#" id="checkout-btn" class="btn-checkout" onclick="handleCheckout(event)">
-          🔓 Choose My Plan <span class="arrow">→</span>
-        </a>
-        <div class="secure-note">🔒 Secure payment via Selar · Instant access on return</div>
+        <div class="secure-note">🔒 Secure payment via Selar · Access granted immediately on return</div>
       </div>
 
-      <!-- What's included -->
+            <!-- What's included -->
       <div class="includes">
         <h3>Everything included in every plan:</h3>
         <div class="tools-row">
@@ -278,92 +282,66 @@
       }
     }
 
-    // ── Navigate to Selar in the SAME tab ───────────────────────────────────
-    // Opening in a new tab means Selar's redirect lands in that new tab,
-    // which loads a fresh page with no polling and no premium yet — pricing
-    // screen shows again. Same-tab navigation fixes this: Selar redirects
-    // back here with ?email=xxx appended, we detect it and auto-start polling.
-    function handleCheckout(e) {
-      e.preventDefault();
-      // Save a flag so on return we know to start polling immediately
-      sessionStorage.setItem('pl_awaiting_payment', '1');
-      window.location.href = PL.getSelarUrl();
+    // ── Per-plan Selar URLs ─────────────────────────────────────────────────
+    // Each plan is a separate Selar product. The redirect URL for each product
+    // includes ?plan=<key> so we know which tier to grant on return — no Zapier
+    // delay, no polling. Update these URLs after creating the Selar products.
+    const SELAR_LINKS = {
+      '24h':   'https://selar.com/premium-access-24',
+      '7day':  'https://selar.com/premium-access-7d',
+      '30day': 'https://selar.com/premium-access-30d',
+    };
+
+    function getSelarLink(plan) {
+      const base  = SELAR_LINKS[plan];
+      const user  = PL.getBiodata();
+      const email = user?.email ? `?email=${encodeURIComponent(user.email)}` : '';
+      return `${base}${email}`;
     }
 
-    // ── Polling ──────────────────────────────────────────────────────────────
-    let pollTimer  = null;
-    let pollCount  = 0;
-    let maxPolls   = 72; // 6 minutes at 5s intervals
+    // ── Go to Selar for selected plan ─────────────────────────────────────────
+    function goToPlan(plan) {
+      // Save the chosen plan to sessionStorage before leaving — used as a
+      // fallback if the redirect URL loses the ?plan param for any reason
+      sessionStorage.setItem('pl_pending_plan', plan);
+      window.location.href = getSelarLink(plan);
+    }
 
-    function startPolling(emailHint) {
-      // Show verifying UI immediately — no delay needed when we know user just paid
-      document.getElementById('pricing-view').style.display   = 'none';
-      document.getElementById('verifying-view').style.display = 'block';
+    // ── Grant access on redirect return ───────────────────────────────────────
+    // Selar appends ?plan=7day&email=xxx to the redirect URL.
+    // We read the plan, grant access immediately, then sync to Sheets async.
+    function handleRedirectReturn(plan, email) {
+      // Clean the URL — prevents double-grant on manual refresh
+      history.replaceState({}, '', location.pathname);
+      sessionStorage.removeItem('pl_pending_plan');
 
-      // Use email from URL param if provided (Selar appends it), else fall back
-      // to whatever is in localStorage from when the user first registered
-      const lookupEmail = emailHint || PL.getBiodata()?.email;
+      // Grant access in localStorage immediately — user gets in right now
+      PL.grantPremium(plan, Date.now());
 
-      if (!lookupEmail) {
-        // No email available — can't poll, show pricing with a message
-        document.getElementById('pricing-view').style.display   = 'block';
-        document.getElementById('verifying-view').style.display = 'none';
-        PL.toast('Could not detect your email. Please log in and try again.', 'error');
-        return;
+      // If Selar returned a different/confirmed email, update biodata
+      if (email) {
+        const user = PL.getBiodata();
+        if (user && email !== user.email) {
+          PL.saveBiodata({ ...user, email });
+        }
       }
 
-      pollTimer = setInterval(async () => {
-        pollCount++;
-        try {
-          const result = await PL.lookupUser(lookupEmail);
-          if (result.premium?.active && result.premium?.plan) {
-            clearInterval(pollTimer);
-            sessionStorage.removeItem('pl_awaiting_payment');
-            PL.grantPremium(result.premium.plan, result.premium.timestamp);
-            // Also sync the confirmed email into biodata in case it changed
-            if (result.found) PL.restoreSession(result);
-            showSuccess(result.premium);
-            return;
-          }
-        } catch (_) {}
-
-        // After 3 minutes show a manual retry button but keep polling
-        if (pollCount === 36) {
-          document.getElementById('manual-check-btn').style.display = 'inline-block';
-        }
-
-        // Stop after 6 minutes — user can click manual check or contact support
-        if (pollCount >= maxPolls) {
-          clearInterval(pollTimer);
-          document.getElementById('verifying-view').style.display  = 'none';
-          document.getElementById('pricing-view').style.display    = 'block';
-          sessionStorage.removeItem('pl_awaiting_payment');
-          PL.toast('Payment not yet confirmed after 6 minutes. If you were charged, please contact support.', 'warn');
-        }
-      }, 5000);
-    }
-
-    // ── Manual re-check (shown after 3 min) ──────────────────────────────────
-    async function manualCheck() {
-      const btn   = document.getElementById('manual-check-btn');
-      btn.textContent = 'Checking…';
-      btn.disabled    = true;
-      const email  = new URLSearchParams(location.search).get('email') || PL.getBiodata()?.email;
-      const result = await PL.lookupUser(email);
-      if (result.premium?.active && result.premium?.plan) {
-        clearInterval(pollTimer);
-        sessionStorage.removeItem('pl_awaiting_payment');
-        PL.grantPremium(result.premium.plan, result.premium.timestamp);
-        if (result.found) PL.restoreSession(result);
-        showSuccess(result.premium);
-      } else {
-        btn.textContent = 'Check Again';
-        btn.disabled    = false;
-        PL.toast('Still confirming — Zapier can take 1–2 minutes. Please wait a moment and try again.', 'info');
+      // Async background sync to Google Sheets — doesn't block the user
+      const user = PL.getBiodata();
+      if (user?.email) {
+        PL.sendToSheets({
+          action:  'savePremium',
+          email:   user.email,
+          plan,
+          paidAt:  String(Date.now()),
+          source:  'selar-redirect',
+        }).catch(e => console.warn('Background Sheets sync failed:', e.message));
       }
+
+      showSuccess({ plan });
     }
 
-    // ── Show success screen ───────────────────────────────────────────────────
+    // ── Show success screen ────────────────────────────────────────────────────
     function showSuccess(premium) {
       document.getElementById('verifying-view').style.display = 'none';
       document.getElementById('pricing-view').style.display   = 'none';
@@ -379,21 +357,22 @@
       window.location.href = '../index.html';
     } else {
 
-      // Case 1: User already has active premium (e.g. returning to this page)
+      const params       = new URLSearchParams(location.search);
+      const planFromUrl  = params.get('plan');
+      const emailFromUrl = params.get('email') ? decodeURIComponent(params.get('email')) : null;
+      const pendingPlan  = sessionStorage.getItem('pl_pending_plan');
+
+      // Case 1: User already has active premium
       if (PL.isPremium()) {
-        showSuccess({ plan: PL.premiumPlan(), timestamp: JSON.parse(localStorage.getItem('pl_premium') || '{}').ts });
+        showSuccess({ plan: PL.premiumPlan() });
 
-      // Case 2: Selar just redirected back — URL has ?email=xxx appended by Selar
-      } else if (new URLSearchParams(location.search).get('email')) {
-        const emailFromUrl = decodeURIComponent(new URLSearchParams(location.search).get('email'));
-        // Clean the URL so a manual refresh doesn't re-trigger polling unnecessarily
-        history.replaceState({}, '', location.pathname);
-        startPolling(emailFromUrl);
+      // Case 2: Selar just redirected back with ?plan=xxx — grant immediately
+      } else if (planFromUrl && PL.PLANS[planFromUrl]) {
+        handleRedirectReturn(planFromUrl, emailFromUrl);
 
-      // Case 3: User set the awaiting flag before going to Selar (same-tab nav)
-      // but URL was cleaned — still poll using stored email
-      } else if (sessionStorage.getItem('pl_awaiting_payment')) {
-        startPolling(PL.getBiodata()?.email);
+      // Case 3: Redirect came back but URL param was stripped — use sessionStorage
+      } else if (pendingPlan && PL.PLANS[pendingPlan]) {
+        handleRedirectReturn(pendingPlan, emailFromUrl);
 
       // Case 4: Normal visit — show pricing
       } else {
@@ -404,5 +383,3 @@
       }
     }
   </script>
-</body>
-</html>
