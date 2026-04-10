@@ -1,0 +1,15 @@
+{
+  "name": "prolaunch-cv-optimizer",
+  "version": "2.0.0",
+  "description": "ProLaunch Careers AI-powered career tools",
+  "private": true,
+  "dependencies": {
+    "docx": "^9.0.2",
+    "formidable": "^3.5.1",
+    "mammoth": "^1.7.0",
+    "pdf-parse": "^1.1.1"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}

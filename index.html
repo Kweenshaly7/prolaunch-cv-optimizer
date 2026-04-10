@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ProLaunch Careers | AI Career Tools</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;800&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+  <style>
+    :root{--green:#7bb640;--green-dark:#6aa335;--green-pale:#f0f7e8;--teal:#19a08c;--teal-dark:#158f7d;--forest:#124745;--forest-light:#1a5f5c;--cream:#f7f9f4;--white:#fff;--gray:#6b7280;--border:#e2ead8;}
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+    html{scroll-behavior:smooth;}
+    body{font-family:'Lato',sans-serif;background:var(--cream);color:var(--forest);overflow-x:hidden;}
+    h1,h2,h3,h4,h5{font-family:'Playfair Display',serif;}
+    nav{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(255,255,255,0.95);backdrop-filter:blur(12px);border-bottom:1.5px solid var(--border);padding:0.9rem 2rem;display:flex;align-items:center;justify-content:space-between;}
+    .nav-brand{display:flex;align-items:center;gap:0.65rem;text-decoration:none;}
+    .nav-brand img{height:38px;}
+    .nav-brand span{font-family:'Playfair Display',serif;font-weight:800;font-size:1rem;color:var(--forest);}
+    .nav-btn{background:var(--green);color:white;font-family:'Playfair Display',serif;font-weight:700;font-size:0.85rem;padding:0.55rem 1.4rem;border-radius:50px;text-decoration:none;border:none;cursor:pointer;transition:all 0.2s;}
+    .nav-btn:hover{background:var(--green-dark);transform:translateY(-1px);}
+    .hero{min-height:100vh;display:grid;grid-template-columns:1fr 1fr;align-items:center;gap:3rem;padding:7rem 4rem 4rem;max-width:1200px;margin:0 auto;}
+    .hero h1{font-size:clamp(2.4rem,4.5vw,3.6rem);font-weight:800;line-height:1.08;letter-spacing:-0.03em;margin-bottom:1.25rem;}
+    .hero h1 em{font-style:normal;color:var(--green);}
+    .hero-sub{font-size:1.05rem;color:var(--gray);line-height:1.65;max-width:440px;margin-bottom:2rem;}
+    .hero-features{display:flex;flex-direction:column;gap:0.6rem;margin-bottom:2rem;}
+    .hero-feat{display:flex;align-items:center;gap:0.6rem;font-size:0.9rem;color:var(--forest);font-weight:500;}
+    .feat-dot{width:20px;height:20px;min-width:20px;background:var(--green);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:0.65rem;color:white;}
+    .hero-scroll{font-size:0.8rem;color:var(--gray);}
+    .form-card{background:white;border-radius:24px;border:2px solid var(--border);padding:2.25rem 2rem;box-shadow:0 20px 60px rgba(18,71,69,0.1);position:relative;overflow:hidden;}
+    .form-card::before{content:'';position:absolute;top:0;left:0;right:0;height:4px;background:linear-gradient(90deg,var(--green),var(--teal));}
+    .form-card h3{font-size:1.25rem;font-weight:800;margin-bottom:0.35rem;}
+    .form-card>p{font-size:0.85rem;color:var(--gray);margin-bottom:1.25rem;}
+    .form-group{margin-bottom:1.1rem;}
+    .form-group label{display:block;font-family:'Playfair Display',serif;font-weight:700;font-size:0.82rem;color:var(--forest);margin-bottom:0.4rem;}
+    .form-group label span{color:var(--green);}
+    .form-group input,.form-group select{width:100%;padding:0.75rem 1rem;border:2px solid var(--border);border-radius:12px;font-family:'Lato',sans-serif;font-size:0.9rem;color:var(--forest);outline:none;transition:border-color 0.2s;background:white;appearance:none;}
+    .form-group input:focus,.form-group select:focus{border-color:var(--green);}
+    .form-group input::placeholder{color:#b0bab0;}
+    .two-col{display:grid;grid-template-columns:1fr 1fr;gap:0.85rem;}
+    .return-toggle{text-align:center;margin-bottom:1.25rem;padding-bottom:1.25rem;border-bottom:1.5px solid var(--border);}
+    .return-toggle p{font-size:0.82rem;color:var(--gray);margin-bottom:0.5rem;}
+    .btn-return{background:transparent;border:1.5px solid var(--border);color:var(--forest);font-family:'Playfair Display',serif;font-weight:700;font-size:0.82rem;padding:0.55rem 1.2rem;border-radius:50px;cursor:pointer;transition:all 0.2s;}
+    .btn-return:hover{border-color:var(--teal);color:var(--teal);}
+    .return-panel{display:none;background:#f0fdf9;border:1.5px solid rgba(25,160,140,0.3);border-radius:14px;padding:1.25rem;margin-bottom:1.25rem;}
+    .return-panel label{font-family:'Playfair Display',serif;font-weight:700;font-size:0.82rem;color:var(--teal);display:block;margin-bottom:0.4rem;}
+    .return-panel input{width:100%;padding:0.75rem 1rem;border:2px solid rgba(25,160,140,0.35);border-radius:12px;font-family:'Lato',sans-serif;font-size:0.9rem;color:var(--forest);outline:none;transition:border-color 0.2s;margin-bottom:0.75rem;}
+    .return-panel input:focus{border-color:var(--teal);}
+    .btn-lookup{width:100%;background:var(--teal);color:white;font-family:'Playfair Display',serif;font-weight:700;font-size:0.9rem;padding:0.75rem;border-radius:50px;border:none;cursor:pointer;transition:all 0.2s;}
+    .btn-lookup:hover{background:var(--teal-dark);}
+    .btn-lookup:disabled{opacity:0.7;cursor:not-allowed;}
+    .divider-or{display:flex;align-items:center;gap:0.75rem;margin:1rem 0;color:var(--gray);font-size:0.78rem;font-weight:600;}
+    .divider-or::before,.divider-or::after{content:'';flex:1;height:1px;background:var(--border);}
+    .upload-zone{width:100%;border:2px dashed var(--border);border-radius:12px;padding:1.25rem 1rem;text-align:center;cursor:pointer;transition:all 0.2s;background:var(--cream);position:relative;}
+    .upload-zone:hover,.upload-zone.dragover{border-color:var(--green);background:var(--green-pale);}
+    .upload-zone input[type=file]{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%;}
+    .upload-icon{font-size:1.5rem;margin-bottom:0.35rem;}
+    .upload-text{font-size:0.82rem;color:var(--gray);line-height:1.4;}
+    .upload-text strong{color:var(--green);}
+    .upload-filename{display:none;align-items:center;gap:0.5rem;background:var(--green-pale);border:1.5px solid rgba(123,182,64,0.35);border-radius:10px;padding:0.6rem 0.9rem;font-size:0.82rem;color:var(--forest);font-weight:600;margin-top:0.5rem;}
+    .upload-filename.show{display:flex;}
+    .upload-clear{background:none;border:none;cursor:pointer;color:#9ca3af;font-size:1rem;margin-left:auto;line-height:1;}
+    .upload-clear:hover{color:#ef4444;}
+    .btn-submit{width:100%;background:var(--forest);color:white;font-family:'Playfair Display',serif;font-weight:800;font-size:1rem;padding:0.95rem;border-radius:50px;border:none;cursor:pointer;transition:all 0.2s;margin-top:0.5rem;display:flex;align-items:center;justify-content:center;gap:0.5rem;box-shadow:0 4px 16px rgba(18,71,69,0.2);}
+    .btn-submit:hover:not(:disabled){background:var(--forest-light);transform:translateY(-2px);}
+    .btn-submit:disabled{opacity:0.7;cursor:not-allowed;}
+    .form-note{font-size:0.75rem;color:var(--gray);text-align:center;margin-top:0.85rem;line-height:1.5;}
+    .tools-section{background:var(--forest);padding:5rem 2rem;}
+    .tools-inner{max-width:1100px;margin:0 auto;}
+    .section-eyebrow{font-family:'Playfair Display',serif;font-size:0.72rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:rgba(123,182,64,0.8);margin-bottom:0.75rem;}
+    .section-title-light{font-size:clamp(1.8rem,3vw,2.5rem);font-weight:800;color:white;margin-bottom:0.75rem;}
+    .section-sub-light{font-size:0.95rem;color:rgba(255,255,255,0.55);max-width:460px;line-height:1.6;margin-bottom:3rem;}
+    .tools-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:1.25rem;}
+    .tool-tile{border-radius:16px;padding:1.5rem;border:1.5px solid rgba(255,255,255,0.08);background:rgba(255,255,255,0.04);transition:all 0.2s;}
+    .tool-tile:hover{background:rgba(255,255,255,0.08);border-color:rgba(123,182,64,0.3);}
+    .tool-tile.free-tool{background:rgba(123,182,64,0.1);border-color:rgba(123,182,64,0.35);}
+    .tile-icon{font-size:1.6rem;margin-bottom:0.85rem;}
+    .tile-badge{display:inline-block;font-size:0.65rem;font-weight:800;padding:0.2rem 0.55rem;border-radius:50px;margin-bottom:0.6rem;letter-spacing:0.07em;text-transform:uppercase;}
+    .badge-free{background:rgba(123,182,64,0.25);color:#a8d96b;}
+    .badge-premium{background:rgba(245,158,11,0.2);color:#fcd34d;}
+    .tool-tile h4{font-size:0.95rem;font-weight:700;color:white;margin-bottom:0.4rem;}
+    .tool-tile p{font-size:0.82rem;color:rgba(255,255,255,0.5);line-height:1.5;}
+    footer{background:#0a2e2d;color:white;padding:2rem;text-align:center;}
+    footer p{font-size:0.82rem;color:rgba(255,255,255,0.45);}
+    footer span{color:var(--green);font-weight:700;}
+    @keyframes fadeUp{from{opacity:0;transform:translateY(20px);}to{opacity:1;transform:translateY(0);}}
+    .fade-1{animation:fadeUp 0.5s 0.1s ease both;}
+    .fade-2{animation:fadeUp 0.5s 0.2s ease both;}
+    .fade-3{animation:fadeUp 0.5s 0.3s ease both;}
+    .fade-4{animation:fadeUp 0.5s 0.4s ease both;}
+    @media(max-width:768px){.hero{grid-template-columns:1fr;padding:6rem 1.5rem 3rem;gap:2rem;min-height:auto;}.hero-sub,.hero-features{display:none;}nav{padding:0.75rem 1rem;}.nav-brand span{display:none;}}
+  </style>
+</head>
+<body>
+  <nav>
+    <a href="index.html" class="nav-brand">
+      <img src="logo2.png" alt="ProLaunch Careers">
+      <span>ProLaunch Careers</span>
+    </a>
+    <button class="nav-btn" onclick="document.getElementById('signup-form').scrollIntoView({behavior:'smooth'})">Get Started Free</button>
+  </nav>
+
+  <section class="hero">
+    <div class="hero-left">
+      <h1 class="fade-1">Your Career,<br><em>Launched</em><br>with ProLaunch Careers</h1>
+      <p class="hero-sub fade-2">Free CV analysis plus premium tools for resume building, cover letters, interview prep, and career insights — built for professionals.</p>
+      <div class="hero-features fade-3">
+        <div class="hero-feat"><div class="feat-dot">✓</div> Free CV Analyzer — no payment needed</div>
+        <div class="hero-feat"><div class="feat-dot">✓</div> Premium suite for just ₦1,000</div>
+        <div class="hero-feat"><div class="feat-dot">✓</div> ATS-optimized outputs you can download</div>
+        <div class="hero-feat"><div class="feat-dot">✓</div> Built for Nigerian & African job seekers</div>
+      </div>
+      <div class="hero-scroll fade-4">↓ Fill the form to get started</div>
+    </div>
+
+    <div class="form-card fade-3" id="signup-form">
+      <h3>Start Your Career Journey</h3>
+      <p>Fill in your details to access your free CV Analysis tool.</p>
+
+      <div class="return-toggle">
+        <p>Already registered before?</p>
+        <button class="btn-return" onclick="toggleReturnPanel()">👋 I have an account</button>
+      </div>
+
+      <div class="return-panel" id="return-panel">
+        <label for="return-email">Enter your email to restore your session</label>
+        <input type="email" id="return-email" placeholder="yourname@email.com">
+        <button class="btn-lookup" id="lookup-btn" onclick="handleLookup()">
+          <span id="lookup-text">🔍 Find My Account</span>
+        </button>
+      </div>
+
+      <div class="divider-or" id="divider-or">or sign up below</div>
+
+      <div class="two-col">
+        <div class="form-group">
+          <label for="fname">First Name <span>*</span></label>
+          <input type="text" id="fname" placeholder="e.g. Adaeze">
+        </div>
+        <div class="form-group">
+          <label for="lname">Last Name <span>*</span></label>
+          <input type="text" id="lname" placeholder="e.g. Okonkwo">
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="email">Email Address <span>*</span></label>
+        <input type="email" id="email" placeholder="yourname@email.com">
+      </div>
+      <div class="form-group">
+        <label for="role">Target Job Role <span>*</span></label>
+        <input type="text" id="role" placeholder="e.g. Data Analyst, Product Manager">
+      </div>
+      <div class="form-group">
+        <label for="level">Experience Level <span>*</span></label>
+        <select id="level">
+          <option value="">— Select your level —</option>
+          <option value="Student / Fresh Graduate">Student / Fresh Graduate</option>
+          <option value="Entry-Level (0–2 years)">Entry-Level (0–2 years)</option>
+          <option value="Mid-Level (3–5 years)">Mid-Level (3–5 years)</option>
+          <option value="Senior (6–10 years)">Senior (6–10 years)</option>
+          <option value="Executive / Director">Executive / Director</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="cvUpload">Upload Your CV <span>*</span></label>
+        <div class="upload-zone" id="upload-zone">
+          <input type="file" id="cvUpload" accept=".pdf,.doc,.docx,.txt" onchange="handleFileSelect(this)">
+          <div class="upload-icon">📎</div>
+          <div class="upload-text"><strong>Click to upload</strong> or drag & drop<br>PDF, DOC, DOCX or TXT · Max 5MB</div>
+        </div>
+        <div class="upload-filename" id="upload-filename">
+          <span>📄</span><span id="filename-text"></span>
+          <button class="upload-clear" onclick="clearFile(event)" title="Remove file">✕</button>
+        </div>
+      </div>
+
+      <button class="btn-submit" id="submit-btn" onclick="handleSignup()">
+        <span id="submit-text">🚀 Access Free CV Analyzer</span>
+      </button>
+      <p class="form-note">🔒 Your name must match the name on your CV. No spam. Upgrade to premium anytime for ₦1,000.</p>
+    </div>
+  </section>
+
+  <section class="tools-section">
+    <div class="tools-inner">
+      <div class="section-eyebrow">What's Inside</div>
+      <h2 class="section-title-light">Free Access + Premium Suite</h2>
+      <p class="section-sub-light">Start free, upgrade when you're ready.</p>
+      <div class="tools-grid">
+        <div class="tool-tile free-tool">
+          <div class="tile-icon">🔍</div><div class="tile-badge badge-free">Free</div>
+          <h4>CV Analyzer</h4><p>Instant feedback on your CV's strengths, weaknesses, and ATS score for your target role.</p>
+        </div>
+        <div class="tool-tile">
+          <div class="tile-icon">📄</div><div class="tile-badge badge-premium">Premium — ₦1,000</div>
+          <h4>Resume Builder</h4><p>Full ATS-optimized resume rewrite tailored to your exact job description.</p>
+        </div>
+        <div class="tool-tile">
+          <div class="tile-icon">✉️</div><div class="tile-badge badge-premium">Premium</div>
+          <h4>Cover Letter</h4><p>Job-specific cover letter connecting your experience to the role.</p>
+        </div>
+        <div class="tool-tile">
+          <div class="tile-icon">🎯</div><div class="tile-badge badge-premium">Premium</div>
+          <h4>Interview Prep</h4><p>10 interview-generated questions with model answers for your specific role.</p>
+        </div>
+        <div class="tool-tile">
+          <div class="tile-icon">💡</div><div class="tile-badge badge-premium">Premium</div>
+          <h4>Career Insights</h4><p>Salary benchmarks, in-demand skills, and a personalised 90-day action plan.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <p>Built by <span>Mary-Queen Uchechukwu</span> for ProLaunch Careers</p>
+    <p style="margin-top:0.3rem">&copy; <script>document.write(new Date().getFullYear())</script> ProLaunch Careers. All rights reserved.</p>
+  </footer>
+
+  <script src="shared.js"></script>
+  <script>
+    window.addEventListener('DOMContentLoaded', () => {
+      if (PL.hasBiodata()) window.location.href = 'pages/dashboard.html';
+    });
+
+    // ── Returning user panel ──────────────────────────────────────────────────
+    function toggleReturnPanel() {
+      const panel = document.getElementById('return-panel');
+      const divider = document.getElementById('divider-or');
+      const isOpen = panel.style.display === 'block';
+      panel.style.display = isOpen ? 'none' : 'block';
+      divider.textContent = isOpen ? 'or sign up below' : 'or fill in your details below';
+      if (!isOpen) document.getElementById('return-email').focus();
+    }
+
+    async function handleLookup() {
+      const email = document.getElementById('return-email').value.trim();
+      if (!email || !email.includes('@')) { PL.toast('Please enter a valid email address.', 'error'); return; }
+      const btn = document.getElementById('lookup-btn');
+      const text = document.getElementById('lookup-text');
+      btn.disabled = true; text.textContent = 'Searching...';
+      const result = await PL.lookupUser(email);
+      btn.disabled = false; text.textContent = 'Find My Account';
+      if (!result.found) {
+        PL.toast('No account found for that email. Please sign up below.', 'warn');
+        document.getElementById('email').value = email;
+        document.getElementById('return-panel').style.display = 'none';
+        document.getElementById('divider-or').textContent = 'sign up below';
+        document.getElementById('fname').focus();
+        return;
+      }
+      PL.restoreSession(result);
+      const msg = (result.premium && result.premium.active)
+        ? 'Welcome back, ' + result.user.fname + '! Premium access restored (' + result.premium.timeLeft + ' left).'
+        : 'Welcome back, ' + result.user.fname + '! Redirecting to your dashboard.';
+      PL.toast(msg, 'success');
+      setTimeout(() => { window.location.href = 'pages/dashboard.html'; }, 1500);
+    }
+
+    // ── File upload ───────────────────────────────────────────────────────────
+    let cvFileText = null, cvFileName = null;
+
+    function handleFileSelect(input) {
+      const file = input.files[0]; if (!file) return;
+      if (file.size > 5 * 1024 * 1024) { PL.toast('File too large. Max 5MB.', 'error'); input.value = ''; return; }
+      const ext = file.name.split('.').pop().toLowerCase();
+      if (!['pdf','doc','docx','txt'].includes(ext)) { PL.toast('Unsupported file type. Please upload PDF, DOC, DOCX or TXT.', 'error'); input.value = ''; return; }
+      cvFileName = file.name; cvFileText = null;
+      document.getElementById('filename-text').textContent = file.name;
+      document.getElementById('upload-filename').classList.add('show');
+    }
+
+    function clearFile(e) {
+      e.preventDefault();
+      document.getElementById('cvUpload').value = '';
+      document.getElementById('upload-filename').classList.remove('show');
+      cvFileText = null; cvFileName = null;
+    }
+
+    async function parseCVFile(file) {
+      const formData = new FormData(); formData.append('cv', file);
+      const res = await fetch('/api/parse-cv', { method: 'POST', body: formData });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || 'Could not parse file');
+      return data.text;
+    }
+
+    const zone = document.getElementById('upload-zone');
+    zone.addEventListener('dragover', (e) => { e.preventDefault(); zone.classList.add('dragover'); });
+    zone.addEventListener('dragleave', () => zone.classList.remove('dragover'));
+    zone.addEventListener('drop', (e) => {
+      e.preventDefault(); zone.classList.remove('dragover');
+      const file = e.dataTransfer.files[0];
+      if (file) { const input = document.getElementById('cvUpload'); const dt = new DataTransfer(); dt.items.add(file); input.files = dt.files; handleFileSelect(input); }
+    });
+
+    // ── Name verification ─────────────────────────────────────────────────────
+    // Uses AI to extract the name from the CV and compares against registered name.
+    // Normalises both names (lowercase, alpha-only tokens, sorted) before comparing.
+    async function verifyCVName(registeredName, cvText) {
+      const prompt = 'Extract the full name of the person this CV belongs to. Return ONLY the name as plain text — no explanation, no punctuation, just the name exactly as it appears at the top of the CV.\n\nCV:\n' + cvText.substring(0, 1500);
+      try {
+        const res = await fetch('/api/generate', {
+          method: 'POST', headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ prompt })
+        });
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.error);
+        const cvName   = (data.text || '').trim().toLowerCase().replace(/[^a-z\s]/g, '');
+        const regName  = registeredName.trim().toLowerCase().replace(/[^a-z\s]/g, '');
+        const cvTokens  = cvName.split(/\s+/).filter(Boolean).sort();
+        const regTokens = regName.split(/\s+/).filter(Boolean).sort();
+        // All tokens in registered name must appear in CV name
+        const allMatch = regTokens.every(t => cvTokens.includes(t));
+        return { match: allMatch, cvName: data.text.trim() };
+      } catch (e) {
+        console.warn('Name verify error:', e);
+        return { match: true }; // fail open if AI call itself fails
+      }
+    }
+
+    // ── Signup ────────────────────────────────────────────────────────────────
+    async function handleSignup() {
+      const fname = document.getElementById('fname').value.trim();
+      const lname = document.getElementById('lname').value.trim();
+      const email = document.getElementById('email').value.trim();
+      const role  = document.getElementById('role').value.trim();
+      const level = document.getElementById('level').value;
+      const fileInput = document.getElementById('cvUpload');
+
+      if (!fname || !lname) { PL.toast('Please enter your full name.', 'error'); return; }
+      if (!email || !email.includes('@')) { PL.toast('Please enter a valid email.', 'error'); return; }
+      if (!role)  { PL.toast('Please enter your target job role.', 'error'); return; }
+      if (!level) { PL.toast('Please select your experience level.', 'error'); return; }
+      if (!fileInput.files[0]) { PL.toast('Please upload your CV.', 'error'); return; }
+
+      const btn = document.getElementById('submit-btn');
+      const text = document.getElementById('submit-text');
+      btn.disabled = true; text.textContent = 'Parsing CV...';
+
+      try {
+        // Step 1 — Parse CV
+        const parsedText = await parseCVFile(fileInput.files[0]);
+        cvFileText = parsedText;
+
+        // Step 2 — Verify name matches CV
+        text.textContent = 'Verifying identity...';
+        const fullName = fname + ' ' + lname;
+        const nameCheck = await verifyCVName(fullName, parsedText);
+
+        if (!nameCheck.match) {
+          btn.disabled = false; text.textContent = '🚀 Access Free CV Analyzer';
+          PL.toast('The name on your CV ("' + nameCheck.cvName + '") does not match your registered name ("' + fullName + '"). Please upload your own CV.', 'error');
+          document.getElementById('fname').style.borderColor = '#ef4444';
+          document.getElementById('lname').style.borderColor = '#ef4444';
+          setTimeout(() => {
+            document.getElementById('fname').style.borderColor = '';
+            document.getElementById('lname').style.borderColor = '';
+          }, 5000);
+          return;
+        }
+
+        // Step 3 — Save & sync
+        text.textContent = 'Saving your profile...';
+
+        // Build the full user object — cvText is kept here for localStorage only
+        const userData = { name: fullName, fname, lname, email, role, level, cvFileName: fileInput.files[0].name, cvText: cvFileText, joinedAt: new Date().toISOString() };
+
+        // FIX (Bug 1, 2, 7):
+        //   Bug 1 — action:'register' added so Apps Script knows what to do
+        //   Bug 2 — cvText stripped from Sheets payload (stays in localStorage via saveBiodata)
+        //            to prevent Google Sheets 50k-char cell limit overflow causing silent failures
+        //   Bug 7 — await added so errors are caught and shown to the user
+        PL.saveBiodata(userData);
+        const { cvText: _drop, ...sheetPayload } = userData;
+        await PL.sendToSheets({ action: 'register', ...sheetPayload });
+
+        PL.toast('CV verified! Redirecting...', 'success');
+        setTimeout(() => { window.location.href = 'pages/dashboard.html'; }, 1000);
+
+      } catch (err) {
+        console.warn('Signup error:', err.message);
+
+        // If biodata was already saved locally, Sheets sync failed — let user in with warning
+        if (PL.hasBiodata()) {
+          PL.toast('Profile saved! Cloud sync failed — your data is stored locally.', 'warn');
+          setTimeout(() => { window.location.href = 'pages/dashboard.html'; }, 2000);
+        } else {
+          // CV parsing failed before anything was saved — graceful fallback
+          PL.toast('CV parsing failed: ' + err.message + '. You can paste your CV manually.', 'warn');
+          const fallbackData = { name: fname + ' ' + lname, fname, lname, email, role, level, cvFileName: fileInput.files[0].name, cvText: '', joinedAt: new Date().toISOString() };
+          PL.saveBiodata(fallbackData);
+          // FIX (Bug 1): action:'register' on fallback path too
+          const { cvText: _fd, ...fallbackSheet } = fallbackData;
+          PL.sendToSheets({ action: 'register', ...fallbackSheet })
+            .catch(e => console.warn('Fallback Sheets sync failed:', e.message));
+          setTimeout(() => { window.location.href = 'pages/dashboard.html'; }, 2500);
+        }
+      } finally {
+        btn.disabled = false; text.textContent = '🚀 Access Free CV Analyzer';
+      }
+    }
+  </script>
+</body>
+</html>

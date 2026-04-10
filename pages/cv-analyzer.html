@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CV Analyzer | ProLaunch Careers</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;800&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+  <style>
+    :root{--green:#7bb640;--green-dark:#6aa335;--green-pale:#f0f7e8;--teal:#19a08c;--teal-dark:#158f7d;--forest:#124745;--forest-light:#1a5f5c;--cream:#f7f9f4;--border:#e2ead8;--gray:#6b7280;--amber:#f59e0b;}
+    *{box-sizing:border-box;margin:0;padding:0;}
+    body{font-family:'Lato',sans-serif;background:var(--cream);color:var(--forest);}
+    h1,h2,h3,h4{font-family:'Playfair Display',sans-serif;}
+    nav{background:white;border-bottom:1.5px solid var(--border);padding:0.85rem 2rem;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;box-shadow:0 2px 10px rgba(18,71,69,0.05);flex-wrap:wrap;gap:0.5rem;}
+    .nav-brand{display:flex;align-items:center;gap:0.6rem;text-decoration:none;}
+    .nav-brand img{height:36px;}
+    .nav-brand span{font-family:'Playfair Display',sans-serif;font-weight:800;font-size:0.95rem;color:var(--forest);}
+    .nav-links{display:flex;align-items:center;gap:0.5rem;flex-wrap:wrap;}
+    .nav-pill{font-family:'Playfair Display',sans-serif;font-size:0.76rem;font-weight:700;color:var(--forest);text-decoration:none;padding:0.32rem 0.8rem;border-radius:50px;border:1.5px solid var(--border);transition:all 0.2s;white-space:nowrap;}
+    .nav-pill:hover{background:var(--forest);color:white;border-color:var(--forest);}
+    .nav-pill.active{background:var(--green);color:white;border-color:var(--green);}
+    .page-header{background:linear-gradient(135deg,#1a3d1a 0%,var(--forest) 50%,var(--forest-light) 100%);color:white;padding:2.75rem 2rem 2.25rem;text-align:center;}
+    .badge{display:inline-flex;align-items:center;gap:0.4rem;background:rgba(123,182,64,0.2);border:1px solid rgba(123,182,64,0.4);color:#a8d96b;font-size:0.7rem;font-weight:700;padding:0.28rem 0.85rem;border-radius:50px;margin-bottom:0.85rem;letter-spacing:0.07em;text-transform:uppercase;}
+    .page-header h1{font-size:clamp(1.75rem,4vw,2.6rem);font-weight:800;margin-bottom:0.5rem;}
+    .page-header p{color:rgba(255,255,255,0.65);font-size:0.92rem;max-width:460px;margin:0 auto;line-height:1.6;}
+    main{max-width:860px;margin:0 auto;padding:2.5rem 1.5rem;}
+    .card{background:white;border-radius:20px;padding:2rem;border:2px solid var(--border);margin-bottom:1.5rem;}
+    label{display:block;font-family:'Playfair Display',sans-serif;font-weight:700;font-size:0.85rem;color:var(--forest);margin-bottom:0.4rem;}
+    .req{color:var(--green);}
+    input[type=text],textarea{width:100%;padding:0.75rem 1rem;border:2px solid #e2e8e2;border-radius:12px;font-family:'Lato',sans-serif;font-size:0.9rem;color:var(--forest);outline:none;transition:border-color 0.2s;resize:vertical;}
+    input[type=text]:focus,textarea:focus{border-color:var(--green);}
+    .hint{font-size:0.78rem;color:#9ca3af;margin-bottom:0.45rem;}
+    .btn-analyze{width:100%;background:var(--green);color:white;font-family:'Playfair Display',sans-serif;font-weight:800;font-size:1.05rem;padding:1rem;border-radius:50px;border:none;cursor:pointer;transition:all 0.2s;display:flex;align-items:center;justify-content:center;gap:0.6rem;box-shadow:0 4px 18px rgba(123,182,64,0.28);}
+    .btn-analyze:hover:not(:disabled){background:var(--green-dark);transform:translateY(-2px);}
+    .btn-analyze:disabled{opacity:0.7;cursor:not-allowed;}
+    .spinner{width:18px;height:18px;border:2.5px solid rgba(255,255,255,0.3);border-top-color:white;border-radius:50%;animation:spin 0.7s linear infinite;display:none;}
+    @keyframes spin{to{transform:rotate(360deg);}}
+    .results{display:none;margin-top:0;}
+
+    /* Score card */
+    .score-card{background:linear-gradient(135deg,var(--forest) 0%,var(--forest-light) 100%);border-radius:20px;padding:2rem;color:white;margin-bottom:1.25rem;display:flex;align-items:center;gap:2rem;flex-wrap:wrap;}
+    .score-circle{min-width:90px;height:90px;border-radius:50%;display:flex;flex-direction:column;align-items:center;justify-content:center;border:4px solid rgba(255,255,255,0.2);background:rgba(255,255,255,0.08);}
+    .score-num{font-family:'Playfair Display',sans-serif;font-size:1.8rem;font-weight:800;line-height:1;}
+    .score-label{font-size:0.65rem;color:rgba(255,255,255,0.6);text-transform:uppercase;letter-spacing:0.05em;margin-top:0.15rem;}
+    .score-meta h3{font-size:1.1rem;font-weight:800;margin-bottom:0.25rem;}
+    .score-meta p{font-size:0.875rem;color:rgba(255,255,255,0.65);line-height:1.5;}
+
+    /* Analysis blocks */
+    .analysis-grid{display:grid;grid-template-columns:1fr 1fr;gap:1.1rem;margin-bottom:1.25rem;}
+    @media(max-width:580px){.analysis-grid{grid-template-columns:1fr;}}
+    .analysis-block{background:white;border-radius:16px;border:2px solid var(--border);overflow:hidden;}
+    .block-head{padding:0.9rem 1.1rem;border-bottom:1.5px solid var(--border);display:flex;align-items:center;gap:0.5rem;}
+    .block-icon{width:28px;height:28px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:0.9rem;}
+    .block-head h4{font-size:0.88rem;font-weight:700;color:var(--forest);}
+    .block-body{padding:1.1rem;font-size:0.85rem;line-height:1.7;color:#374151;white-space:pre-wrap;}
+    .full-width{grid-column:1/-1;}
+
+    /* CTA to premium */
+    .premium-cta{background:linear-gradient(135deg,#2d1f00,#7a4f00);border-radius:20px;padding:1.75rem 2rem;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1.25rem;margin-top:1.5rem;}
+    .premium-cta h3{font-size:1.05rem;font-weight:800;color:white;margin-bottom:0.25rem;}
+    .premium-cta p{font-size:0.84rem;color:rgba(255,255,255,0.65);}
+    .btn-premium{background:var(--amber);color:white;font-family:'Playfair Display',sans-serif;font-weight:800;font-size:0.92rem;padding:0.7rem 1.6rem;border-radius:50px;border:none;cursor:pointer;white-space:nowrap;transition:all 0.2s;box-shadow:0 4px 14px rgba(245,158,11,0.3);}
+    .btn-premium:hover{background:#d97706;}
+
+    footer{background:var(--forest);color:white;padding:1.75rem;text-align:center;margin-top:3rem;}
+    footer p{font-size:0.82rem;color:rgba(255,255,255,0.5);}
+    footer span{color:var(--green);font-weight:700;}
+    @media(max-width:500px){.nav-brand span{display:none;}.nav-pill{font-size:0.7rem;padding:0.27rem 0.65rem;}}
+  </style>
+</head>
+<body>
+  <nav>
+    <a href="../index.html" class="nav-brand">
+      <img src="../logo2.png" alt="ProLaunch">
+      <span>ProLaunch Careers</span>
+    </a>
+    <div class="nav-links">
+      <a href="dashboard.html" class="nav-pill">🏠 Dashboard</a>
+      <a href="cv-analyzer.html" class="nav-pill active">🔍 CV Analyzer</a>
+    </div>
+  </nav>
+
+  <div class="page-header">
+    <div class="badge">🔍 Free Tool</div>
+    <h1>CV Analyzer</h1>
+    <p>Get instant feedback on your CV — ATS score, strengths, gaps, and quick wins for your target role.</p>
+  </div>
+
+  <main>
+    <div class="card">
+      <div style="margin-bottom:1.25rem;">
+        <label for="jobRole">Target Job Role <span class="req">*</span></label>
+        <input type="text" id="jobRole" placeholder="e.g., Data Analyst, Product Manager">
+      </div>
+      <div style="margin-bottom:1.25rem;">
+        <label for="cvInput">Paste Your CV <span class="req">*</span></label>
+        <textarea id="cvInput" rows="11" placeholder="Copy and paste the full text of your CV here..."></textarea>
+      </div>
+
+      <!-- Re-upload option (shown when CV was uploaded at signup) -->
+      <div id="reupload-section" style="display:none; margin-bottom:1.25rem;">
+        <label id="reupload-label" for="cvReupload" style="font-size:0.8rem; color:var(--gray); font-weight:600;">Re-upload CV</label>
+        <div style="margin-top:0.4rem;">
+          <label style="display:inline-flex;align-items:center;gap:0.5rem;background:var(--green-pale);border:1.5px solid rgba(123,182,64,0.35);border-radius:10px;padding:0.55rem 1rem;cursor:pointer;font-size:0.82rem;font-weight:600;color:var(--forest);transition:all 0.2s;" onmouseover="this.style.background='#ddf0c4'" onmouseout="this.style.background='var(--green-pale)'">
+            📎 Choose new file (PDF, DOC, DOCX, TXT)
+            <input type="file" id="cvReupload" accept=".pdf,.doc,.docx,.txt" style="display:none;" onchange="handleReupload(this)">
+          </label>
+        </div>
+      </div>
+      <div style="margin-bottom:2rem;">
+        <label for="jdInput">Paste Job Description <span style="color:var(--gray);font-weight:400;">(Recommended)</span></label>
+        <p class="hint">Adding the job description gives you role-specific gap analysis.</p>
+        <textarea id="jdInput" rows="5" placeholder="Paste the job description here for tailored analysis..."></textarea>
+      </div>
+      <button class="btn-analyze" id="analyzeBtn" onclick="handleAnalyze()">
+        <span id="btnText">🔍 Analyze My CV</span>
+        <div class="spinner" id="spinner"></div>
+      </button>
+    </div>
+
+    <div class="results" id="results">
+
+      <!-- Score -->
+      <div class="score-card" id="score-card">
+        <div class="score-circle">
+          <div class="score-num" id="score-num">—</div>
+          <div class="score-label">ATS Score</div>
+        </div>
+        <div class="score-meta">
+          <h3 id="score-verdict">Analyzing...</h3>
+          <p id="score-summary"></p>
+        </div>
+      </div>
+
+      <!-- Analysis blocks -->
+      <div class="analysis-grid">
+        <div class="analysis-block">
+          <div class="block-head">
+            <div class="block-icon" style="background:rgba(123,182,64,0.12);">💪</div>
+            <h4>Strengths</h4>
+          </div>
+          <div class="block-body" id="strengths-output"></div>
+        </div>
+        <div class="analysis-block">
+          <div class="block-head">
+            <div class="block-icon" style="background:rgba(239,68,68,0.1);">⚠️</div>
+            <h4>Gaps & Weaknesses</h4>
+          </div>
+          <div class="block-body" id="gaps-output"></div>
+        </div>
+        <div class="analysis-block">
+          <div class="block-head">
+            <div class="block-icon" style="background:rgba(25,160,140,0.1);">🔑</div>
+            <h4>Missing Keywords</h4>
+          </div>
+          <div class="block-body" id="keywords-output"></div>
+        </div>
+        <div class="analysis-block">
+          <div class="block-head">
+            <div class="block-icon" style="background:rgba(245,158,11,0.1);">⚡</div>
+            <h4>Quick Wins</h4>
+          </div>
+          <div class="block-body" id="quickwins-output"></div>
+        </div>
+        <div class="analysis-block full-width">
+          <div class="block-head">
+            <div class="block-icon" style="background:rgba(18,71,69,0.08);">📋</div>
+            <h4>Overall Recommendation</h4>
+          </div>
+          <div class="block-body" id="recommendation-output"></div>
+        </div>
+      </div>
+
+      <!-- Download button -->
+      <div style="display:flex;gap:0.75rem;flex-wrap:wrap;margin-bottom:1.25rem;">
+        <button onclick="downloadAnalysis()" style="background:var(--teal);color:white;font-family:'Playfair Display',sans-serif;font-weight:700;font-size:0.82rem;padding:0.55rem 1.25rem;border-radius:50px;border:none;cursor:pointer;">⬇ Download Analysis (.docx)</button>
+      </div>
+
+      <!-- Upgrade CTA -->
+      <div class="premium-cta" id="premium-cta" style="display:none;">
+        <div>
+          <h3>Ready to fix all of this? 🚀</h3>
+          <p>Unlock Resume Builder, Cover Letter, Interview Prep & Career Insights for ₦1,000 (24hr access).</p>
+        </div>
+        <button class="btn-premium" onclick="window.location.href='unlock.html'">🔓 Unlock Premium →</button>
+      </div>
+
+    </div>
+
+      <!-- Career Grooming Camp Recommendation -->
+      <div id="cgc-inline" style="display:none;margin-top:1.5rem;background:linear-gradient(135deg,#124745,#1a5f5c);border-radius:18px;padding:1.5rem 1.75rem;color:white;">
+        <p style="font-size:0.7rem;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:#7bb640;margin-bottom:0.3rem;">Recommended For You</p>
+        <h3 id="cgc-inline-headline" style="font-family:'Playfair Display',sans-serif;font-size:1.05rem;font-weight:800;margin-bottom:0.35rem;"></h3>
+        <p id="cgc-inline-body" style="font-size:0.85rem;color:rgba(255,255,255,0.7);line-height:1.55;margin-bottom:1rem;"></p>
+        <a id="cgc-inline-cta" href="#" target="_blank" style="display:inline-block;background:#7bb640;color:white;font-family:'Playfair Display',sans-serif;font-weight:800;font-size:0.85rem;padding:0.55rem 1.25rem;border-radius:50px;text-decoration:none;"></a>
+      </div>
+
+  </main>
+
+  <footer>
+    <p>Built by <span>Mary-Queen Uchechukwu</span> for ProLaunch Careers</p>
+    <p style="margin-top:0.3rem">&copy; <script>document.write(new Date().getFullYear())</script> ProLaunch Careers. All rights reserved.</p>
+  </footer>
+
+  <script src="../shared.js"></script>
+  <script>
+    if (!PL.hasBiodata()) window.location.href = '../index.html';
+
+    // Pre-fill job role and CV text from user profile
+    window.addEventListener('DOMContentLoaded', () => {
+      const user = PL.getBiodata();
+      if (user?.role) document.getElementById('jobRole').value = user.role;
+      if (user?.cvText && user.cvText.length > 50) {
+        document.getElementById('cvInput').value = user.cvText;
+        showReupload(user.cvFileName);
+      } else if (user?.cvFileName) {
+        document.getElementById('cvInput').placeholder =
+          `CV on file: ${user.cvFileName}\n\nParsing failed for this file type — please paste your CV text here, or re-upload below.`;
+        showReupload(user.cvFileName);
+      }
+    });
+
+    function showReupload(filename) {
+      const el = document.getElementById('reupload-section');
+      if (el) {
+        el.style.display = 'block';
+        const lbl = document.getElementById('reupload-label');
+        if (lbl && filename) lbl.textContent = `Re-upload CV (on file: ${filename})`;
+      }
+    }
+
+    async function handleReupload(input) {
+      const file = input.files[0];
+      if (!file) return;
+      if (file.size > 5 * 1024 * 1024) { PL.toast('File too large. Max 5MB.', 'error'); return; }
+      PL.toast('Parsing CV...', 'info');
+      try {
+        const formData = new FormData();
+        formData.append('cv', file);
+        const res = await fetch('/api/parse-cv', { method: 'POST', body: formData });
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.error);
+        document.getElementById('cvInput').value = data.text;
+        // Update stored cvText
+        const user = PL.getBiodata();
+        if (user) { user.cvText = data.text; user.cvFileName = file.name; PL.saveBiodata(user); }
+        PL.toast('✅ CV parsed successfully!', 'success');
+      } catch (e) {
+        PL.toast(`Parse failed: ${e.message}`, 'error');
+      }
+    }
+
+    // ── Name verification helper (shared logic) ─────────────────────────────
+    async function verifyCVName(registeredName, cvText) {
+      const prompt = 'Extract the full name of the person this CV belongs to. Return ONLY the name as plain text — no explanation, no punctuation, just the name exactly as it appears at the top of the CV.\n\nCV:\n' + cvText.substring(0, 1500);
+      try {
+        const res = await PL.callAI(prompt);
+        const cvName  = (res || '').trim().toLowerCase().replace(/[^a-z\s]/g, '');
+        const regName = registeredName.trim().toLowerCase().replace(/[^a-z\s]/g, '');
+        const cvTokens  = cvName.split(/\s+/).filter(Boolean).sort();
+        const regTokens = regName.split(/\s+/).filter(Boolean).sort();
+        const allMatch  = regTokens.every(t => cvTokens.includes(t));
+        return { match: allMatch, cvName: res.trim() };
+      } catch (e) { return { match: true }; }
+    }
+
+    async function handleAnalyze() {
+      const jobRole = document.getElementById('jobRole').value.trim();
+      const cv = document.getElementById('cvInput').value.trim();
+      const jd = document.getElementById('jdInput').value.trim();
+
+      if (!jobRole) { PL.toast('Please enter a target job role.', 'error'); return; }
+      if (!cv) { PL.toast('Please paste your CV.', 'error'); return; }
+
+      setLoading(true);
+
+      // ── Verify CV belongs to the registered user ────────────────────────
+      const user = PL.getBiodata();
+      if (user && user.name) {
+        document.getElementById('btnText').textContent = 'Verifying identity...';
+        const nameCheck = await verifyCVName(user.name, cv);
+        if (!nameCheck.match) {
+          setLoading(false);
+          PL.toast('The name on this CV ("' + nameCheck.cvName + '") does not match your registered name ("' + user.name + '"). Please use your own CV.', 'error');
+          return;
+        }
+      }
+      document.getElementById('results').style.display = 'none';
+
+      try {
+        // Truncate CV to prevent token overload (keep first 4000 chars)
+        const cvTruncated = cv.length > 4000 ? cv.substring(0, 4000) + '...' : cv;
+        const jdTruncated = jd.length > 1500 ? jd.substring(0, 1500) + '...' : jd;
+
+        const raw = await PL.callAI(`You are a senior ATS specialist and career coach. Analyze this CV for a "${jobRole}" role.
+${jdTruncated ? `Job Description:\n${jdTruncated}` : ''}
+
+CV:
+${cvTruncated}
+
+IMPORTANT: Respond ONLY with a valid JSON object. No markdown fences, no explanation, no text before or after the JSON.
+
+{
+  "ats_score": 72,
+  "verdict": "Good Foundation",
+  "summary": "Two sentences about overall fit.",
+  "strengths": "• Point one\n• Point two\n• Point three",
+  "gaps": "• Point one\n• Point two\n• Point three",
+  "missing_keywords": "• Keyword one\n• Keyword two\n• Keyword three\n• Keyword four",
+  "quick_wins": "• Action one\n• Action two\n• Action three",
+  "recommendation": "Three sentences of honest advice."
+}`);
+
+        // Robust JSON extraction — handles markdown fences, leading text, trailing text
+        let cleaned = raw.trim();
+        // Strip markdown code fences
+        cleaned = cleaned.replace(/^```(?:json)?\s*/i, '').replace(/\s*```\s*$/, '');
+        // Extract JSON object if there's surrounding text
+        const jsonMatch = cleaned.match(/\{[\s\S]*\}/);
+        if (!jsonMatch) throw new Error('No JSON object found in response');
+        const data = JSON.parse(jsonMatch[0]);
+
+        // Validate required fields exist
+        if (data.ats_score === undefined) throw new Error('Missing ats_score in response');
+
+        // Score
+        const score = Number(data.ats_score);
+        const scoreEl = document.getElementById('score-num');
+        scoreEl.textContent = score + '%';
+        scoreEl.style.color = score >= 70 ? '#7bb640' : score >= 45 ? '#f59e0b' : '#ef4444';
+        document.getElementById('score-verdict').textContent = data.verdict || '—';
+        document.getElementById('score-summary').textContent = data.summary || '—';
+
+        // Blocks
+        document.getElementById('strengths-output').textContent = data.strengths || '—';
+        document.getElementById('gaps-output').textContent = data.gaps || '—';
+        document.getElementById('keywords-output').textContent = data.missing_keywords || '—';
+        document.getElementById('quickwins-output').textContent = data.quick_wins || '—';
+        document.getElementById('recommendation-output').textContent = data.recommendation || '—';
+
+        document.getElementById('results').style.display = 'block';
+        document.getElementById('results').scrollIntoView({ behavior:'smooth' });
+
+        // Save to report history
+        PL.saveReport('analysis', data.role || jobRole, data);
+
+        // Show upgrade CTA if not premium
+        if (!PL.isPremium()) {
+          document.getElementById('premium-cta').style.display = 'flex';
+        }
+
+        PL.toast('✅ Analysis complete!', 'success');
+      } catch(e) {
+        console.error('Analysis error:', e);
+        // Specific error messages to help diagnose
+        if (e.message && e.message.includes('API')) {
+          PL.toast('API error — please check your connection and try again.', 'error');
+        } else if (e.message && e.message.includes('JSON')) {
+          PL.toast('Analysis returned unexpected format. Please try again.', 'error');
+        } else {
+          PL.toast('Error analyzing CV. Please try again.', 'error');
+        }
+      } finally { setLoading(false); }
+    }
+
+    function window.location.href='unlock.html' {
+      window.open(PL.getSelarUrl(), '_blank');
+    }
+
+    function setLoading(on) {
+      document.getElementById('analyzeBtn').disabled = on;
+      document.getElementById('btnText').textContent = on ? 'Analyzing your CV...' : '🔍 Analyze My CV';
+      document.getElementById('spinner').style.display = on ? 'block' : 'none';
+    }
+    function downloadAnalysis() {
+      const data = {
+        role:     document.getElementById('jobRole')?.value || '',
+        score:    document.querySelector('.score-num')?.textContent || '',
+        strengths: document.getElementById('strengths-output')?.innerText || '',
+        gaps:      document.getElementById('gaps-output')?.innerText || '',
+        missing_keywords: document.getElementById('keywords-output')?.innerText || '',
+        quick_wins: document.getElementById('quickwins-output')?.innerText || '',
+        recommendation: document.getElementById('recommendation-output')?.innerText || '',
+      };
+      PL.downloadDocx(JSON.stringify(data), 'CV_Analysis_Report', 'analysis');
+    }
+
+    // Career Grooming Camp inline banner
+    function showCGC() {
+      const rec = PL.getCGCRecommendation();
+      if (!rec) return;
+      const card = document.getElementById('cgc-inline');
+      document.getElementById('cgc-inline-headline').textContent = rec.headline;
+      document.getElementById('cgc-inline-body').textContent     = rec.body;
+      const cta = document.getElementById('cgc-inline-cta');
+      cta.textContent = rec.cta;
+      cta.href        = PL.CGC.url;
+      card.style.display = 'block';
+    }
+
+  </script>
+</body>
+</html>

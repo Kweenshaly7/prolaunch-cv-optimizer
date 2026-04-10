@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Career Insights | ProLaunch Careers</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;800&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+  <style>
+    :root{--green:#7bb640;--green-dark:#6aa335;--teal:#19a08c;--teal-dark:#158f7d;--forest:#124745;--amber:#f59e0b;--cream:#f7f9f4;--border:#e2ead8;--gray:#6b7280;}
+    *{box-sizing:border-box;margin:0;padding:0;}
+    body{font-family:'Lato',sans-serif;background:var(--cream);color:var(--forest);}
+    h1,h2,h3,h4{font-family:'Playfair Display',sans-serif;}
+    nav{background:white;border-bottom:2px solid var(--border);padding:0.85rem 2rem;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;box-shadow:0 2px 12px rgba(18,71,69,0.06);flex-wrap:wrap;gap:0.5rem;}
+    .nav-logo{display:flex;align-items:center;gap:0.65rem;text-decoration:none;}
+    .nav-logo img{height:40px;}
+    .nav-logo span{font-family:'Playfair Display',sans-serif;font-weight:800;font-size:1rem;color:var(--forest);}
+    .nav-links{display:flex;align-items:center;gap:0.5rem;flex-wrap:wrap;}
+    .nav-pill{font-family:'Playfair Display',sans-serif;font-size:0.78rem;font-weight:700;color:var(--forest);text-decoration:none;padding:0.35rem 0.85rem;border-radius:50px;border:1.5px solid var(--border);transition:all 0.2s;white-space:nowrap;}
+    .nav-pill:hover,.nav-pill.active{background:var(--amber);color:white;border-color:var(--amber);}
+    .page-header{background:linear-gradient(135deg,#2d1f00 0%,#7a4f00 50%,#b37400 100%);color:white;padding:3rem 2rem 2.5rem;text-align:center;}
+    .badge{display:inline-block;background:rgba(245,158,11,0.25);border:1px solid rgba(245,158,11,0.4);color:#fcd34d;font-size:0.72rem;font-weight:700;padding:0.3rem 0.9rem;border-radius:50px;margin-bottom:1rem;letter-spacing:0.07em;text-transform:uppercase;}
+    .page-header h1{font-size:clamp(1.8rem,4vw,2.8rem);font-weight:800;margin-bottom:0.6rem;}
+    .page-header p{color:rgba(255,255,255,0.7);font-size:0.95rem;max-width:500px;margin:0 auto;line-height:1.6;}
+    main{max-width:900px;margin:0 auto;padding:2.5rem 1.5rem;}
+    .card{background:white;border-radius:20px;padding:2rem;border:2px solid var(--border);margin-bottom:1.5rem;}
+    label{display:block;font-family:'Playfair Display',sans-serif;font-weight:700;font-size:0.9rem;color:var(--forest);margin-bottom:0.5rem;}
+    input[type=text],textarea,select{width:100%;padding:0.8rem 1rem;border:2px solid #e2e8f0;border-radius:12px;font-family:'Lato',sans-serif;font-size:0.9rem;color:var(--forest);outline:none;transition:border-color 0.2s;resize:vertical;appearance:none;}
+    input[type=text]:focus,textarea:focus,select:focus{border-color:var(--amber);}
+    .hint{font-size:0.8rem;color:#9ca3af;margin-bottom:0.5rem;}
+    .two-col{display:grid;grid-template-columns:1fr 1fr;gap:1.25rem;}
+    @media(max-width:640px){.two-col{grid-template-columns:1fr;}}
+    .btn-generate{width:100%;background:var(--amber);color:white;font-family:'Playfair Display',sans-serif;font-weight:800;font-size:1.05rem;padding:1rem 2rem;border-radius:50px;border:none;cursor:pointer;transition:all 0.2s;display:flex;align-items:center;justify-content:center;gap:0.75rem;box-shadow:0 4px 20px rgba(245,158,11,0.3);}
+    .btn-generate:hover:not(:disabled){background:#d97706;transform:translateY(-2px);}
+    .btn-generate:disabled{opacity:0.7;cursor:not-allowed;}
+    .spinner{width:20px;height:20px;border:3px solid rgba(255,255,255,0.3);border-top-color:white;border-radius:50%;animation:spin 0.7s linear infinite;display:none;}
+    @keyframes spin{to{transform:rotate(360deg);}}
+    .results{display:none;margin-top:2rem;}
+    .insights-grid{display:grid;grid-template-columns:1fr 1fr;gap:1.25rem;margin-bottom:1.25rem;}
+    @media(max-width:640px){.insights-grid{grid-template-columns:1fr;}}
+    .insight-block{background:white;border-radius:16px;border:2px solid var(--border);overflow:hidden;}
+    .insight-block.full{grid-column:1/-1;}
+    .insight-head{padding:1rem 1.25rem;border-bottom:2px solid var(--border);display:flex;align-items:center;gap:0.6rem;}
+    .insight-head h3{font-size:0.92rem;font-weight:700;color:var(--forest);}
+    .insight-icon{width:32px;height:32px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:1rem;}
+    .insight-body{padding:1.25rem;font-size:0.875rem;line-height:1.7;color:#374151;white-space:pre-wrap;min-height:120px;}
+    .skills-body{padding:1.25rem;display:flex;flex-wrap:wrap;gap:0.5rem;}
+    .skill-tag{background:rgba(123,182,64,0.1);border:1.5px solid rgba(123,182,64,0.3);color:var(--forest);font-size:0.8rem;font-weight:600;padding:0.3rem 0.75rem;border-radius:50px;}
+    .btn-download{background:var(--teal);color:white;font-family:'Playfair Display',sans-serif;font-weight:700;font-size:0.82rem;padding:0.45rem 1rem;border-radius:50px;border:none;cursor:pointer;transition:all 0.2s;}
+    .btn-download:hover{background:var(--teal-dark);}
+    .results-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:1.25rem;flex-wrap:wrap;gap:0.75rem;}
+    .results-header h2{font-size:1.3rem;font-weight:800;color:var(--forest);}
+    footer{background:var(--forest);color:white;padding:1.75rem 2rem;text-align:center;margin-top:3rem;}
+    footer p{font-size:0.83rem;color:rgba(255,255,255,0.6);}
+    footer span{color:var(--green);font-weight:700;}
+    @media(max-width:500px){.nav-logo span{display:none;}.nav-pill{font-size:0.7rem;padding:0.28rem 0.65rem;}}
+  </style>
+</head>
+<body>
+  <nav>
+    <a href="dashboard.html" class="nav-logo">
+      <img src="../logo2.png" alt="ProLaunch">
+      <span>ProLaunch Careers</span>
+    </a>
+    <div class="nav-links">
+      <a href="cv-optimizer.html" class="nav-pill">📄 Resume</a>
+      <a href="cover-letter.html" class="nav-pill">✉️ Cover Letter</a>
+      <a href="interview-prep.html" class="nav-pill">🎯 Interview</a>
+      <a href="career-insights.html" class="nav-pill active">💡 Insights</a>
+    </div>
+  </nav>
+
+  <div class="page-header">
+    <div class="badge">💡 Career Insights</div>
+    <h1>Know Your Market</h1>
+    <p>Get career advice, in-demand skills, salary benchmarks, and industry trends tailored to your field and experience level.</p>
+  </div>
+
+  <main>
+    <div class="card">
+      <div class="two-col" style="margin-bottom:1.5rem;">
+        <div>
+          <label for="jobRole">Your Target Role <span style="color:var(--amber);">*</span></label>
+          <input type="text" id="jobRole" placeholder="e.g., Product Manager, DevOps Engineer">
+        </div>
+        <div>
+          <label for="industry">Industry</label>
+          <input type="text" id="industry" placeholder="e.g., Fintech, Healthcare, E-commerce">
+        </div>
+      </div>
+      <div class="two-col" style="margin-bottom:1.5rem;">
+        <div>
+          <label for="expLevel">Experience Level</label>
+          <select id="expLevel">
+            <option value="entry-level">Entry-Level (0–2 yrs)</option>
+            <option value="mid-level" selected>Mid-Level (3–5 yrs)</option>
+            <option value="senior">Senior (6–10 yrs)</option>
+            <option value="executive">Executive / Director</option>
+          </select>
+        </div>
+        <div>
+          <label for="location">Location / Market</label>
+          <input type="text" id="location" placeholder="e.g., Nigeria, Remote, UK">
+        </div>
+      </div>
+      <div style="margin-bottom:2rem;">
+        <label for="cvInput">Paste Your CV <span style="color:#9ca3af;font-weight:400;">(Optional — for personalised advice)</span></label>
+        <p class="hint">Adding your CV enables personalised gap analysis and recommendations.</p>
+        <textarea id="cvInput" rows="5" placeholder="Paste your CV here for personalised career advice..."></textarea>
+      </div>
+      <button class="btn-generate" id="generateBtn" onclick="handleGenerate()">
+        <span id="btnText">💡 Generate My Career Insights</span>
+        <div class="spinner" id="spinner"></div>
+      </button>
+    </div>
+
+    <div class="results" id="results">
+      <div class="results-header">
+        <h2>💡 Your Career Insights</h2>
+        <button class="btn-download" onclick="downloadInsights()">⬇ Download Report</button>
+      </div>
+      <div class="insights-grid">
+        <div class="insight-block">
+          <div class="insight-head"><div class="insight-icon" style="background:rgba(123,182,64,0.12);">📈</div><h3>Industry Trends</h3></div>
+          <div class="insight-body" id="trends-output"></div>
+        </div>
+        <div class="insight-block">
+          <div class="insight-head"><div class="insight-icon" style="background:rgba(245,158,11,0.12);">💰</div><h3>Salary Benchmarks</h3></div>
+          <div class="insight-body" id="salary-output"></div>
+        </div>
+        <div class="insight-block">
+          <div class="insight-head"><div class="insight-icon" style="background:rgba(25,160,140,0.12);">🛠️</div><h3>In-Demand Skills</h3></div>
+          <div id="skills-output" class="skills-body"></div>
+        </div>
+        <div class="insight-block">
+          <div class="insight-head"><div class="insight-icon" style="background:rgba(18,71,69,0.08);">🚀</div><h3>Career Growth Path</h3></div>
+          <div class="insight-body" id="growth-output"></div>
+        </div>
+        <div class="insight-block full">
+          <div class="insight-head"><div class="insight-icon" style="background:rgba(123,182,64,0.12);">🎯</div><h3>Personalised Action Plan</h3></div>
+          <div class="insight-body" id="action-output"></div>
+        </div>
+      </div>
+    </div>
+
+      <!-- Career Grooming Camp Recommendation -->
+      <div id="cgc-inline" style="display:none;margin-top:1.5rem;background:linear-gradient(135deg,#124745,#1a5f5c);border-radius:18px;padding:1.5rem 1.75rem;color:white;">
+        <p style="font-size:0.7rem;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:#7bb640;margin-bottom:0.3rem;">Recommended For You</p>
+        <h3 id="cgc-inline-headline" style="font-family:'Playfair Display',sans-serif;font-size:1.05rem;font-weight:800;margin-bottom:0.35rem;"></h3>
+        <p id="cgc-inline-body" style="font-size:0.85rem;color:rgba(255,255,255,0.7);line-height:1.55;margin-bottom:1rem;"></p>
+        <a id="cgc-inline-cta" href="#" target="_blank" style="display:inline-block;background:#7bb640;color:white;font-family:'Playfair Display',sans-serif;font-weight:800;font-size:0.85rem;padding:0.55rem 1.25rem;border-radius:50px;text-decoration:none;"></a>
+      </div>
+
+  </main>
+
+  <footer>
+    <p>Built by <span>Mary-Queen Uchechukwu</span> for ProLaunch Careers</p>
+    <p style="margin-top:0.3rem;">&copy; <script>document.write(new Date().getFullYear())</script> ProLaunch Careers. All rights reserved.</p>
+  </footer>
+
+  <script src="../shared.js"></script>
+  <script>
+    // Premium gate
+    if (!PL.hasBiodata()) { window.location.href = '../index.html'; }
+    else if (!PL.isPremium()) { window.location.href = 'dashboard.html'; }
+
+    // Pre-fill from saved profile
+    window.addEventListener('DOMContentLoaded', () => {
+      // Prefer optimized CV from Resume Builder; fall back to original uploaded CV
+      document.getElementById('jobRole').value = PL.getBestRole();
+      document.getElementById('cvInput').value = PL.getBestCV();
+    });
+
+    let insightsData = {};
+
+    async function handleGenerate() {
+      const jobRole = document.getElementById('jobRole').value.trim();
+      const industry = document.getElementById('industry').value.trim();
+      const expLevel = document.getElementById('expLevel').value;
+      const location = document.getElementById('location').value.trim();
+      const cv = document.getElementById('cvInput').value.trim();
+      if (!jobRole) { PL.toast('Please enter a Target Role.', 'error'); return; }
+      setLoading(true);
+      document.getElementById('results').style.display = 'none';
+
+      const context = `Role: ${jobRole} | Level: ${expLevel}${industry ? ` | Industry: ${industry}` : ''}${location ? ` | Market: ${location}` : ''}${cv ? `\n\nCandidate CV:\n${cv}` : ''}`;
+
+      try {
+        const raw = await PL.callAI(`You are a senior career strategist and industry analyst. Generate comprehensive career insights for the following profile.
+
+${context}
+
+Return ONLY valid JSON with this exact structure (no markdown, no explanation):
+{
+  "trends": "3-4 sentences on current industry trends and market demand for this role",
+  "salary": "Salary ranges for entry/mid/senior levels in the specified market. If no market given, use global/African context.",
+  "skills": ["skill1","skill2","skill3","skill4","skill5","skill6","skill7","skill8"],
+  "growth": "3-4 sentences on typical career progression path, timelines, and next-level roles",
+  "action": "5 specific, numbered action steps this person should take in the next 90 days to advance their career. Be direct and practical."
+}`);
+
+        let cleaned = raw.replace(/```json|```/g, '').trim();
+        insightsData = JSON.parse(cleaned);
+
+        document.getElementById('trends-output').textContent = insightsData.trends;
+        document.getElementById('salary-output').textContent = insightsData.salary;
+        document.getElementById('growth-output').textContent = insightsData.growth;
+        document.getElementById('action-output').textContent = insightsData.action;
+
+        const skillsEl = document.getElementById('skills-output');
+        skillsEl.innerHTML = insightsData.skills.map(s => `<span class="skill-tag">${s}</span>`).join('');
+
+        document.getElementById('results').style.display = 'block';
+        document.getElementById('results').scrollIntoView({ behavior: 'smooth' });
+        PL.toast('✅ Career insights ready!', 'success');
+        PL.saveReport('insights', jobRole || PL.getBestRole(), { text: result });
+      } catch (e) {
+        PL.toast('Error generating insights. Please try again.', 'error');
+        console.error(e);
+      } finally { setLoading(false); }
+    }
+
+    function downloadInsights() {
+      if (!insightsData.trends) return;
+      const content = `CAREER INSIGHTS REPORT\nGenerated by ProLaunch Careers\n\n` +
+        `INDUSTRY TRENDS\n${insightsData.trends}\n\n` +
+        `SALARY BENCHMARKS\n${insightsData.salary}\n\n` +
+        `IN-DEMAND SKILLS\n${insightsData.skills?.join(', ')}\n\n` +
+        `CAREER GROWTH PATH\n${insightsData.growth}\n\n` +
+        `90-DAY ACTION PLAN\n${insightsData.action}`;
+      PL.downloadDocx(content, 'Career_Insights','insights');
+    }
+
+    function setLoading(on) {
+      document.getElementById('generateBtn').disabled = on;
+      document.getElementById('btnText').textContent = on ? 'Analyzing your career market...' : '💡 Generate My Career Insights';
+      document.getElementById('spinner').style.display = on ? 'block' : 'none';
+    }
+
+    // Career Grooming Camp inline banner
+    function showCGC() {
+      const rec = PL.getCGCRecommendation();
+      if (!rec) return;
+      const card = document.getElementById('cgc-inline');
+      document.getElementById('cgc-inline-headline').textContent = rec.headline;
+      document.getElementById('cgc-inline-body').textContent     = rec.body;
+      const cta = document.getElementById('cgc-inline-cta');
+      cta.textContent = rec.cta;
+      cta.href        = PL.CGC.url;
+      card.style.display = 'block';
+    }
+
+  </script>
+</body>
+</html>

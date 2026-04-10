@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Unlock Premium | ProLaunch Careers</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;800&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+  <style>
+    :root{--green:#7bb640;--green-dark:#6aa335;--forest:#124745;--forest-light:#1a5f5c;--cream:#f7f9f4;--amber:#f59e0b;--red:#ef4444;--teal:#19a08c;--border:#e2ead8;--gray:#6b7280;}
+    *{box-sizing:border-box;margin:0;padding:0;}
+    body{font-family:'Lato',sans-serif;background:var(--cream);color:var(--forest);min-height:100vh;padding-bottom:3rem;}
+    h1,h2,h3,h4{font-family:'Playfair Display',sans-serif;}
+
+    nav{background:white;border-bottom:1.5px solid var(--border);padding:0.85rem 2rem;display:flex;align-items:center;gap:1rem;position:sticky;top:0;z-index:100;box-shadow:0 2px 10px rgba(18,71,69,0.05);}
+    .nav-brand{display:flex;align-items:center;gap:0.6rem;text-decoration:none;}
+    .nav-brand img{height:36px;}
+    .nav-brand span{font-family:'Playfair Display',sans-serif;font-weight:800;font-size:0.95rem;color:var(--forest);}
+    .btn-back{font-family:'Playfair Display',sans-serif;font-weight:700;font-size:0.8rem;color:var(--gray);text-decoration:none;border:1.5px solid var(--border);padding:0.3rem 0.85rem;border-radius:50px;transition:all 0.2s;margin-left:auto;}
+    .btn-back:hover{border-color:var(--forest);color:var(--forest);}
+
+    .page-wrap{max-width:880px;margin:0 auto;padding:2.5rem 1.25rem;}
+
+    /* Header */
+    .page-head{text-align:center;margin-bottom:2rem;}
+    .page-head h1{font-size:clamp(1.75rem,4vw,2.4rem);font-weight:800;margin-bottom:0.5rem;}
+    .page-head p{color:var(--gray);font-size:0.95rem;max-width:480px;margin:0 auto;line-height:1.6;}
+
+    /* Promo banner */
+    .promo-banner{background:linear-gradient(135deg,#7a2700,#c0390a);border-radius:18px;padding:1.25rem 1.75rem;margin-bottom:2rem;text-align:center;color:white;}
+    .promo-banner .label{font-size:0.72rem;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:rgba(255,255,255,0.7);margin-bottom:0.3rem;}
+    .promo-banner h2{font-size:1rem;font-weight:800;margin-bottom:0.75rem;}
+    .timer-row{display:flex;align-items:center;justify-content:center;gap:0.5rem;flex-wrap:wrap;}
+    .timer-unit{background:rgba(0,0,0,0.3);border-radius:10px;padding:0.4rem 0.75rem;min-width:58px;text-align:center;}
+    .timer-num{display:block;font-family:'Playfair Display',sans-serif;font-size:1.6rem;font-weight:800;line-height:1;}
+    .timer-lbl{display:block;font-size:0.6rem;text-transform:uppercase;letter-spacing:0.07em;color:rgba(255,255,255,0.6);margin-top:0.15rem;}
+    .timer-sep{font-size:1.3rem;font-weight:800;opacity:0.5;align-self:flex-start;margin-top:0.35rem;}
+
+    /* Plans */
+    .plans-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.1rem;margin-bottom:2rem;}
+    @media(max-width:680px){.plans-grid{grid-template-columns:1fr;max-width:360px;margin-left:auto;margin-right:auto;}}
+
+    .plan-card{background:white;border-radius:22px;border:2px solid var(--border);padding:1.75rem 1.5rem;position:relative;text-align:center;transition:all 0.25s;cursor:default;}
+    .plan-card.popular{border-color:var(--green);box-shadow:0 8px 28px rgba(123,182,64,0.18);}
+    .plan-card.selected{border-color:var(--forest);box-shadow:0 0 0 3px rgba(18,71,69,0.15);}
+
+    .popular-badge{position:absolute;top:-12px;left:50%;transform:translateX(-50%);background:var(--green);color:white;font-family:'Playfair Display',sans-serif;font-weight:800;font-size:0.7rem;padding:0.25rem 0.9rem;border-radius:50px;white-space:nowrap;letter-spacing:0.04em;}
+
+    .plan-name{font-size:0.95rem;font-weight:800;margin-bottom:0.75rem;color:var(--forest);}
+    .plan-duration{font-size:0.75rem;font-weight:700;color:var(--teal);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:0.75rem;}
+
+    .price-block{margin-bottom:1.1rem;}
+    .was-price{font-size:0.8rem;color:var(--gray);text-decoration:line-through;margin-bottom:0.1rem;min-height:1.2em;}
+    .now-price{font-family:'Playfair Display',sans-serif;font-size:2rem;font-weight:800;color:var(--forest);line-height:1;}
+    .now-price sup{font-size:0.9rem;vertical-align:super;}
+    .save-pill{display:inline-block;background:#fef3c7;color:#92400e;font-weight:700;font-size:0.7rem;padding:0.18rem 0.6rem;border-radius:50px;margin-top:0.3rem;}
+    .promo-active .now-price{color:#b91c1c;}
+
+    .plan-features{text-align:left;border-top:1.5px solid var(--border);padding-top:1rem;margin-top:0.75rem 0 1rem;}
+    .feat{display:flex;align-items:flex-start;gap:0.45rem;font-size:0.82rem;color:#374151;padding:0.18rem 0;line-height:1.4;}
+    .feat-check{color:var(--green);font-weight:700;flex-shrink:0;}
+
+    /* Checkout button — single, below plans */
+    .checkout-wrap{text-align:center;margin-bottom:2rem;}
+    .checkout-note{font-size:0.82rem;color:var(--gray);margin-bottom:0.85rem;line-height:1.5;}
+    .btn-checkout{display:inline-flex;align-items:center;gap:0.5rem;background:var(--forest);color:white;font-family:'Playfair Display',sans-serif;font-weight:800;font-size:1.05rem;padding:0.95rem 2.5rem;border-radius:50px;text-decoration:none;transition:all 0.2s;border:none;cursor:pointer;box-shadow:0 6px 20px rgba(18,71,69,0.25);}
+    .btn-checkout:hover{background:var(--forest-light);transform:translateY(-2px);box-shadow:0 8px 28px rgba(18,71,69,0.3);}
+    .btn-checkout .arrow{transition:transform 0.2s;}
+    .btn-checkout:hover .arrow{transform:translateX(3px);}
+    .secure-note{font-size:0.76rem;color:var(--gray);margin-top:0.6rem;}
+
+    /* What's included */
+    .includes{background:white;border-radius:18px;border:2px solid var(--border);padding:1.5rem 1.75rem;margin-bottom:2rem;}
+    .includes h3{font-size:0.9rem;font-weight:800;margin-bottom:0.9rem;}
+    .tools-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(145px,1fr));gap:0.6rem;}
+    .tool-chip{background:var(--cream);border-radius:10px;padding:0.55rem 0.8rem;font-size:0.8rem;font-weight:600;display:flex;align-items:center;gap:0.45rem;}
+
+    /* Verifying state */
+    .verifying-card{background:white;border-radius:22px;border:2px solid var(--border);padding:3rem 2rem;max-width:440px;margin:3rem auto;text-align:center;display:none;}
+    .spinner-lg{width:48px;height:48px;border:4px solid var(--border);border-top-color:var(--green);border-radius:50%;animation:spin 0.8s linear infinite;margin:0 auto 1.25rem;}
+    @keyframes spin{to{transform:rotate(360deg);}}
+    .verifying-card h2{font-size:1.4rem;font-weight:800;margin-bottom:0.4rem;}
+    .verifying-card p{color:var(--gray);font-size:0.9rem;line-height:1.6;}
+
+    /* Success state */
+    .success-card{background:white;border-radius:22px;border:2px solid rgba(123,182,64,0.4);padding:3rem 2rem;max-width:460px;margin:3rem auto;text-align:center;display:none;}
+    .success-icon{width:72px;height:72px;background:linear-gradient(135deg,var(--green),#5fa830);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:2rem;margin:0 auto 1.25rem;animation:popIn 0.5s ease both;}
+    @keyframes popIn{from{transform:scale(0);opacity:0;}to{transform:scale(1);opacity:1;}}
+    .success-card h2{font-size:1.6rem;font-weight:800;margin-bottom:0.4rem;}
+    .plan-granted{background:var(--cream);border:1.5px solid var(--border);border-radius:14px;padding:0.9rem 1.25rem;margin:1rem 0 1.5rem;font-size:0.9rem;}
+    .plan-granted strong{font-family:'Playfair Display',sans-serif;font-size:1.05rem;color:var(--forest);}
+    .access-timer{background:#fefce8;border:2px solid rgba(245,158,11,0.3);border-radius:12px;padding:0.75rem 1.1rem;margin-bottom:1.5rem;}
+    .access-timer p{font-size:0.78rem;color:#92400e;font-weight:700;margin-bottom:0.2rem;}
+    .access-countdown{font-family:'Playfair Display',sans-serif;font-size:1.3rem;font-weight:800;color:var(--amber);}
+    .btn-go{display:block;background:var(--green);color:white;font-family:'Playfair Display',sans-serif;font-weight:800;font-size:1rem;padding:0.9rem;border-radius:50px;text-decoration:none;transition:all 0.2s;box-shadow:0 4px 14px rgba(123,182,64,0.3);}
+    .btn-go:hover{background:var(--green-dark);}
+  </style>
+</head>
+<body>
+
+  <nav>
+    <a href="../index.html" class="nav-brand">
+      <img src="../logo2.png" alt="ProLaunch">
+      <span>ProLaunch Careers</span>
+    </a>
+    <a href="dashboard.html" class="btn-back">← Dashboard</a>
+  </nav>
+
+  <!-- ── PRICING VIEW ────────────────────────────────────────────────────── -->
+  <div id="pricing-view">
+    <div class="page-wrap">
+
+      <div class="page-head">
+        <h1>Choose Your Premium Plan</h1>
+        <p>All plans unlock every career tool. Pick the duration that fits your job search timeline.</p>
+      </div>
+
+      <!-- Promo countdown (hidden when promo is over) -->
+      <div class="promo-banner" id="promo-banner">
+        <div class="label">🔥 Limited-Time Launch Offer</div>
+        <h2>Promo prices expire in:</h2>
+        <div class="timer-row">
+          <div class="timer-unit"><span class="timer-num" id="p-d">00</span><span class="timer-lbl">Days</span></div>
+          <div class="timer-sep">:</div>
+          <div class="timer-unit"><span class="timer-num" id="p-h">00</span><span class="timer-lbl">Hrs</span></div>
+          <div class="timer-sep">:</div>
+          <div class="timer-unit"><span class="timer-num" id="p-m">00</span><span class="timer-lbl">Mins</span></div>
+          <div class="timer-sep">:</div>
+          <div class="timer-unit"><span class="timer-num" id="p-s">00</span><span class="timer-lbl">Secs</span></div>
+        </div>
+      </div>
+
+      <!-- Three plans -->
+      <div class="plans-grid" id="plans-grid">
+
+        <!-- 24-Hour -->
+        <div class="plan-card" id="card-24h">
+          <div class="plan-duration">24 Hours</div>
+          <div class="plan-name">Quick Access</div>
+          <div class="price-block">
+            <div class="was-price" id="was-24h"></div>
+            <div class="now-price" id="price-24h"><sup>₦</sup>1,000</div>
+            <div class="save-pill" id="save-24h" style="display:none;"></div>
+          </div>
+          <div class="plan-features">
+            <div class="feat"><span class="feat-check">✓</span> All 4 premium tools</div>
+            <div class="feat"><span class="feat-check">✓</span> One-time rapid use</div>
+            <div class="feat"><span class="feat-check">✓</span> Download .docx results</div>
+            <div class="feat"><span class="feat-check">✓</span> Best for quick applications</div>
+          </div>
+        </div>
+
+        <!-- 7-Day (popular) -->
+        <div class="plan-card popular" id="card-7day">
+          <div class="popular-badge">⭐ Most Popular</div>
+          <div class="plan-duration">7 Days</div>
+          <div class="plan-name">Active Job Seeker</div>
+          <div class="price-block">
+            <div class="was-price" id="was-7day"></div>
+            <div class="now-price" id="price-7day"><sup>₦</sup>4,999</div>
+            <div class="save-pill" id="save-7day" style="display:none;"></div>
+          </div>
+          <div class="plan-features">
+            <div class="feat"><span class="feat-check">✓</span> All 4 premium tools</div>
+            <div class="feat"><span class="feat-check">✓</span> Unlimited uses for 7 days</div>
+            <div class="feat"><span class="feat-check">✓</span> Download .docx results</div>
+            <div class="feat"><span class="feat-check">✓</span> Full report history</div>
+          </div>
+        </div>
+
+        <!-- 30-Day -->
+        <div class="plan-card" id="card-30day">
+          <div class="plan-duration">30 Days</div>
+          <div class="plan-name">Career Changer</div>
+          <div class="price-block">
+            <div class="was-price" id="was-30day"></div>
+            <div class="now-price" id="price-30day"><sup>₦</sup>9,999</div>
+            <div class="save-pill" id="save-30day" style="display:none;"></div>
+          </div>
+          <div class="plan-features">
+            <div class="feat"><span class="feat-check">✓</span> All 4 premium tools</div>
+            <div class="feat"><span class="feat-check">✓</span> Unlimited uses for 30 days</div>
+            <div class="feat"><span class="feat-check">✓</span> Download .docx results</div>
+            <div class="feat"><span class="feat-check">✓</span> Full report history</div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Single checkout CTA -->
+      <div class="checkout-wrap">
+        <p class="checkout-note">
+          Clicking below takes you to <strong>Selar</strong> — Nigeria's trusted payment platform.<br>
+          Select your preferred plan on the checkout page, complete payment, and you'll be redirected back automatically.
+        </p>
+        <a href="#" id="checkout-btn" class="btn-checkout" target="_blank" onclick="handleCheckout(event)">
+          🔓 Choose My Plan <span class="arrow">→</span>
+        </a>
+        <div class="secure-note">🔒 Secure payment via Selar · Instant access on return</div>
+      </div>
+
+      <!-- What's included -->
+      <div class="includes">
+        <h3>Everything included in every plan:</h3>
+        <div class="tools-row">
+          <div class="tool-chip">📄 Resume Builder</div>
+          <div class="tool-chip">✉️ Cover Letter</div>
+          <div class="tool-chip">🎯 Interview Prep</div>
+          <div class="tool-chip">💡 Career Insights</div>
+          <div class="tool-chip">⬇️ .docx Downloads</div>
+          <div class="tool-chip">📂 Report History</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ── VERIFYING VIEW (shown while we confirm payment with server) ──────── -->
+  <div class="verifying-card" id="verifying-view">
+    <div class="spinner-lg"></div>
+    <h2>Confirming your payment…</h2>
+    <p>We're verifying your access with our server. This takes just a few seconds.</p>
+  </div>
+
+  <!-- ── SUCCESS VIEW (shown once server confirms plan) ────────────────────── -->
+  <div class="success-card" id="success-view">
+    <div class="success-icon">🎉</div>
+    <h2>You're In!</h2>
+    <p>Your premium access is confirmed and active.</p>
+    <div class="plan-granted">
+      Plan: <strong id="granted-plan-label">—</strong>
+    </div>
+    <div class="access-timer">
+      <p>⏱ Access expires in:</p>
+      <div class="access-countdown" id="access-countdown">—</div>
+    </div>
+    <a href="dashboard.html" class="btn-go">🚀 Go to My Dashboard</a>
+  </div>
+
+  <script src="../shared.js"></script>
+  <script>
+    // ── Promo timer ─────────────────────────────────────────────────────────
+    function tickPromo() {
+      const t = PL.promoTimeLeft();
+      if (!t) { document.getElementById('promo-banner').style.display = 'none'; return; }
+      document.getElementById('p-d').textContent = String(t.d).padStart(2,'0');
+      document.getElementById('p-h').textContent = String(t.h).padStart(2,'0');
+      document.getElementById('p-m').textContent = String(t.m).padStart(2,'0');
+      document.getElementById('p-s').textContent = String(t.s).padStart(2,'0');
+    }
+
+    // ── Render promo prices ──────────────────────────────────────────────────
+    // Promo prices  — must match AMOUNT_TO_PLAN in selar-webhook.js
+    const PROMO = {
+      '24h':   { normal: null,      promo: null,   save: null   },   // 24h: no promo, always ₦1,000
+      '7day':  { normal: '₦7,000',  promo: '₦4,999', save: '₦2,001' },
+      '30day': { normal: '₦30,000', promo: '₦9,999', save: '₦20,001' },
+    };
+
+    function renderPricing() {
+      const isPromo = PL.isPromoActive();
+      document.getElementById('pricing-view').classList.toggle('promo-active', isPromo);
+
+      if (isPromo) {
+        for (const [plan, p] of Object.entries(PROMO)) {
+          if (!p.promo) continue;
+          document.getElementById(`was-${plan}`).textContent = p.normal;
+          document.getElementById(`price-${plan}`).innerHTML = `<sup>₦</sup>${p.promo.slice(1)}`;
+          const pill = document.getElementById(`save-${plan}`);
+          pill.textContent = `Save ${p.save} 🔥`;
+          pill.style.display = 'inline-block';
+        }
+      }
+    }
+
+    // ── Open Selar, then start polling ──────────────────────────────────────
+    function handleCheckout(e) {
+      e.preventDefault();
+      window.open(PL.getSelarUrl(), '_blank');
+      startPolling();
+    }
+
+    // ── Poll lookup-user every 5s after Selar opens ─────────────────────────
+    // When Selar fires the webhook, our server writes the plan to Sheets.
+    // We keep checking until the lookup returns an active plan.
+    let pollTimer = null;
+    let pollCount = 0;
+
+    function startPolling() {
+      // Switch to verifying UI after a short delay (user might still be on Selar)
+      setTimeout(() => {
+        document.getElementById('pricing-view').style.display = 'none';
+        document.getElementById('verifying-view').style.display = 'block';
+      }, 8000);
+
+      pollTimer = setInterval(async () => {
+        pollCount++;
+        const user = PL.getBiodata();
+        if (!user?.email) return;
+
+        try {
+          const result = await PL.lookupUser(user.email);
+          if (result.premium?.active && result.premium?.plan) {
+            clearInterval(pollTimer);
+            PL.grantPremium(result.premium.plan, result.premium.timestamp);
+            showSuccess(result.premium);
+          }
+        } catch (_) {}
+
+        // Stop polling after 5 minutes — user can refresh if needed
+        if (pollCount > 60) {
+          clearInterval(pollTimer);
+          document.getElementById('verifying-view').style.display = 'none';
+          document.getElementById('pricing-view').style.display = 'block';
+          PL.toast('Payment not yet confirmed. If you paid, please wait a moment and refresh the page.', 'warn');
+        }
+      }, 5000);
+    }
+
+    // ── Show success screen ──────────────────────────────────────────────────
+    function showSuccess(premium) {
+      document.getElementById('verifying-view').style.display = 'none';
+      document.getElementById('pricing-view').style.display  = 'none';
+
+      const planLabel = PL.PLANS[premium.plan]?.label || premium.plan;
+      document.getElementById('granted-plan-label').textContent = planLabel;
+      document.getElementById('access-countdown').textContent   = PL.premiumTimeLeft() || '—';
+
+      document.getElementById('success-view').style.display = 'block';
+    }
+
+    // ── Check if user already has active premium (returning directly) ────────
+    function checkExistingPremium() {
+      if (PL.isPremium()) {
+        const plan = PL.premiumPlan();
+        showSuccess({ plan, timestamp: JSON.parse(localStorage.getItem('pl_premium')).ts });
+        return true;
+      }
+      return false;
+    }
+
+    // ── Init ─────────────────────────────────────────────────────────────────
+    if (!PL.hasBiodata()) { window.location.href = '../index.html'; }
+    else {
+      checkExistingPremium();
+      renderPricing();
+      if (!PL.isPromoActive()) document.getElementById('promo-banner').style.display = 'none';
+      tickPromo();
+      setInterval(tickPromo, 1000);
+    }
+  </script>
+</body>
+</html>
