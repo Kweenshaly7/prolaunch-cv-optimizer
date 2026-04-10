@@ -192,7 +192,7 @@
           Clicking below takes you to <strong>Selar</strong> — Nigeria's trusted payment platform.<br>
           Select your preferred plan on the checkout page, complete payment, and you'll be redirected back automatically.
         </p>
-        <a href="#" id="checkout-btn" class="btn-checkout" target="_blank" onclick="handleCheckout(event)">
+        <a href="#" id="checkout-btn" class="btn-checkout" onclick="handleCheckout(event)">
           🔓 Choose My Plan <span class="arrow">→</span>
         </a>
         <div class="secure-note">🔒 Secure payment via Selar · Instant access on return</div>
@@ -218,7 +218,13 @@
   <div class="verifying-card" id="verifying-view">
     <div class="spinner-lg"></div>
     <h2>Confirming your payment…</h2>
-    <p>We're verifying your access with our server. This takes just a few seconds.</p>
+    <p>We're verifying your access. Zapier typically confirms within 1–2 minutes.</p>
+    <p style="margin-top:0.75rem;font-size:0.8rem;color:#9ca3af;">This page will update automatically — no need to refresh.</p>
+    <button id="manual-check-btn"
+      onclick="manualCheck()"
+      style="display:none;margin-top:1.5rem;background:var(--forest);color:white;font-family:'Playfair Display',sans-serif;font-weight:700;font-size:0.875rem;padding:0.65rem 1.5rem;border-radius:50px;border:none;cursor:pointer;">
+      I've paid — check now
+    </button>
   </div>
 
   <!-- ── SUCCESS VIEW (shown once server confirms plan) ────────────────────── -->
@@ -272,80 +278,130 @@
       }
     }
 
-    // ── Open Selar, then start polling ──────────────────────────────────────
+    // ── Navigate to Selar in the SAME tab ───────────────────────────────────
+    // Opening in a new tab means Selar's redirect lands in that new tab,
+    // which loads a fresh page with no polling and no premium yet — pricing
+    // screen shows again. Same-tab navigation fixes this: Selar redirects
+    // back here with ?email=xxx appended, we detect it and auto-start polling.
     function handleCheckout(e) {
       e.preventDefault();
-      window.open(PL.getSelarUrl(), '_blank');
-      startPolling();
+      // Save a flag so on return we know to start polling immediately
+      sessionStorage.setItem('pl_awaiting_payment', '1');
+      window.location.href = PL.getSelarUrl();
     }
 
-    // ── Poll lookup-user every 5s after Selar opens ─────────────────────────
-    // When Selar fires the webhook, our server writes the plan to Sheets.
-    // We keep checking until the lookup returns an active plan.
-    let pollTimer = null;
-    let pollCount = 0;
+    // ── Polling ──────────────────────────────────────────────────────────────
+    let pollTimer  = null;
+    let pollCount  = 0;
+    let maxPolls   = 72; // 6 minutes at 5s intervals
 
-    function startPolling() {
-      // Switch to verifying UI after a short delay (user might still be on Selar)
-      setTimeout(() => {
-        document.getElementById('pricing-view').style.display = 'none';
-        document.getElementById('verifying-view').style.display = 'block';
-      }, 8000);
+    function startPolling(emailHint) {
+      // Show verifying UI immediately — no delay needed when we know user just paid
+      document.getElementById('pricing-view').style.display   = 'none';
+      document.getElementById('verifying-view').style.display = 'block';
+
+      // Use email from URL param if provided (Selar appends it), else fall back
+      // to whatever is in localStorage from when the user first registered
+      const lookupEmail = emailHint || PL.getBiodata()?.email;
+
+      if (!lookupEmail) {
+        // No email available — can't poll, show pricing with a message
+        document.getElementById('pricing-view').style.display   = 'block';
+        document.getElementById('verifying-view').style.display = 'none';
+        PL.toast('Could not detect your email. Please log in and try again.', 'error');
+        return;
+      }
 
       pollTimer = setInterval(async () => {
         pollCount++;
-        const user = PL.getBiodata();
-        if (!user?.email) return;
-
         try {
-          const result = await PL.lookupUser(user.email);
+          const result = await PL.lookupUser(lookupEmail);
           if (result.premium?.active && result.premium?.plan) {
             clearInterval(pollTimer);
+            sessionStorage.removeItem('pl_awaiting_payment');
             PL.grantPremium(result.premium.plan, result.premium.timestamp);
+            // Also sync the confirmed email into biodata in case it changed
+            if (result.found) PL.restoreSession(result);
             showSuccess(result.premium);
+            return;
           }
         } catch (_) {}
 
-        // Stop polling after 5 minutes — user can refresh if needed
-        if (pollCount > 60) {
+        // After 3 minutes show a manual retry button but keep polling
+        if (pollCount === 36) {
+          document.getElementById('manual-check-btn').style.display = 'inline-block';
+        }
+
+        // Stop after 6 minutes — user can click manual check or contact support
+        if (pollCount >= maxPolls) {
           clearInterval(pollTimer);
-          document.getElementById('verifying-view').style.display = 'none';
-          document.getElementById('pricing-view').style.display = 'block';
-          PL.toast('Payment not yet confirmed. If you paid, please wait a moment and refresh the page.', 'warn');
+          document.getElementById('verifying-view').style.display  = 'none';
+          document.getElementById('pricing-view').style.display    = 'block';
+          sessionStorage.removeItem('pl_awaiting_payment');
+          PL.toast('Payment not yet confirmed after 6 minutes. If you were charged, please contact support.', 'warn');
         }
       }, 5000);
     }
 
-    // ── Show success screen ──────────────────────────────────────────────────
+    // ── Manual re-check (shown after 3 min) ──────────────────────────────────
+    async function manualCheck() {
+      const btn   = document.getElementById('manual-check-btn');
+      btn.textContent = 'Checking…';
+      btn.disabled    = true;
+      const email  = new URLSearchParams(location.search).get('email') || PL.getBiodata()?.email;
+      const result = await PL.lookupUser(email);
+      if (result.premium?.active && result.premium?.plan) {
+        clearInterval(pollTimer);
+        sessionStorage.removeItem('pl_awaiting_payment');
+        PL.grantPremium(result.premium.plan, result.premium.timestamp);
+        if (result.found) PL.restoreSession(result);
+        showSuccess(result.premium);
+      } else {
+        btn.textContent = 'Check Again';
+        btn.disabled    = false;
+        PL.toast('Still confirming — Zapier can take 1–2 minutes. Please wait a moment and try again.', 'info');
+      }
+    }
+
+    // ── Show success screen ───────────────────────────────────────────────────
     function showSuccess(premium) {
       document.getElementById('verifying-view').style.display = 'none';
-      document.getElementById('pricing-view').style.display  = 'none';
+      document.getElementById('pricing-view').style.display   = 'none';
 
       const planLabel = PL.PLANS[premium.plan]?.label || premium.plan;
       document.getElementById('granted-plan-label').textContent = planLabel;
       document.getElementById('access-countdown').textContent   = PL.premiumTimeLeft() || '—';
-
-      document.getElementById('success-view').style.display = 'block';
+      document.getElementById('success-view').style.display     = 'block';
     }
 
-    // ── Check if user already has active premium (returning directly) ────────
-    function checkExistingPremium() {
+    // ── Init ──────────────────────────────────────────────────────────────────
+    if (!PL.hasBiodata()) {
+      window.location.href = '../index.html';
+    } else {
+
+      // Case 1: User already has active premium (e.g. returning to this page)
       if (PL.isPremium()) {
-        const plan = PL.premiumPlan();
-        showSuccess({ plan, timestamp: JSON.parse(localStorage.getItem('pl_premium')).ts });
-        return true;
-      }
-      return false;
-    }
+        showSuccess({ plan: PL.premiumPlan(), timestamp: JSON.parse(localStorage.getItem('pl_premium') || '{}').ts });
 
-    // ── Init ─────────────────────────────────────────────────────────────────
-    if (!PL.hasBiodata()) { window.location.href = '../index.html'; }
-    else {
-      checkExistingPremium();
-      renderPricing();
-      if (!PL.isPromoActive()) document.getElementById('promo-banner').style.display = 'none';
-      tickPromo();
-      setInterval(tickPromo, 1000);
+      // Case 2: Selar just redirected back — URL has ?email=xxx appended by Selar
+      } else if (new URLSearchParams(location.search).get('email')) {
+        const emailFromUrl = decodeURIComponent(new URLSearchParams(location.search).get('email'));
+        // Clean the URL so a manual refresh doesn't re-trigger polling unnecessarily
+        history.replaceState({}, '', location.pathname);
+        startPolling(emailFromUrl);
+
+      // Case 3: User set the awaiting flag before going to Selar (same-tab nav)
+      // but URL was cleaned — still poll using stored email
+      } else if (sessionStorage.getItem('pl_awaiting_payment')) {
+        startPolling(PL.getBiodata()?.email);
+
+      // Case 4: Normal visit — show pricing
+      } else {
+        renderPricing();
+        if (!PL.isPromoActive()) document.getElementById('promo-banner').style.display = 'none';
+        tickPromo();
+        setInterval(tickPromo, 1000);
+      }
     }
   </script>
 </body>
