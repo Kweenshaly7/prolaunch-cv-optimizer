@@ -115,6 +115,15 @@
       </div>
       <div id="questions-container"></div>
     </div>
+
+      <!-- Career Grooming Camp Recommendation -->
+      <div id="cgc-inline" style="display:none;margin-top:1.5rem;background:linear-gradient(135deg,#124745,#1a5f5c);border-radius:18px;padding:1.5rem 1.75rem;color:white;">
+        <p style="font-size:0.7rem;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:#7bb640;margin-bottom:0.3rem;">Recommended For You</p>
+        <h3 id="cgc-inline-headline" style="font-family:'Playfair Display',sans-serif;font-size:1.05rem;font-weight:800;margin-bottom:0.35rem;"></h3>
+        <p id="cgc-inline-body" style="font-size:0.85rem;color:rgba(255,255,255,0.7);line-height:1.55;margin-bottom:1rem;"></p>
+        <a id="cgc-inline-cta" href="#" target="_blank" style="display:inline-block;background:#7bb640;color:white;font-family:'Playfair Display',sans-serif;font-weight:800;font-size:0.85rem;padding:0.55rem 1.25rem;border-radius:50px;text-decoration:none;"></a>
+      </div>
+
   </main>
 
   <footer>
@@ -166,6 +175,7 @@ Format as valid JSON only — no markdown, no explanation:
         document.getElementById('results').style.display = 'block';
         document.getElementById('results').scrollIntoView({ behavior: 'smooth' });
         PL.toast('✅ 10 questions ready — click any to reveal the answer!', 'success');
+        PL.saveReport('interview', jobRole || PL.getBestRole(), { text: result });
       } catch (e) {
         PL.toast('Error generating questions. Please try again.', 'error');
         console.error(e);
@@ -215,7 +225,7 @@ Format as valid JSON only — no markdown, no explanation:
       questionsData.forEach((item, i) => {
         content += `Q${i+1}. [${item.type}] ${item.question}\n\nModel Answer:\n${item.answer}\n\n${'─'.repeat(60)}\n\n`;
       });
-      PL.downloadDoc(content, 'Interview_Prep.doc');
+      PL.downloadDocx(content, 'Interview_Prep', 'interview');
     }
 
     function setLoading(on) {
@@ -223,6 +233,20 @@ Format as valid JSON only — no markdown, no explanation:
       document.getElementById('btnText').textContent = on ? 'Generating questions...' : '🎯 Generate Interview Questions';
       document.getElementById('spinner').style.display = on ? 'block' : 'none';
     }
+
+    // Career Grooming Camp inline banner
+    function showCGC() {
+      const rec = PL.getCGCRecommendation();
+      if (!rec) return;
+      const card = document.getElementById('cgc-inline');
+      document.getElementById('cgc-inline-headline').textContent = rec.headline;
+      document.getElementById('cgc-inline-body').textContent     = rec.body;
+      const cta = document.getElementById('cgc-inline-cta');
+      cta.textContent = rec.cta;
+      cta.href        = PL.CGC.url;
+      card.style.display = 'block';
+    }
+
   </script>
 </body>
 </html>

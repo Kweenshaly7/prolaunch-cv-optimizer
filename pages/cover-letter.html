@@ -108,11 +108,27 @@
       <div class="result-block">
         <div class="result-header">
           <h3>✉️ Your Cover Letter</h3>
+<<<<<<< HEAD
           <button class="btn-download" onclick="downloadDoc('cover-letter-output','Cover_Letter.doc')">⬇ Download .DOC</button>
+=======
+          <button class="btn-download" onclick="downloadDoc('cover-letter-output','Cover_Letter.docx')">⬇ Download .docxx</button>
+>>>>>>> staging
         </div>
         <div class="result-body" id="cover-letter-output"></div>
       </div>
     </div>
+<<<<<<< HEAD
+=======
+
+      <!-- Career Grooming Camp Recommendation -->
+      <div id="cgc-inline" style="display:none;margin-top:1.5rem;background:linear-gradient(135deg,#124745,#1a5f5c);border-radius:18px;padding:1.5rem 1.75rem;color:white;">
+        <p style="font-size:0.7rem;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:#7bb640;margin-bottom:0.3rem;">Recommended For You</p>
+        <h3 id="cgc-inline-headline" style="font-family:'Playfair Display',sans-serif;font-size:1.05rem;font-weight:800;margin-bottom:0.35rem;"></h3>
+        <p id="cgc-inline-body" style="font-size:0.85rem;color:rgba(255,255,255,0.7);line-height:1.55;margin-bottom:1rem;"></p>
+        <a id="cgc-inline-cta" href="#" target="_blank" style="display:inline-block;background:#7bb640;color:white;font-family:'Playfair Display',sans-serif;font-weight:800;font-size:0.85rem;padding:0.55rem 1.25rem;border-radius:50px;text-decoration:none;"></a>
+      </div>
+
+>>>>>>> staging
   </main>
 
   <footer>
@@ -153,6 +169,7 @@ CANDIDATE CV: ${cv}`);
         document.getElementById('results').style.display = 'block';
         document.getElementById('results').scrollIntoView({ behavior: 'smooth' });
         PL.toast('✅ Cover letter ready!', 'success');
+        PL.saveReport('letter', jobRole || PL.getBestRole(), { text: result });
       } catch (e) { PL.toast(e.message, 'error'); }
       finally { setLoading(false); }
     }
@@ -165,8 +182,22 @@ CANDIDATE CV: ${cv}`);
 
     function downloadDoc(id, filename) {
       const content = document.getElementById(id).innerText;
-      PL.downloadDoc(content, filename);
+      PL.downloadDocx(content, filename);
     }
+
+    // Career Grooming Camp inline banner
+    function showCGC() {
+      const rec = PL.getCGCRecommendation();
+      if (!rec) return;
+      const card = document.getElementById('cgc-inline');
+      document.getElementById('cgc-inline-headline').textContent = rec.headline;
+      document.getElementById('cgc-inline-body').textContent     = rec.body;
+      const cta = document.getElementById('cgc-inline-cta');
+      cta.textContent = rec.cta;
+      cta.href        = PL.CGC.url;
+      card.style.display = 'block';
+    }
+
   </script>
 </body>
 </html>
