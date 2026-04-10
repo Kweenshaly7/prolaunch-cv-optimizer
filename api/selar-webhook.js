@@ -1,3 +1,15 @@
+// ── CURRENT ROLE (as of per-plan Selar links implementation) ─────────────────
+// This endpoint is NO LONGER in the critical path for granting premium access.
+// Access is now granted immediately on Selar redirect via unlock.html.
+//
+// This webhook runs as a BACKGROUND AUDIT LAYER:
+//   Selar sale → Zapier → here → writes payment record to Google Sheets
+//
+// Use this record to: reconcile revenue, manually restore access for users
+// who clear browser data, and as the foundation for server-side verification
+// when migrating to a proper backend (Supabase/PostgreSQL).
+// ─────────────────────────────────────────────────────────────────────────────
+
 // api/selar-webhook.js
 // ─────────────────────────────────────────────────────────────────────────────
 // Receives Selar sale events forwarded by Zapier (or Pabbly Connect) and
