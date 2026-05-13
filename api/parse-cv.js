@@ -19,7 +19,7 @@ export default async function handler(req, res) {
     return res.status(405).json({ error: "Method not allowed" });
 
   const form = formidable({
-    maxFileSize: 5 * 1024 * 1024,
+    maxFileSize: 10 * 1024 * 1024, // Bumped to 10MB to accommodate image-heavy PDFs
     keepExtensions: true,
   });
 
