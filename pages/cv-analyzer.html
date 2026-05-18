@@ -3,10 +3,11 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>CV Analyzer | ProLaunch Careers</title>
+  <title>CV Analyzer | LaunchIQ</title>
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;800&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
   <style>
-    :root{--green:#7bb640;--green-dark:#6aa335;--green-pale:#f0f7e8;--teal:#19a08c;--teal-dark:#158f7d;--forest:#124745;--forest-light:#1a5f5c;--cream:#f7f9f4;--border:#e2ead8;--gray:#6b7280;--amber:#f59e0b;}
+    :root{--primary:#0A84FF;--navy:#1E3A6E;--teal:#19A08C;--teal-dark:#158f7d;--light-blue:#E8F3FF;--white:#FFFFFF;--gray:#6B7280;--border:#e2ead8;--green:#0A84FF;--green-dark:#0066CC;--green-pale:#E8F3FF;--forest:#1E3A6E;--forest-light:#2A4D8C;--cream:#FFFFFF;--amber:#f59e0b;}
     *{box-sizing:border-box;margin:0;padding:0;}
     body{font-family:'Lato',sans-serif;background:var(--cream);color:var(--forest);}
     h1,h2,h3,h4{font-family:'Playfair Display',sans-serif;}
@@ -70,8 +71,7 @@
 <body>
   <nav>
     <a href="../index.html" class="nav-brand">
-      <img src="../logo2.png" alt="ProLaunch">
-      <span>ProLaunch Careers</span>
+      <span>LaunchIQ</span>
     </a>
     <div class="nav-links">
       <a href="dashboard.html" class="nav-pill">🏠 Dashboard</a>
@@ -197,8 +197,8 @@
   </main>
 
   <footer>
-    <p>Built by <span>Mary-Queen Uchechukwu</span> for ProLaunch Careers</p>
-    <p style="margin-top:0.3rem">&copy; <script>document.write(new Date().getFullYear())</script> ProLaunch Careers. All rights reserved.</p>
+    <p>Product of <span>ProLaunch Group</span></p>
+    <p style="margin-top:0.3rem">&copy; <script>document.write(new Date().getFullYear())</script> LaunchIQ. All rights reserved.</p>
   </footer>
 
   <script src="../shared.js"></script>
@@ -263,6 +263,8 @@
       } catch (e) { return { match: true }; }
     }
 
+    let lastAnalysisData = null;
+
     async function handleAnalyze() {
       const jobRole = document.getElementById('jobRole').value.trim();
       const cv = document.getElementById('cvInput').value.trim();
@@ -297,7 +299,7 @@ ${jdTruncated ? `Job Description:\n${jdTruncated}` : ''}
 CV:
 ${cvTruncated}
 
-IMPORTANT: Respond ONLY with a valid JSON object. No markdown fences, no explanation, no text before or after the JSON.
+IMPORTANT: Respond ONLY with a valid JSON object. No markdown fences, no explanation, no text before or after the JSON. You MUST use Markdown (e.g. **bold**, bullet points) inside the string values to format the text beautifully.
 
 {
   "ats_score": 72,
@@ -331,11 +333,12 @@ IMPORTANT: Respond ONLY with a valid JSON object. No markdown fences, no explana
         document.getElementById('score-summary').textContent = data.summary || '—';
 
         // Blocks
-        document.getElementById('strengths-output').textContent = data.strengths || '—';
-        document.getElementById('gaps-output').textContent = data.gaps || '—';
-        document.getElementById('keywords-output').textContent = data.missing_keywords || '—';
-        document.getElementById('quickwins-output').textContent = data.quick_wins || '—';
-        document.getElementById('recommendation-output').textContent = data.recommendation || '—';
+        lastAnalysisData = data;
+        document.getElementById('strengths-output').innerHTML = PL.renderMarkdown(data.strengths || '—');
+        document.getElementById('gaps-output').innerHTML = PL.renderMarkdown(data.gaps || '—');
+        document.getElementById('keywords-output').innerHTML = PL.renderMarkdown(data.missing_keywords || '—');
+        document.getElementById('quickwins-output').innerHTML = PL.renderMarkdown(data.quick_wins || '—');
+        document.getElementById('recommendation-output').innerHTML = PL.renderMarkdown(data.recommendation || '—');
 
         document.getElementById('results').style.display = 'block';
         document.getElementById('results').scrollIntoView({ behavior:'smooth' });
@@ -362,7 +365,7 @@ IMPORTANT: Respond ONLY with a valid JSON object. No markdown fences, no explana
       } finally { setLoading(false); }
     }
 
-    function window.location.href='unlock.html' {
+    if (window.location.href.includes('unlock.html')) {
       window.open(PL.getSelarUrl(), '_blank');
     }
 
@@ -375,11 +378,11 @@ IMPORTANT: Respond ONLY with a valid JSON object. No markdown fences, no explana
       const data = {
         role:     document.getElementById('jobRole')?.value || '',
         score:    document.querySelector('.score-num')?.textContent || '',
-        strengths: document.getElementById('strengths-output')?.innerText || '',
-        gaps:      document.getElementById('gaps-output')?.innerText || '',
-        missing_keywords: document.getElementById('keywords-output')?.innerText || '',
-        quick_wins: document.getElementById('quickwins-output')?.innerText || '',
-        recommendation: document.getElementById('recommendation-output')?.innerText || '',
+        strengths: lastAnalysisData?.strengths || document.getElementById('strengths-output')?.innerText || '',
+        gaps:      lastAnalysisData?.gaps || document.getElementById('gaps-output')?.innerText || '',
+        missing_keywords: lastAnalysisData?.missing_keywords || document.getElementById('keywords-output')?.innerText || '',
+        quick_wins: lastAnalysisData?.quick_wins || document.getElementById('quickwins-output')?.innerText || '',
+        recommendation: lastAnalysisData?.recommendation || document.getElementById('recommendation-output')?.innerText || '',
       };
       PL.downloadDocx(JSON.stringify(data), 'CV_Analysis_Report', 'analysis');
     }

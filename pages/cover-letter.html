@@ -3,10 +3,11 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Cover Letter Generator | ProLaunch Careers</title>
+  <title>Cover Letter Generator | LaunchIQ</title>
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;800&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
   <style>
-    :root{--green:#7bb640;--green-dark:#6aa335;--teal:#19a08c;--teal-dark:#158f7d;--forest:#124745;--cream:#f7f9f4;--border:#e2ead8;--gray:#6b7280;}
+    :root{--primary:#0A84FF;--navy:#1E3A6E;--teal:#19A08C;--teal-dark:#158f7d;--light-blue:#E8F3FF;--white:#FFFFFF;--gray:#6B7280;--border:#e2ead8;--green:#0A84FF;--green-dark:#0066CC;--green-pale:#E8F3FF;--forest:#1E3A6E;--forest-light:#2A4D8C;--cream:#FFFFFF;--amber:#f59e0b;}
     *{box-sizing:border-box;margin:0;padding:0;}
     body{font-family:'Lato',sans-serif;background:var(--cream);color:var(--forest);}
     h1,h2,h3{font-family:'Playfair Display',sans-serif;}
@@ -51,8 +52,7 @@
 <body>
   <nav>
     <a href="dashboard.html" class="nav-logo">
-      <img src="../logo2.png" alt="ProLaunch">
-      <span>ProLaunch Careers</span>
+      <span>LaunchIQ</span>
     </a>
     <div class="nav-links">
       <a href="cv-optimizer.html" class="nav-pill">📄 Resume</a>
@@ -125,8 +125,8 @@
   </main>
 
   <footer>
-    <p>Built by <span>Mary-Queen Uchechukwu</span> for ProLaunch Careers</p>
-    <p style="margin-top:0.3rem;">&copy; <script>document.write(new Date().getFullYear())</script> ProLaunch Careers. All rights reserved.</p>
+    <p>Product of <span>ProLaunch Group</span></p>
+    <p style="margin-top:0.3rem;">&copy; <script>document.write(new Date().getFullYear())</script> LaunchIQ. All rights reserved.</p>
   </footer>
 
   <script src="../shared.js"></script>
@@ -143,6 +143,8 @@
       document.getElementById('jdInput').value  = PL.getBestJD();
     });
 
+    let lastCoverLetter = '';
+
     async function handleGenerate() {
       const jobRole = document.getElementById('jobRole').value.trim();
       const company = document.getElementById('companyName').value.trim();
@@ -155,10 +157,11 @@
       document.getElementById('results').style.display = 'none';
       try {
         const text = await PL.callAI(`Write a ${tone} cover letter for the role of "${jobRole}"${company ? ` at ${company}` : ''}.
-Rules: Address to "${company ? `the Hiring Manager at ${company}` : 'Hiring Manager'}". Standard business letter format. 3-4 paragraphs. Opening states role and strong interest. Middle connects candidate achievements to job requirements. Closing requests interview.
+Rules: Address to "${company ? `the Hiring Manager at ${company}` : 'Hiring Manager'}". Standard business letter format. 3-4 paragraphs. Opening states role and strong interest. Middle connects candidate achievements to job requirements. Closing requests interview. Format the output in rich Markdown.
 JOB DESCRIPTION: ${jd || 'Not provided — write a strong general cover letter.'}
 CANDIDATE CV: ${cv}`);
-        document.getElementById('cover-letter-output').textContent = text;
+        lastCoverLetter = text;
+        document.getElementById('cover-letter-output').innerHTML = PL.renderMarkdown(text);
         document.getElementById('results').style.display = 'block';
         document.getElementById('results').scrollIntoView({ behavior: 'smooth' });
         PL.toast('✅ Cover letter ready!', 'success');
@@ -174,8 +177,8 @@ CANDIDATE CV: ${cv}`);
     }
 
     function downloadDoc(id, filename) {
-      const content = document.getElementById(id).innerText;
-      PL.downloadDocx(content, filename);
+      const content = lastCoverLetter || document.getElementById(id).innerText;
+      PL.downloadDocx(content, filename, 'letter');
     }
 
     // Career Grooming Camp inline banner

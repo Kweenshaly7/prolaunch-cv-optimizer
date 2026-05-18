@@ -9,6 +9,7 @@ import cors          from 'cors';
 import promMiddleware from 'express-prometheus-middleware';
 import path          from 'path';
 import { fileURLToPath } from 'url';
+import 'dotenv/config';
 
 // ── Route handlers (direct imports from existing api/ files) ─────────────────
 import generateHandler     from './api/generate.js';
@@ -76,6 +77,6 @@ app.get('*', (_req, res) => {
 
 // ── Start ─────────────────────────────────────────────────────────────────────
 app.listen(PORT, () => {
-  console.log(`[ProLaunch] Server running on port ${PORT}`);
-  console.log(`[ProLaunch] Health: http://localhost:${PORT}/health`);
+  console.log(`[LaunchIQ] Server running on port ${PORT}`);
+  console.log(`[LaunchIQ] Health: http://localhost:${PORT}/health`);
 });

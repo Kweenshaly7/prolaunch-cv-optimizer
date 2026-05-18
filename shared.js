@@ -1,4 +1,4 @@
-// ─── ProLaunch Shared Utilities v3.1 ─────────────────────────────────────────
+// ─── LaunchIQ Shared Utilities v3.1 ─────────────────────────────────────────
 
 const PL = {
 
@@ -169,7 +169,31 @@ const PL = {
   },
 
   _downloadDocFallback(content, filename) {
-    const html = `<html xmlns:o='urn:schemas-microsoft-com:office:office'><head><meta charset='utf-8'><style>body{font-family:Calibri,sans-serif;font-size:11pt;line-height:1.6}</style></head><body>${content.replace(/\n/g, '<br>')}</body></html>`;
+    let htmlBody = content;
+    try {
+      const parsed = JSON.parse(content);
+      if (typeof parsed === 'object') {
+        htmlBody = '';
+        if (parsed.role) htmlBody += `<h2>Target Role: ${parsed.role}</h2>`;
+        if (parsed.score) htmlBody += `<h2>ATS Score: ${parsed.score} / 100</h2>`;
+        const sections = [
+          { label: 'Strengths', val: parsed.strengths },
+          { label: 'Gaps & Weaknesses', val: parsed.gaps },
+          { label: 'Missing Keywords', val: parsed.missing_keywords },
+          { label: 'Quick Wins', val: parsed.quick_wins },
+          { label: 'Recommendation', val: parsed.recommendation }
+        ];
+        for (const sec of sections) {
+          if (sec.val) {
+            htmlBody += `<h3>${sec.label}</h3>`;
+            htmlBody += window.marked ? marked.parse(String(sec.val)) : String(sec.val).replace(/\n/g, '<br>');
+          }
+        }
+      }
+    } catch (e) {
+      htmlBody = window.marked ? marked.parse(content) : content.replace(/\n/g, '<br>');
+    }
+    const html = `<html xmlns:o='urn:schemas-microsoft-com:office:office'><head><meta charset='utf-8'><style>body{font-family:Calibri,sans-serif;font-size:11pt;line-height:1.6}</style></head><body>${htmlBody}</body></html>`;
     const a = Object.assign(document.createElement('a'), { href: URL.createObjectURL(new Blob(['\ufeff', html], { type: 'application/msword' })), download: `${filename}.doc` });
     document.body.appendChild(a); a.click(); document.body.removeChild(a);
   },
@@ -192,7 +216,7 @@ const PL = {
       return { headline: `Ready to move up from ${role}?`, body: `Mid-level professionals who attend the Career Grooming Camp report clearer career direction, stronger personal brands, and faster-track promotions. The next cohort opens soon.`, cta: 'Learn More →', urgency: false };
     if (level.includes('senior') || level.includes('executive') || level.includes('director'))
       return { headline: `Elevate your executive presence in ${role}.`, body: `The Career Grooming Camp's advanced track helps senior professionals land board roles, advisory positions, and high-leverage opportunities through strategic positioning.`, cta: 'Explore the Executive Track →', urgency: false };
-    return { headline: 'Take your career further with the ProLaunch Career Grooming Camp.', body: `Join a cohort of ambitious professionals to master personal branding, interview strategy, and career advancement in ${role}.`, cta: 'Find Out More →', urgency: false };
+    return { headline: 'Take your career further with the LaunchIQ Career Grooming Camp.', body: `Join a cohort of ambitious professionals to master personal branding, interview strategy, and career advancement in ${role}.`, cta: 'Find Out More →', urgency: false };
   },
 
   // ── Navigation guard ──────────────────────────────────────────────────────
@@ -215,4 +239,13 @@ const PL = {
     el.style.transform = 'translateY(0)'; el.style.opacity = '1';
     setTimeout(() => { el.style.transform = 'translateY(80px)'; el.style.opacity = '0'; }, 4500);
   },
+
+  // ── Markdown Helper ───────────────────────────────────────────────────────
+  renderMarkdown(text) {
+    if (window.marked) {
+      return marked.parse(text);
+    }
+    // Simple fallback if marked is not loaded
+    return text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>').replace(/\n/g, '<br>');
+  }
 };

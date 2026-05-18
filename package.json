@@ -16,11 +16,12 @@
   "dependencies": {
     "cors": "^2.8.5",
     "docx": "^9.0.2",
+    "dotenv": "^17.4.2",
     "express": "^4.19.2",
+    "express-prometheus-middleware": "^1.2.0",
     "formidable": "^3.5.1",
     "mammoth": "^1.7.0",
-    "pdf-parse": "^1.1.1",
-    "express-prometheus-middleware": "^1.2.0"
+    "pdf-parse": "^1.1.1"
   },
   "devDependencies": {
     "eslint": "^9.0.0",
