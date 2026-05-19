@@ -1,4 +1,4 @@
-// ─── LaunchIQ Shared Utilities v3.1 ─────────────────────────────────────────
+// ─── LaunchIQ Shared Utilities v3.2 ─────────────────────────────────────────
 
 const PL = {
 
@@ -7,14 +7,22 @@ const PL = {
   SELAR_URL: 'https://selar.com/premium-access',
 
   // ── Promo end date ──
-  PROMO_END: new Date('2026-04-30T23:59:59').getTime(),
+  PROMO_END: new Date('2026-06-30T23:59:59').getTime(),
+
+  // ── External perk URLs ────────────────────────────────────────────────────
+  COACHLI_URL: 'https://coachli.co/YOUR_BOOKING_LINK', // ← replace with your real Coachli booking link
+  MIJAA_URL:   'https://mijaa.app',                    // ← placeholder until Mijaa launches
+
+  // ── Mijaa trial window (must match the 7-day benefit on unlock.html) ──────
+  MIJAA_TRIAL_DURATION: 7 * 24 * 60 * 60 * 1000,
 
   // ── Three premium tiers ──
   // Amounts must match exactly what you set on Selar for each variant
+  // Feature flags drive UI gating across all tool pages
   PLANS: {
-    '24h':   { label: '24-Hour Access', duration: 24 * 60 * 60 * 1000,      amount: 1000  },
-    '7day':  { label: '7-Day Access',   duration: 7  * 24 * 60 * 60 * 1000, amount: 4999  },
-    '30day': { label: '30-Day Access',  duration: 30 * 24 * 60 * 60 * 1000, amount: 9999  },
+    '24h':   { label: '24-Hour Access', duration: 24 * 60 * 60 * 1000,      amount: 1000, canDownloadDocx: false, hasCoachingCall: false, hasMijaaAccess: false },
+    '7day':  { label: '7-Day Access',   duration: 7  * 24 * 60 * 60 * 1000, amount: 4999, canDownloadDocx: true,  hasCoachingCall: true,  hasMijaaAccess: false },
+    '30day': { label: '30-Day Access',  duration: 30 * 24 * 60 * 60 * 1000, amount: 9999, canDownloadDocx: true,  hasCoachingCall: true,  hasMijaaAccess: true  },
   },
 
   HISTORY_MAX: 10,
@@ -66,12 +74,75 @@ const PL = {
     } catch { return null; }
   },
 
+  // ── Plan feature helpers ──────────────────────────────────────────────────
+  // Use these on every tool page to gate features by plan, never hardcode plan names.
+
+  // Returns true if the user's active plan includes .docx downloads.
+  // Use this to show/hide download buttons on all tool pages.
+  canDownloadDocx() {
+    const plan = this.premiumPlan();
+    return plan ? (this.PLANS[plan]?.canDownloadDocx ?? false) : false;
+  },
+
+  // Returns true if the user's active plan includes a free coaching call.
+  hasCoachingCall() {
+    const plan = this.premiumPlan();
+    return plan ? (this.PLANS[plan]?.hasCoachingCall ?? false) : false;
+  },
+
+  // Returns true if the user's active plan includes Mijaa access.
+  hasMijaaAccess() {
+    const plan = this.premiumPlan();
+    return plan ? (this.PLANS[plan]?.hasMijaaAccess ?? false) : false;
+  },
+
+  // ── Coaching Call Booking State ───────────────────────────────────────────
+  bookCoachingCall() {
+    localStorage.setItem('pl_coaching_booked', 'true');
+  },
+
+  hasBookedCoachingCall() {
+    return localStorage.getItem('pl_coaching_booked') === 'true';
+  },
+
+  // ── Mijaa trial activation ────────────────────────────────────────────────
+  // Stamps the first time the user clicks "Activate Free Trial".
+  // The 7-day window runs from this timestamp, not from purchase time.
+
+  activateMijaa() {
+    // Only stamp once — subsequent calls are no-ops so the clock never resets.
+    if (!localStorage.getItem('pl_mijaa_activated')) {
+      localStorage.setItem('pl_mijaa_activated', String(Date.now()));
+    }
+  },
+
+  getMijaaActivatedAt() {
+    const ts = localStorage.getItem('pl_mijaa_activated');
+    return ts ? parseInt(ts, 10) : null;
+  },
+
+  isMijaaTrialActive() {
+    const ts = this.getMijaaActivatedAt();
+    if (!ts) return false;
+    return (Date.now() - ts) < this.MIJAA_TRIAL_DURATION;
+  },
+
+  getMijaaTimeLeft() {
+    const ts = this.getMijaaActivatedAt();
+    if (!ts) return null;
+    const remaining = this.MIJAA_TRIAL_DURATION - (Date.now() - ts);
+    if (remaining <= 0) return null;
+    const d = Math.floor(remaining / 86400000);
+    const h = Math.floor((remaining % 86400000) / 3600000);
+    return d > 0 ? `${d}d ${h}h remaining` : `${h}h remaining`;
+  },
+
   // ── Promo ─────────────────────────────────────────────────────────────────
-  isPromoActive() { return Date.now() < this.PROMO_END; },
+  isPromoActive() { return true; },
 
   promoTimeLeft() {
-    const remaining = this.PROMO_END - Date.now();
-    if (remaining <= 0) return null;
+    const SEVEN_DAYS = 7 * 24 * 60 * 60 * 1000;
+    const remaining = SEVEN_DAYS - (Date.now() % SEVEN_DAYS);
     return {
       d: Math.floor(remaining / 86400000),
       h: Math.floor((remaining % 86400000) / 3600000),
@@ -239,12 +310,12 @@ const PL = {
     el.style.transform = 'translateY(0)'; el.style.opacity = '1';
     setTimeout(() => { el.style.transform = 'translateY(80px)'; el.style.opacity = '0'; }, 4500);
   },
+
   // ── Markdown Helper ───────────────────────────────────────────────────────
   renderMarkdown(text) {
     if (window.marked) {
       return marked.parse(text);
     }
-    // Simple fallback if marked is not loaded
     return text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>').replace(/\n/g, '<br>');
   }
 };

@@ -328,6 +328,40 @@
       flex-shrink: 0;
     }
 
+    .btn-plan {
+      display: inline-block;
+      width: 100%;
+      background: var(--forest);
+      color: white;
+      font-family: 'Playfair Display', sans-serif;
+      font-weight: 800;
+      font-size: 0.95rem;
+      padding: 0.85rem;
+      border-radius: 50px;
+      text-decoration: none;
+      transition: all 0.2s;
+      border: none;
+      cursor: pointer;
+      box-shadow: 0 4px 14px rgba(18, 71, 69, 0.25);
+      margin-top: 1rem;
+    }
+
+    .btn-plan:hover {
+      background: var(--forest-light);
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(18, 71, 69, 0.3);
+    }
+
+    .btn-plan.green {
+      background: var(--green);
+      box-shadow: 0 4px 14px rgba(10, 132, 255, 0.3);
+    }
+
+    .btn-plan.green:hover {
+      background: var(--green-dark);
+      box-shadow: 0 6px 20px rgba(0, 102, 204, 0.35);
+    }
+
     /* Checkout button — single, below plans */
     .checkout-wrap {
       text-align: center;
@@ -548,6 +582,24 @@
     .btn-go:hover {
       background: var(--green-dark);
     }
+
+    footer {
+      background: var(--forest);
+      color: white;
+      padding: 1.75rem;
+      text-align: center;
+      margin-top: 3rem;
+    }
+
+    footer p {
+      font-size: 0.82rem;
+      color: rgba(255, 255, 255, 0.5);
+    }
+
+    footer span {
+      color: var(--green);
+      font-weight: 700;
+    }
   </style>
 </head>
 
@@ -657,19 +709,6 @@
         <div class="secure-note">🔒 Secure payment via Selar · Access granted immediately on return</div>
       </div>
 
-            <!-- What's included -->
-      <div class="includes">
-        <h3>Everything included in every plan:</h3>
-        <div class="tools-row">
-          <div class="tool-chip">📄 Resume Builder</div>
-          <div class="tool-chip">✉️ Cover Letter</div>
-          <div class="tool-chip">🎯 Interview Prep</div>
-          <div class="tool-chip">💡 Career Insights</div>
-          <div class="tool-chip">⬇️ .docx Downloads</div>
-          <div class="tool-chip">📂 Report History</div>
-        </div>
-      </div>
-
     </div>
   </div>
 
@@ -678,9 +717,9 @@
     <div class="spinner-lg"></div>
     <h2>Confirming your payment…</h2>
     <p>We're verifying your access. Zapier typically confirms within 1–2 minutes.</p>
-    <p style="margin-top:0.75rem;font-size:0.8rem;color:#9ca3af;">This page will update automatically — no need to refresh.</p>
-    <button id="manual-check-btn"
-      onclick="manualCheck()"
+    <p style="margin-top:0.75rem;font-size:0.8rem;color:#9ca3af;">This page will update automatically — no need to
+      refresh.</p>
+    <button id="manual-check-btn" onclick="manualCheck()"
       style="display:none;margin-top:1.5rem;background:var(--forest);color:white;font-family:'Playfair Display',sans-serif;font-weight:700;font-size:0.875rem;padding:0.65rem 1.5rem;border-radius:50px;border:none;cursor:pointer;">
       I've paid — check now
     </button>
@@ -700,6 +739,13 @@
     </div>
     <a href="dashboard.html" class="btn-go">🚀 Go to My Dashboard</a>
   </div>
+
+  <footer>
+    <p>Product of <span>ProLaunch Group</span></p>
+    <p style="margin-top:0.3rem">&copy;
+      <script>document.write(new Date().getFullYear())</script> LaunchIQ. All rights reserved.
+    </p>
+  </footer>
 
   <script src="../shared.js"></script>
   <script>
@@ -742,14 +788,14 @@
     // includes ?plan=<key> so we know which tier to grant on return — no Zapier
     // delay, no polling. Update these URLs after creating the Selar products.
     const SELAR_LINKS = {
-      '24h':   'https://selar.com/premium-access-24',
-      '7day':  'https://selar.com/premium-access-7d',
+      '24h': 'https://selar.com/premium-access-24',
+      '7day': 'https://selar.com/premium-access-7d',
       '30day': 'https://selar.com/premium-access-30d',
     };
 
     function getSelarLink(plan) {
-      const base  = SELAR_LINKS[plan];
-      const user  = PL.getBiodata();
+      const base = SELAR_LINKS[plan];
+      const user = PL.getBiodata();
       const email = user?.email ? `?email=${encodeURIComponent(user.email)}` : '';
       return `${base}${email}`;
     }
@@ -800,11 +846,11 @@
       const user = PL.getBiodata();
       if (user?.email) {
         PL.sendToSheets({
-          action:  'savePremium',
-          email:   user.email,
+          action: 'savePremium',
+          email: user.email,
           plan,
-          paidAt:  String(Date.now()),
-          source:  'selar-redirect',
+          paidAt: String(Date.now()),
+          source: 'selar-redirect',
         }).catch(e => console.warn('Background Sheets sync failed:', e.message));
       }
 
@@ -828,24 +874,24 @@
       window.location.href = '../index.html';
     } else {
 
-      const params       = new URLSearchParams(location.search);
-      const planFromUrl  = params.get('plan');
+      const params = new URLSearchParams(location.search);
+      const planFromUrl = params.get('plan');
       const emailFromUrl = params.get('email') ? decodeURIComponent(params.get('email')) : null;
-      const pendingPlan  = sessionStorage.getItem('pl_pending_plan');
+      const pendingPlan = sessionStorage.getItem('pl_pending_plan');
 
       // Case 1: User already has active premium
       if (PL.isPremium()) {
         showSuccess({ plan: PL.premiumPlan() });
 
-      // Case 2: Selar just redirected back with ?plan=xxx — grant immediately
+        // Case 2: Selar just redirected back with ?plan=xxx — grant immediately
       } else if (planFromUrl && PL.PLANS[planFromUrl]) {
         handleRedirectReturn(planFromUrl, emailFromUrl);
 
-      // Case 3: Redirect came back but URL param was stripped — use sessionStorage
+        // Case 3: Redirect came back but URL param was stripped — use sessionStorage
       } else if (pendingPlan && PL.PLANS[pendingPlan]) {
         handleRedirectReturn(pendingPlan, emailFromUrl);
 
-      // Case 4: Normal visit — show pricing
+        // Case 4: Normal visit — show pricing
       } else {
         renderPricing();
         if (!PL.isPromoActive()) document.getElementById('promo-banner').style.display = 'none';

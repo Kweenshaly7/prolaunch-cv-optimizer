@@ -5,9 +5,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Dashboard | LaunchIQ</title>
-  <link
-    href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;800&family=Lato:wght@300;400;700&display=swap"
-    rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;800&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
   <style>
     :root {
       --primary: #0A84FF;
@@ -27,557 +25,128 @@
       --amber: #f59e0b;
     }
 
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
-
-    body {
-      font-family: 'Lato', sans-serif;
-      background: var(--cream);
-      color: var(--forest);
-    }
-
-    h1,
-    h2,
-    h3,
-    h4 {
-      font-family: 'Playfair Display', sans-serif;
-    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Lato', sans-serif; background: var(--cream); color: var(--forest); }
+    h1, h2, h3, h4 { font-family: 'Playfair Display', sans-serif; }
 
     /* NAV */
-    nav {
-      background: white;
-      border-bottom: 1.5px solid var(--border);
-      padding: 0.85rem 2rem;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      position: sticky;
-      top: 0;
-      z-index: 100;
-      box-shadow: 0 2px 12px rgba(18, 71, 69, 0.05);
-    }
-
-    .nav-brand {
-      display: flex;
-      align-items: center;
-      gap: 0.6rem;
-      text-decoration: none;
-    }
-
-    .nav-brand img {
-      height: 36px;
-    }
-
-    .nav-brand span {
-      font-family: 'Playfair Display', sans-serif;
-      font-weight: 800;
-      font-size: 0.95rem;
-      color: var(--forest);
-    }
-
-    .nav-right {
-      display: flex;
-      align-items: center;
-      gap: 0.75rem;
-    }
-
-    .user-chip {
-      background: var(--green-pale);
-      border: 1.5px solid rgba(123, 182, 64, 0.3);
-      padding: 0.35rem 0.9rem;
-      border-radius: 50px;
-      font-size: 0.8rem;
-      font-weight: 600;
-      color: var(--forest);
-    }
-
-    .premium-badge {
-      background: var(--amber);
-      color: white;
-      font-family: 'Playfair Display', sans-serif;
-      font-weight: 700;
-      font-size: 0.72rem;
-      padding: 0.3rem 0.75rem;
-      border-radius: 50px;
-      letter-spacing: 0.04em;
-    }
-
-    .btn-logout {
-      background: transparent;
-      border: 1.5px solid var(--border);
-      color: var(--gray);
-      font-family: 'Playfair Display', sans-serif;
-      font-weight: 700;
-      font-size: 0.78rem;
-      padding: 0.35rem 0.85rem;
-      border-radius: 50px;
-      cursor: pointer;
-      transition: all 0.2s;
-    }
-
-    .btn-logout:hover {
-      border-color: var(--forest);
-      color: var(--forest);
-    }
+    nav { background: white; border-bottom: 1.5px solid var(--border); padding: 0.85rem 2rem; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 100; box-shadow: 0 2px 12px rgba(18,71,69,0.05); }
+    .nav-brand { display: flex; align-items: center; gap: 0.6rem; text-decoration: none; }
+    .nav-brand img { height: 36px; }
+    .nav-brand span { font-family: 'Playfair Display', sans-serif; font-weight: 800; font-size: 0.95rem; color: var(--forest); }
+    .nav-right { display: flex; align-items: center; gap: 0.75rem; }
+    .user-chip { background: var(--green-pale); border: 1.5px solid rgba(123,182,64,0.3); padding: 0.35rem 0.9rem; border-radius: 50px; font-size: 0.8rem; font-weight: 600; color: var(--forest); }
+    .premium-badge { background: var(--amber); color: white; font-family: 'Playfair Display', sans-serif; font-weight: 700; font-size: 0.72rem; padding: 0.3rem 0.75rem; border-radius: 50px; letter-spacing: 0.04em; }
+    .btn-logout { background: transparent; border: 1.5px solid var(--border); color: var(--gray); font-family: 'Playfair Display', sans-serif; font-weight: 700; font-size: 0.78rem; padding: 0.35rem 0.85rem; border-radius: 50px; cursor: pointer; transition: all 0.2s; }
+    .btn-logout:hover { border-color: var(--forest); color: var(--forest); }
 
     /* HERO STRIP */
-    .dash-header {
-      background: linear-gradient(135deg, var(--forest) 0%, var(--forest-light) 100%);
-      color: white;
-      padding: 2.5rem 2rem;
-    }
-
-    .dash-header-inner {
-      max-width: 1100px;
-      margin: 0 auto;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      flex-wrap: wrap;
-      gap: 1rem;
-    }
-
-    .dash-header h1 {
-      font-size: clamp(1.5rem, 3vw, 2rem);
-      font-weight: 800;
-    }
-
-    .dash-header h1 span {
-      color: var(--green);
-    }
-
-    .dash-header p {
-      color: rgba(255, 255, 255, 0.65);
-      font-size: 0.9rem;
-      margin-top: 0.3rem;
-    }
-
-    .premium-timer {
-      background: rgba(245, 158, 11, 0.2);
-      border: 1px solid rgba(245, 158, 11, 0.4);
-      color: #fcd34d;
-      padding: 0.5rem 1rem;
-      border-radius: 50px;
-      font-size: 0.8rem;
-      font-weight: 700;
-      font-family: 'Playfair Display', sans-serif;
-    }
+    .dash-header { background: linear-gradient(135deg, var(--forest) 0%, var(--forest-light) 100%); color: white; padding: 2.5rem 2rem; }
+    .dash-header-inner { max-width: 1100px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1rem; }
+    .dash-header h1 { font-size: clamp(1.5rem, 3vw, 2rem); font-weight: 800; }
+    .dash-header h1 span { color: var(--green); }
+    .dash-header p { color: rgba(255,255,255,0.65); font-size: 0.9rem; margin-top: 0.3rem; }
+    .premium-timer { background: rgba(245,158,11,0.2); border: 1px solid rgba(245,158,11,0.4); color: #fcd34d; padding: 0.5rem 1rem; border-radius: 50px; font-size: 0.8rem; font-weight: 700; font-family: 'Playfair Display', sans-serif; }
 
     /* MAIN */
-    main{max-width:1100px;margin:0 auto;padding:2.5rem 1.5rem;}
+    main { max-width: 1100px; margin: 0 auto; padding: 2.5rem 1.5rem; }
 
     /* FREE TOOL HIGHLIGHT */
-    .free-section {
-      margin-bottom: 2.5rem;
-    }
-
-    .free-section h2 {
-      font-size: 1rem;
-      font-weight: 700;
-      color: var(--gray);
-      letter-spacing: 0.06em;
-      text-transform: uppercase;
-      margin-bottom: 1rem;
-    }
-
-    .free-card {
-      background: white;
-      border-radius: 20px;
-      border: 2px solid rgba(123, 182, 64, 0.4);
-      padding: 1.75rem 2rem;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 1.5rem;
-      flex-wrap: wrap;
-      box-shadow: 0 4px 20px rgba(123, 182, 64, 0.08);
-      text-decoration: none;
-      color: inherit;
-      transition: all 0.2s;
-    }
-
-    .free-card:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 8px 28px rgba(123, 182, 64, 0.15);
-    }
-
-    .free-card-left {
-      display: flex;
-      align-items: center;
-      gap: 1.25rem;
-    }
-
-    .free-icon {
-      width: 56px;
-      height: 56px;
-      background: var(--green-pale);
-      border-radius: 16px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 1.6rem;
-    }
-
-    .free-card h3 {
-      font-size: 1.15rem;
-      font-weight: 800;
-      margin-bottom: 0.2rem;
-    }
-
-    .free-card p {
-      font-size: 0.875rem;
-      color: var(--gray);
-      max-width: 380px;
-      line-height: 1.5;
-    }
-
-    .btn-free {
-      background: var(--green);
-      color: white;
-      font-family: 'Playfair Display', sans-serif;
-      font-weight: 800;
-      font-size: 0.9rem;
-      padding: 0.7rem 1.6rem;
-      border-radius: 50px;
-      white-space: nowrap;
-      transition: all 0.2s;
-    }
-
-    .btn-free:hover {
-      background: var(--green-dark);
-    }
+    .free-section { margin-bottom: 2.5rem; }
+    .free-section h2 { font-size: 1rem; font-weight: 700; color: var(--gray); letter-spacing: 0.06em; text-transform: uppercase; margin-bottom: 1rem; }
+    .free-card { background: white; border-radius: 20px; border: 2px solid rgba(123,182,64,0.4); padding: 1.75rem 2rem; display: flex; align-items: center; justify-content: space-between; gap: 1.5rem; flex-wrap: wrap; box-shadow: 0 4px 20px rgba(123,182,64,0.08); text-decoration: none; color: inherit; transition: all 0.2s; }
+    .free-card:hover { transform: translateY(-2px); box-shadow: 0 8px 28px rgba(123,182,64,0.15); }
+    .free-card-left { display: flex; align-items: center; gap: 1.25rem; }
+    .free-icon { width: 56px; height: 56px; background: var(--green-pale); border-radius: 16px; display: flex; align-items: center; justify-content: center; font-size: 1.6rem; }
+    .free-card h3 { font-size: 1.15rem; font-weight: 800; margin-bottom: 0.2rem; }
+    .free-card p { font-size: 0.875rem; color: var(--gray); max-width: 380px; line-height: 1.5; }
+    .btn-free { background: var(--green); color: white; font-family: 'Playfair Display', sans-serif; font-weight: 800; font-size: 0.9rem; padding: 0.7rem 1.6rem; border-radius: 50px; white-space: nowrap; transition: all 0.2s; }
+    .btn-free:hover { background: var(--green-dark); }
 
     /* PREMIUM SECTION */
-    .premium-section h2 {
-      font-size: 1rem;
-      font-weight: 700;
-      color: var(--gray);
-      letter-spacing: 0.06em;
-      text-transform: uppercase;
-      margin-bottom: 1rem;
-    }
-
-    .tools-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
-      gap: 1.25rem;
-    }
-
-    .tool-card {
-      background: white;
-      border-radius: 18px;
-      border: 2px solid var(--border);
-      padding: 1.5rem;
-      text-decoration: none;
-      color: inherit;
-      transition: all 0.25s;
-      position: relative;
-      overflow: hidden;
-      display: block;
-    }
-
-    .tool-card.locked::after {
-      content: '🔒';
-      position: absolute;
-      top: 1rem;
-      right: 1rem;
-      font-size: 1rem;
-    }
-
-    .tool-card.unlocked::after {
-      content: '✓';
-      position: absolute;
-      top: 1rem;
-      right: 1rem;
-      width: 22px;
-      height: 22px;
-      background: var(--green);
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 0.65rem;
-      color: white;
-      font-weight: 800;
-    }
-
-    .tool-card:hover {
-      transform: translateY(-3px);
-      box-shadow: 0 10px 28px rgba(18, 71, 69, 0.09);
-    }
-
-    .tool-card.locked:hover {
-      border-color: var(--amber);
-    }
-
-    .tool-card.unlocked:hover {
-      border-color: var(--green);
-    }
-
-    .card-icon {
-      width: 46px;
-      height: 46px;
-      border-radius: 12px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 1.35rem;
-      margin-bottom: 1rem;
-    }
-
-    .tool-card h3 {
-      font-size: 0.95rem;
-      font-weight: 700;
-      margin-bottom: 0.4rem;
-    }
-
-    .tool-card p {
-      font-size: 0.82rem;
-      color: var(--gray);
-      line-height: 1.5;
-      margin-bottom: 1rem;
-    }
-
-    .card-action {
-      font-family: 'Playfair Display', sans-serif;
-      font-size: 0.78rem;
-      font-weight: 700;
-    }
-
-    .card-action.locked-text {
-      color: var(--amber);
-    }
-
-    .card-action.open-text {
-      color: var(--teal);
-    }
+    .premium-section h2 { font-size: 1rem; font-weight: 700; color: var(--gray); letter-spacing: 0.06em; text-transform: uppercase; margin-bottom: 1rem; }
+    .tools-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 1.25rem; }
+    .tool-card { background: white; border-radius: 18px; border: 2px solid var(--border); padding: 1.5rem; text-decoration: none; color: inherit; transition: all 0.25s; position: relative; overflow: hidden; display: block; }
+    .tool-card.locked::after { content: '🔒'; position: absolute; top: 1rem; right: 1rem; font-size: 1rem; }
+    .tool-card.unlocked::after { content: '✓'; position: absolute; top: 1rem; right: 1rem; width: 22px; height: 22px; background: var(--green); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.65rem; color: white; font-weight: 800; }
+    .tool-card:hover { transform: translateY(-3px); box-shadow: 0 10px 28px rgba(18,71,69,0.09); }
+    .tool-card.locked:hover { border-color: var(--amber); }
+    .tool-card.unlocked:hover { border-color: var(--green); }
+    .card-icon { width: 46px; height: 46px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 1.35rem; margin-bottom: 1rem; }
+    .tool-card h3 { font-size: 0.95rem; font-weight: 700; margin-bottom: 0.4rem; }
+    .tool-card p { font-size: 0.82rem; color: var(--gray); line-height: 1.5; margin-bottom: 1rem; }
+    .card-action { font-family: 'Playfair Display', sans-serif; font-size: 0.78rem; font-weight: 700; }
+    .card-action.locked-text { color: var(--amber); }
+    .card-action.open-text { color: var(--teal); }
 
     /* UPGRADE BANNER */
-    .upgrade-banner {
-      background: linear-gradient(135deg, var(--forest) 0%, var(--forest-light) 100%);
-      border-radius: 20px;
-      padding: 2rem;
-      margin-bottom: 2rem;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      flex-wrap: wrap;
-      gap: 1.25rem;
-    }
+    .upgrade-banner { background: linear-gradient(135deg, var(--forest) 0%, var(--forest-light) 100%); border-radius: 20px; padding: 2rem; margin-bottom: 2rem; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1.25rem; }
+    .upgrade-banner h3 { font-size: 1.15rem; font-weight: 800; color: white; margin-bottom: 0.3rem; }
+    .upgrade-banner p { font-size: 0.875rem; color: rgba(255,255,255,0.65); }
+    .btn-upgrade { background: var(--amber); color: white; font-family: 'Playfair Display', sans-serif; font-weight: 800; font-size: 0.95rem; padding: 0.75rem 1.75rem; border-radius: 50px; text-decoration: none; white-space: nowrap; transition: all 0.2s; border: none; cursor: pointer; box-shadow: 0 4px 16px rgba(245,158,11,0.35); }
+    .btn-upgrade:hover { background: #d97706; transform: translateY(-1px); }
 
-    .upgrade-banner h3 {
-      font-size: 1.15rem;
-      font-weight: 800;
-      color: white;
-      margin-bottom: 0.3rem;
-    }
+    /* PLAN PERKS ─────────────────────────────────────────────────────────── */
+    .perks-section { margin-top: 2.5rem; }
+    .perks-section > h2 { font-size: 1rem; font-weight: 700; color: var(--gray); letter-spacing: 0.06em; text-transform: uppercase; margin-bottom: 1rem; }
+    .perks-grid { display: flex; flex-direction: column; gap: 0.85rem; }
 
-    .upgrade-banner p {
-      font-size: 0.875rem;
-      color: rgba(255, 255, 255, 0.65);
-    }
+    .perk-card { background: white; border-radius: 16px; border: 2px solid var(--border); padding: 1.1rem 1.4rem; display: flex; align-items: center; justify-content: space-between; gap: 1rem; flex-wrap: wrap; transition: box-shadow 0.2s; }
+    .perk-card.coaching-card { border-color: rgba(25,160,140,0.35); }
+    .perk-card.mijaa-card    { border-color: rgba(10,132,255,0.3); }
+    .perk-card.expired-card  { opacity: 0.6; }
 
-    .btn-upgrade {
-      background: var(--amber);
-      color: white;
-      font-family: 'Playfair Display', sans-serif;
-      font-weight: 800;
-      font-size: 0.95rem;
-      padding: 0.75rem 1.75rem;
-      border-radius: 50px;
-      text-decoration: none;
-      white-space: nowrap;
-      transition: all 0.2s;
-      border: none;
-      cursor: pointer;
-      box-shadow: 0 4px 16px rgba(245, 158, 11, 0.35);
-    }
+    .perk-left { display: flex; align-items: center; gap: 0.9rem; }
+    .perk-icon { width: 44px; height: 44px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 1.25rem; flex-shrink: 0; }
+    .perk-title { font-family: 'Playfair Display', sans-serif; font-weight: 800; font-size: 0.9rem; color: var(--forest); margin-bottom: 0.15rem; }
+    .perk-desc  { font-size: 0.78rem; color: var(--gray); line-height: 1.4; }
+    .perk-timer { font-size: 0.72rem; font-weight: 700; color: var(--primary); margin-top: 0.2rem; }
+    .perk-expired { font-size: 0.72rem; color: var(--gray); margin-top: 0.2rem; }
 
-    .btn-upgrade:hover {
-      background: #d97706;
-      transform: translateY(-1px);
-    }
-
+    .btn-perk { font-family: 'Playfair Display', sans-serif; font-weight: 800; font-size: 0.82rem; padding: 0.55rem 1.25rem; border-radius: 50px; text-decoration: none; white-space: nowrap; transition: all 0.2s; border: none; cursor: pointer; display: inline-block; }
+    .btn-perk.coaching      { background: var(--teal); color: white; box-shadow: 0 3px 10px rgba(25,160,140,0.25); }
+    .btn-perk.coaching:hover { background: var(--teal-dark); transform: translateY(-1px); }
+    .btn-perk.coaching-booked { background: var(--border); color: var(--gray); cursor: default; }
+    .btn-perk.mijaa-activate       { background: var(--primary); color: white; box-shadow: 0 3px 10px rgba(10,132,255,0.25); }
+    .btn-perk.mijaa-activate:hover { background: #0070e0; transform: translateY(-1px); }
+    .btn-perk.mijaa-open           { background: var(--green-pale); color: var(--primary); border: 1.5px solid rgba(10,132,255,0.3); }
+    .btn-perk.mijaa-open:hover     { background: rgba(10,132,255,0.08); }
+    .btn-perk.mijaa-expired        { background: var(--border); color: var(--gray); cursor: default; }
 
     /* HISTORY */
-    .history-item {
-      background: white;
-      border-radius: 14px;
-      border: 2px solid var(--border);
-      padding: 1rem 1.25rem;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 1rem;
-      flex-wrap: wrap;
-    }
-
-    .history-item:hover {
-      border-color: var(--green);
-      box-shadow: 0 4px 14px rgba(123, 182, 64, 0.1);
-    }
-
-    .history-meta {
-      flex: 1;
-    }
-
-    .history-type {
-      font-family: 'Playfair Display', sans-serif;
-      font-weight: 800;
-      font-size: 0.9rem;
-      color: var(--forest);
-      margin-bottom: 0.15rem;
-    }
-
-    .history-info {
-      font-size: 0.78rem;
-      color: var(--gray);
-    }
-
-    .btn-history {
-      font-family: 'Playfair Display', sans-serif;
-      font-weight: 700;
-      font-size: 0.78rem;
-      color: var(--teal);
-      text-decoration: none;
-      border: 1.5px solid rgba(25, 160, 140, 0.3);
-      padding: 0.3rem 0.85rem;
-      border-radius: 50px;
-      white-space: nowrap;
-      transition: all 0.2s;
-      cursor: pointer;
-      background: transparent;
-    }
-
-    .btn-history:hover {
-      background: var(--teal);
-      color: white;
-      border-color: var(--teal);
-    }
+    .history-item { background: white; border-radius: 14px; border: 2px solid var(--border); padding: 1rem 1.25rem; display: flex; align-items: center; justify-content: space-between; gap: 1rem; flex-wrap: wrap; }
+    .history-item:hover { border-color: var(--green); box-shadow: 0 4px 14px rgba(123,182,64,0.1); }
+    .history-meta { flex: 1; }
+    .history-type { font-family: 'Playfair Display', sans-serif; font-weight: 800; font-size: 0.9rem; color: var(--forest); margin-bottom: 0.15rem; }
+    .history-info { font-size: 0.78rem; color: var(--gray); }
+    .btn-history { font-family: 'Playfair Display', sans-serif; font-weight: 700; font-size: 0.78rem; color: var(--teal); text-decoration: none; border: 1.5px solid rgba(25,160,140,0.3); padding: 0.3rem 0.85rem; border-radius: 50px; white-space: nowrap; transition: all 0.2s; cursor: pointer; background: transparent; }
+    .btn-history:hover { background: var(--teal); color: white; border-color: var(--teal); }
 
     /* CGC */
-    .cgc-card {
-      background: linear-gradient(135deg, var(--forest) 0%, #1d6b68 100%);
-      border-radius: 20px;
-      padding: 1.75rem 2rem;
-      color: white;
-    }
+    .cgc-card { background: linear-gradient(135deg, var(--forest) 0%, #1d6b68 100%); border-radius: 20px; padding: 1.75rem 2rem; color: white; }
+    .cgc-inner { display: flex; align-items: flex-start; gap: 1.25rem; margin-bottom: 1.25rem; }
+    .cgc-icon { font-size: 2rem; flex-shrink: 0; margin-top: 0.15rem; }
+    .cgc-label { font-size: 0.7rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--green); margin-bottom: 0.3rem; }
+    .cgc-headline { font-size: 1.1rem; font-weight: 800; margin-bottom: 0.35rem; }
+    .cgc-desc { font-size: 0.875rem; color: rgba(255,255,255,0.7); line-height: 1.6; }
+    .cgc-footer { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1rem; border-top: 1px solid rgba(255,255,255,0.15); padding-top: 1.1rem; }
+    .cgc-meta { font-size: 0.8rem; color: rgba(255,255,255,0.6); }
+    .cgc-meta strong { color: white; }
+    .btn-cgc { background: var(--green); color: white; font-family: 'Playfair Display', sans-serif; font-weight: 800; font-size: 0.875rem; padding: 0.6rem 1.4rem; border-radius: 50px; text-decoration: none; white-space: nowrap; transition: all 0.2s; box-shadow: 0 4px 14px rgba(123,182,64,0.35); }
+    .btn-cgc:hover { background: #6aa335; transform: translateY(-1px); }
 
-    .cgc-inner {
-      display: flex;
-      align-items: flex-start;
-      gap: 1.25rem;
-      margin-bottom: 1.25rem;
-    }
+    .history-section { margin-top: 2.5rem; }
 
-    .cgc-icon {
-      font-size: 2rem;
-      flex-shrink: 0;
-      margin-top: 0.15rem;
-    }
-
-    .cgc-label {
-      font-size: 0.7rem;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 0.08em;
-      color: var(--green);
-      margin-bottom: 0.3rem;
-    }
-
-    .cgc-headline {
-      font-size: 1.1rem;
-      font-weight: 800;
-      margin-bottom: 0.35rem;
-    }
-
-    .cgc-desc {
-      font-size: 0.875rem;
-      color: rgba(255, 255, 255, 0.7);
-      line-height: 1.6;
-    }
-
-    .cgc-footer {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      flex-wrap: wrap;
-      gap: 1rem;
-      border-top: 1px solid rgba(255, 255, 255, 0.15);
-      padding-top: 1.1rem;
-    }
-
-    .cgc-meta {
-      font-size: 0.8rem;
-      color: rgba(255, 255, 255, 0.6);
-    }
-
-    .cgc-meta strong {
-      color: white;
-    }
-
-    .btn-cgc {
-      background: var(--green);
-      color: white;
-      font-family: 'Playfair Display', sans-serif;
-      font-weight: 800;
-      font-size: 0.875rem;
-      padding: 0.6rem 1.4rem;
-      border-radius: 50px;
-      text-decoration: none;
-      white-space: nowrap;
-      transition: all 0.2s;
-      box-shadow: 0 4px 14px rgba(123, 182, 64, 0.35);
-    }
-
-    .btn-cgc:hover {
-      background: #6aa335;
-      transform: translateY(-1px);
-    }
-
-    /* History section title */
-    .history-section {
-      margin-top: 2.5rem;
-    }
-
-    footer {
-      background: var(--forest);
-      color: white;
-      padding: 1.75rem;
-      text-align: center;
-      margin-top: 3rem;
-    }
-
-    footer p {
-      font-size: 0.82rem;
-      color: rgba(255, 255, 255, 0.5);
-    }
-
-    footer span {
-      color: var(--green);
-      font-weight: 700;
-    }
+    footer { background: var(--forest); color: white; padding: 1.75rem; text-align: center; margin-top: 3rem; }
+    footer p { font-size: 0.82rem; color: rgba(255,255,255,0.5); }
+    footer span { color: var(--green); font-weight: 700; }
 
     @media(max-width:600px) {
-      nav {
-        padding: 0.7rem 1rem;
-      }
-
-      .nav-brand span {
-        display: none;
-      }
-
-      .dash-header {
-        padding: 2rem 1.25rem;
-      }
-
-      .free-card {
-        flex-direction: column;
-        align-items: flex-start;
-      }
+      nav { padding: 0.7rem 1rem; }
+      .nav-brand span { display: none; }
+      .dash-header { padding: 2rem 1.25rem; }
+      .free-card { flex-direction: column; align-items: flex-start; }
+      .perk-card { flex-direction: column; align-items: flex-start; }
     }
   </style>
 </head>
@@ -632,11 +201,9 @@
       <div class="upgrade-banner" id="upgrade-banner">
         <div>
           <h3 id="banner-headline">Unlock All 4 Premium Tools</h3>
-          <p id="banner-sub">Resume Builder, Cover Letter, Interview Prep & Career Insights. Plans from ₦1,500 (24h) · ₦4,999 (7 days) · ₦9,999 (30 days).</p>
+          <p id="banner-sub">Resume Builder, Cover Letter, Interview Prep & Career Insights. Plans from ₦1,000 (24h) · ₦4,999 (7 days) · ₦9,999 (30 days).</p>
           <div id="promo-teaser" style="margin-top:0.5rem;display:none;">
-            <span
-              style="background:rgba(255,255,255,0.15);color:#fcd34d;font-size:0.78rem;font-weight:700;padding:0.25rem 0.7rem;border-radius:50px;">🔥
-              Promo: 7 days from ₦4,999 · 30 days from ₦9,999</span>
+            <span style="background:rgba(255,255,255,0.15);color:#fcd34d;font-size:0.78rem;font-weight:700;padding:0.25rem 0.7rem;border-radius:50px;">🔥 Promo: 7 days from ₦4,999 · 30 days from ₦9,999</span>
           </div>
         </div>
         <button class="btn-upgrade" onclick="goToPremium()">🔓 See Plans & Pricing</button>
@@ -647,16 +214,19 @@
       </div>
     </div>
 
+    <!-- PLAN PERKS (shown only for 7-day and 30-day plans) -->
+    <div class="perks-section" id="perks-section" style="display:none;">
+      <h2>🎁 Your Plan Perks</h2>
+      <div class="perks-grid" id="perks-grid">
+        <!-- Injected by renderPerks() -->
+      </div>
+    </div>
 
     <!-- REPORT HISTORY -->
     <div class="history-section" id="history-section" style="display:none;">
-      <h2
-        style="font-size:1rem;font-weight:700;color:var(--gray);letter-spacing:0.06em;text-transform:uppercase;margin-bottom:1rem;">
-        📂 Recent Reports</h2>
+      <h2 style="font-size:1rem;font-weight:700;color:var(--gray);letter-spacing:0.06em;text-transform:uppercase;margin-bottom:1rem;">📂 Recent Reports</h2>
       <div id="history-list" style="display:flex;flex-direction:column;gap:0.75rem;"></div>
-      <button onclick="PL.clearHistory(); renderHistory();"
-        style="margin-top:0.75rem;background:transparent;border:1.5px solid var(--border);color:var(--gray);font-family:'Playfair Display',sans-serif;font-weight:700;font-size:0.78rem;padding:0.35rem 0.9rem;border-radius:50px;cursor:pointer;">Clear
-        History</button>
+      <button onclick="PL.clearHistory(); renderHistory();" style="margin-top:0.75rem;background:transparent;border:1.5px solid var(--border);color:var(--gray);font-family:'Playfair Display',sans-serif;font-weight:700;font-size:0.78rem;padding:0.35rem 0.9rem;border-radius:50px;cursor:pointer;">Clear History</button>
     </div>
 
     <!-- CAREER GROOMING CAMP -->
@@ -682,40 +252,37 @@
 
   <footer>
     <p>Product of <span>ProLaunch Group</span></p>
-    <p style="margin-top:0.3rem">&copy;
-      <script>document.write(new Date().getFullYear())</script> LaunchIQ. All rights reserved.
-    </p>
+    <p style="margin-top:0.3rem">&copy; <script>document.write(new Date().getFullYear())</script> LaunchIQ. All rights reserved.</p>
   </footer>
 
   <script src="../shared.js"></script>
   <script>
     const PREMIUM_TOOLS = [
-      { icon: '📄', bg: 'rgba(123,182,64,0.1)', title: 'Resume Builder', desc: 'Full ATS-optimized resume rewrite tailored to your exact job description and role.', href: 'cv-optimizer.html' },
-      { icon: '✉️', bg: 'rgba(25,160,140,0.1)', title: 'Cover Letter Generator', desc: 'Personalized, job-specific cover letter that connects your experience to the employer.', href: 'cover-letter.html' },
-      { icon: '🎯', bg: 'rgba(18,71,69,0.08)', title: 'Interview Prep', desc: '10 AI-generated interview questions with model answers for your specific role.', href: 'interview-prep.html' },
-      { icon: '💡', bg: 'rgba(245,158,11,0.1)', title: 'Career Insights', desc: 'Salary benchmarks, in-demand skills, growth paths, and a 90-day action plan.', href: 'career-insights.html' },
+      { icon: '📄', bg: 'rgba(123,182,64,0.1)', title: 'Resume Builder',          desc: 'Full ATS-optimized resume rewrite tailored to your exact job description and role.',     href: 'cv-optimizer.html'  },
+      { icon: '✉️', bg: 'rgba(25,160,140,0.1)',  title: 'Cover Letter Generator',  desc: 'Personalized, job-specific cover letter that connects your experience to the employer.', href: 'cover-letter.html'  },
+      { icon: '🎯', bg: 'rgba(18,71,69,0.08)',   title: 'Interview Prep',          desc: '10 AI-generated interview questions with model answers for your specific role.',          href: 'interview-prep.html'},
+      { icon: '💡', bg: 'rgba(245,158,11,0.1)',  title: 'Career Insights',         desc: 'Salary benchmarks, in-demand skills, growth paths, and a 90-day action plan.',           href: 'career-insights.html'},
     ];
 
     function init() {
-      if (!PL.hasBiodata()) {
-        window.location.href = '../index.html'; return;
-      }
+      if (!PL.hasBiodata()) { window.location.href = '../index.html'; return; }
 
       const user = PL.getBiodata();
-      document.getElementById('user-chip').textContent = `👤 ${user.fname || user.name}`;
-      document.getElementById('user-name').textContent = user.fname || user.name;
-      document.getElementById('user-meta').textContent = `${user.level} · ${user.role}`;
+      document.getElementById('user-chip').textContent  = `👤 ${user.fname || user.name}`;
+      document.getElementById('user-name').textContent  = user.fname || user.name;
+      document.getElementById('user-meta').textContent  = `${user.level} · ${user.role}`;
 
       const isPremium = PL.isPremium();
 
       if (isPremium) {
-        document.getElementById('premium-badge').style.display = 'inline-block';
+        document.getElementById('premium-badge').style.display  = 'inline-block';
         document.getElementById('upgrade-banner').style.display = 'none';
-        document.getElementById('timer-display').style.display = 'block';
+        document.getElementById('timer-display').style.display  = 'block';
         document.getElementById('time-left').textContent = PL.premiumTimeLeft();
       }
 
       renderPremiumTools(isPremium);
+      renderPerks();
     }
 
     function renderPremiumTools(isPremium) {
@@ -733,21 +300,133 @@
         </a>`).join('');
     }
 
+    // ── Plan Perks ────────────────────────────────────────────────────────────
+    // Renders the coaching call and Mijaa chips for eligible plans.
+    // Mijaa has three states: not activated / active (with countdown) / expired.
+    function renderPerks() {
+      if (!PL.isPremium()) return;
+
+      const hasCoaching = PL.hasCoachingCall();
+      const hasMijaa    = PL.hasMijaaAccess();
+      if (!hasCoaching && !hasMijaa) return;
+
+      document.getElementById('perks-section').style.display = 'block';
+
+      let html = '';
+
+      // ── Coaching call chip ────────────────────────────────────────────────
+      if (hasCoaching) {
+        const isBooked = PL.hasBookedCoachingCall();
+        
+        if (!isBooked) {
+          html += `
+            <div class="perk-card coaching-card">
+              <div class="perk-left">
+                <div class="perk-icon" style="background:rgba(25,160,140,0.12)">📞</div>
+                <div>
+                  <div class="perk-title">Free 1:1 Coaching Call</div>
+                  <div class="perk-desc">A personal career coaching session, included with your plan. Book a time that works for you.</div>
+                </div>
+              </div>
+              <button class="btn-perk coaching" onclick="activateCoachingAndRefresh()">Book via Coachli →</button>
+            </div>`;
+        } else {
+          html += `
+            <div class="perk-card coaching-card expired-card">
+              <div class="perk-left">
+                <div class="perk-icon" style="background:rgba(107,114,128,0.1)">📞</div>
+                <div>
+                  <div class="perk-title">Coaching Call Booked</div>
+                  <div class="perk-desc">You have successfully booked your 1:1 coaching session.</div>
+                  <div class="perk-expired">Check your email for the meeting details.</div>
+                </div>
+              </div>
+              <button class="btn-perk coaching-booked" disabled>Booked</button>
+            </div>`;
+        }
+      }
+
+      // ── Mijaa chip — 3 states ─────────────────────────────────────────────
+      if (hasMijaa) {
+        const activatedAt = PL.getMijaaActivatedAt();
+        const isActive    = PL.isMijaaTrialActive();
+        const timeLeft    = PL.getMijaaTimeLeft();
+
+        if (!activatedAt) {
+          // State 1: Not yet activated — prompt user to start the clock
+          html += `
+            <div class="perk-card mijaa-card">
+              <div class="perk-left">
+                <div class="perk-icon" style="background:rgba(10,132,255,0.1)">🚀</div>
+                <div>
+                  <div class="perk-title">7-Day Mijaa Access</div>
+                  <div class="perk-desc">Premium personalised job application tool. Your 7-day trial starts when you activate.</div>
+                </div>
+              </div>
+              <button class="btn-perk mijaa-activate" onclick="activateMijaaAndRefresh()">Activate Free Trial →</button>
+            </div>`;
+
+        } else if (isActive) {
+          // State 2: Trial running — show countdown and open link
+          html += `
+            <div class="perk-card mijaa-card">
+              <div class="perk-left">
+                <div class="perk-icon" style="background:rgba(10,132,255,0.1)">🚀</div>
+                <div>
+                  <div class="perk-title">Mijaa — Trial Active</div>
+                  <div class="perk-desc">Premium personalised job application tool.</div>
+                  <div class="perk-timer">⏱ ${timeLeft}</div>
+                </div>
+              </div>
+              <a href="${PL.MIJAA_URL}" target="_blank" class="btn-perk mijaa-open">Open Mijaa →</a>
+            </div>`;
+
+        } else {
+          // State 3: Trial window has passed
+          html += `
+            <div class="perk-card mijaa-card expired-card">
+              <div class="perk-left">
+                <div class="perk-icon" style="background:rgba(107,114,128,0.1)">🚀</div>
+                <div>
+                  <div class="perk-title">Mijaa Trial</div>
+                  <div class="perk-desc">Your 7-day free trial has ended.</div>
+                  <div class="perk-expired">Visit mijaa.app to continue with a paid plan.</div>
+                </div>
+              </div>
+              <a href="${PL.MIJAA_URL}" target="_blank" class="btn-perk mijaa-expired">Visit Mijaa</a>
+            </div>`;
+        }
+      }
+
+      document.getElementById('perks-grid').innerHTML = html;
+    }
+
+    function activateCoachingAndRefresh() {
+      PL.bookCoachingCall();
+      window.open(PL.COACHLI_URL, '_blank');
+      renderPerks();
+    }
+
+    // Stamps activation time, opens Mijaa in a new tab, then re-renders the chip
+    function activateMijaaAndRefresh() {
+      PL.activateMijaa();
+      window.open(PL.MIJAA_URL, '_blank');
+      renderPerks();
+    }
+
     function showUpgradePrompt(e) {
       e.preventDefault();
       PL.toast('Unlock premium access for ₦1,000 to use this tool.', 'warn');
       document.getElementById('upgrade-banner').scrollIntoView({ behavior: 'smooth' });
     }
 
-    function goToPremium() {
-      window.location.href = 'unlock.html';
-    }
+    function goToPremium() { window.location.href = 'unlock.html'; }
 
-    // ── Report history rendering ────────────────────────────────────────────
+    // ── Report history ────────────────────────────────────────────────────────
     function renderHistory() {
       const history = PL.getHistory();
       const section = document.getElementById('history-section');
-      const list = document.getElementById('history-list');
+      const list    = document.getElementById('history-list');
       if (!history.length) { section.style.display = 'none'; return; }
       section.style.display = 'block';
       list.innerHTML = history.map(entry => {
@@ -771,19 +450,18 @@
       window.location.href = pageMap[entry.type] || 'cv-analyzer.html';
     }
 
-    // ── Career Grooming Camp ─────────────────────────────────────────────────
+    // ── Career Grooming Camp ──────────────────────────────────────────────────
     function renderCGC() {
       const rec = PL.getCGCRecommendation();
       if (!rec) return;
-      const card = document.getElementById('cgc-card');
       document.getElementById('cgc-headline').textContent = rec.headline;
-      document.getElementById('cgc-body').textContent = rec.body;
+      document.getElementById('cgc-body').textContent     = rec.body;
       const cta = document.getElementById('cgc-cta');
       cta.textContent = rec.cta;
-      cta.href = PL.CGC.url;
+      cta.href        = PL.CGC.url;
       document.getElementById('cgc-cohort').textContent = PL.CGC.nextCohort;
-      document.getElementById('cgc-price').textContent = PL.CGC.price;
-      card.style.display = 'block';
+      document.getElementById('cgc-price').textContent  = PL.CGC.price;
+      document.getElementById('cgc-card').style.display = 'block';
     }
 
     function handleLogout() {
@@ -792,7 +470,6 @@
       window.location.href = '../index.html';
     }
 
-    // ── Show promo teaser on banner ──────────────────────────────────────────
     function showPromoTeaser() {
       if (PL.isPromoActive()) {
         const el = document.getElementById('promo-teaser');
