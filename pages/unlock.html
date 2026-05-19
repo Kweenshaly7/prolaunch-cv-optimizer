@@ -329,19 +329,6 @@
     }
 
     /* Checkout button — single, below plans */
-<<<<<<< HEAD
-    .checkout-wrap{text-align:center;margin-bottom:2rem;}
-    .checkout-note{font-size:0.82rem;color:var(--gray);margin-bottom:0.85rem;line-height:1.5;}
-    .btn-plan{display:block;width:100%;background:var(--forest);color:white;font-family:'Playfair Display',sans-serif;font-weight:800;font-size:0.9rem;padding:0.8rem;border-radius:50px;border:none;cursor:pointer;transition:all 0.2s;margin-top:1rem;box-shadow:0 4px 14px rgba(18,71,69,0.2);}
-    .btn-plan:hover{background:var(--forest-light);transform:translateY(-1px);}
-    .btn-plan.green{background:var(--green);box-shadow:0 4px 14px rgba(123,182,64,0.3);}
-    .btn-plan.green:hover{background:#6aa335;}
-    .btn-checkout{display:inline-flex;align-items:center;gap:0.5rem;background:var(--forest);color:white;font-family:'Playfair Display',sans-serif;font-weight:800;font-size:1.05rem;padding:0.95rem 2.5rem;border-radius:50px;text-decoration:none;transition:all 0.2s;border:none;cursor:pointer;box-shadow:0 6px 20px rgba(18,71,69,0.25);}
-    .btn-checkout:hover{background:var(--forest-light);transform:translateY(-2px);box-shadow:0 8px 28px rgba(18,71,69,0.3);}
-    .btn-checkout .arrow{transition:transform 0.2s;}
-    .btn-checkout:hover .arrow{transform:translateX(3px);}
-    .secure-note{font-size:0.76rem;color:var(--gray);margin-top:0.6rem;}
-=======
     .checkout-wrap {
       text-align: center;
       margin-bottom: 2rem;
@@ -391,7 +378,6 @@
       color: var(--gray);
       margin-top: 0.6rem;
     }
->>>>>>> staging
 
     /* What's included */
     .includes {
@@ -664,14 +650,9 @@
       <!-- Per-plan checkout note -->
       <div class="checkout-wrap">
         <p class="checkout-note">
-<<<<<<< HEAD
-          Each button takes you directly to <strong>Selar</strong> for that plan.<br>
-          Complete payment and you'll be redirected back instantly — no waiting.
-=======
           Clicking below takes you to <strong>Selar</strong> — Nigeria's trusted payment platform.<br>
           Select your preferred plan on the checkout page, complete payment, and you'll be redirected back
           automatically.
->>>>>>> staging
         </p>
         <div class="secure-note">🔒 Secure payment via Selar · Access granted immediately on return</div>
       </div>
@@ -784,7 +765,7 @@
     // ── Grant access on redirect return ───────────────────────────────────────
     // Selar appends ?plan=7day&email=xxx to the redirect URL.
     // We read the plan, grant access immediately, then sync to Sheets async.
-    function handleRedirectReturn(plan, email) {
+    async function handleRedirectReturn(plan, email) {
       // Clean the URL — prevents double-grant on manual refresh
       history.replaceState({}, '', location.pathname);
       sessionStorage.removeItem('pl_pending_plan');
@@ -795,10 +776,6 @@
       // If Selar returned a different/confirmed email, update biodata
       if (email) {
         const user = PL.getBiodata();
-<<<<<<< HEAD
-        if (user && email !== user.email) {
-          PL.saveBiodata({ ...user, email });
-=======
         if (!user?.email) return;
 
         try {
@@ -816,7 +793,6 @@
           document.getElementById('verifying-view').style.display = 'none';
           document.getElementById('pricing-view').style.display = 'block';
           PL.toast('Payment not yet confirmed. If you paid, please wait a moment and refresh the page.', 'warn');
->>>>>>> staging
         }
       }
 
@@ -838,14 +814,6 @@
     // ── Show success screen ────────────────────────────────────────────────────
     function showSuccess(premium) {
       document.getElementById('verifying-view').style.display = 'none';
-<<<<<<< HEAD
-      document.getElementById('pricing-view').style.display   = 'none';
-
-      const planLabel = PL.PLANS[premium.plan]?.label || premium.plan;
-      document.getElementById('granted-plan-label').textContent = planLabel;
-      document.getElementById('access-countdown').textContent   = PL.premiumTimeLeft() || '—';
-      document.getElementById('success-view').style.display     = 'block';
-=======
       document.getElementById('pricing-view').style.display = 'none';
 
       const planLabel = PL.PLANS[premium.plan]?.label || premium.plan;
@@ -853,7 +821,6 @@
       document.getElementById('access-countdown').textContent = PL.premiumTimeLeft() || '—';
 
       document.getElementById('success-view').style.display = 'block';
->>>>>>> staging
     }
 
     // ── Init ──────────────────────────────────────────────────────────────────
@@ -886,11 +853,7 @@
         setInterval(tickPromo, 1000);
       }
     }
-<<<<<<< HEAD
-  </script>
-=======
   </script>
 </body>
 
 </html>
->>>>>>> staging

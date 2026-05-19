@@ -239,10 +239,6 @@ const PL = {
     el.style.transform = 'translateY(0)'; el.style.opacity = '1';
     setTimeout(() => { el.style.transform = 'translateY(80px)'; el.style.opacity = '0'; }, 4500);
   },
-<<<<<<< HEAD
-};
-=======
-
   // ── Markdown Helper ───────────────────────────────────────────────────────
   renderMarkdown(text) {
     if (window.marked) {
@@ -252,4 +248,3 @@ const PL = {
     return text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>').replace(/\n/g, '<br>');
   }
 };
->>>>>>> staging
