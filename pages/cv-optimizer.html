@@ -3,10 +3,11 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Resume Builder | ProLaunch Careers</title>
+  <title>Resume Builder | LaunchIQ</title>
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;800&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
   <style>
-    :root{--green:#7bb640;--green-dark:#6aa335;--teal:#19a08c;--teal-dark:#158f7d;--forest:#124745;--cream:#f7f9f4;--border:#e2ead8;--gray:#6b7280;}
+    :root{--primary:#0A84FF;--navy:#1E3A6E;--teal:#19A08C;--teal-dark:#158f7d;--light-blue:#E8F3FF;--white:#FFFFFF;--gray:#6B7280;--border:#e2ead8;--green:#0A84FF;--green-dark:#0066CC;--green-pale:#E8F3FF;--forest:#1E3A6E;--forest-light:#2A4D8C;--cream:#FFFFFF;--amber:#f59e0b;}
     *{box-sizing:border-box;margin:0;padding:0;}
     body{font-family:'Lato',sans-serif;background:var(--cream);color:var(--forest);}
     h1,h2,h3{font-family:'Playfair Display',sans-serif;}
@@ -52,8 +53,7 @@
 <body>
   <nav>
     <a href="dashboard.html" class="nav-logo">
-      <img src="../logo2.png" alt="ProLaunch">
-      <span>ProLaunch Careers</span>
+      <span>LaunchIQ</span>
     </a>
     <div class="nav-links">
       <a href="cv-optimizer.html" class="nav-pill active">📄 Resume</a>
@@ -128,8 +128,8 @@
   </main>
 
   <footer>
-    <p>Built by <span>Mary-Queen Uchechukwu</span> for ProLaunch Careers</p>
-    <p style="margin-top:0.3rem;">&copy; <script>document.write(new Date().getFullYear())</script> ProLaunch Careers. All rights reserved.</p>
+    <p>Product of <span>ProLaunch Group</span></p>
+    <p style="margin-top:0.3rem;">&copy; <script>document.write(new Date().getFullYear())</script> LaunchIQ. All rights reserved.</p>
   </footer>
 
   <script src="../shared.js"></script>
@@ -189,20 +189,20 @@
         const [cvText, clText, tipsText] = await Promise.all([
           PL.callAI(`Act as an expert CV writer. Rewrite the following CV to be ATS-optimized for the role of "${jobRole}".
 ${jd ? `Tailor it using this job description: ${jd}` : ''}
-Rules: Clean chronological format. No tables/columns. Sections: Professional Summary, Core Competencies, Professional Experience, Education, Certifications. Strong action verbs, quantified results.
+Rules: Clean chronological format. No tables/columns. Sections: Professional Summary, Core Competencies, Professional Experience, Education, Certifications. Strong action verbs, quantified results. Format using rich Markdown (e.g. **bolding**, bullet points, # headers).
 DESIRED ROLE: ${jobRole}
 ORIGINAL CV: ${cv}`),
-          PL.callAI(`Write a professional cover letter for the role of "${jobRole}". Tone: confident and enthusiastic. Address to "Hiring Manager". 3-4 paragraphs. Connect candidate achievements to job requirements.
+          PL.callAI(`Write a professional cover letter for the role of "${jobRole}". Tone: confident and enthusiastic. Address to "Hiring Manager". 3-4 paragraphs. Connect candidate achievements to job requirements. Format using rich Markdown.
 DESIRED ROLE: ${jobRole}
 JOB DESCRIPTION: ${jd || 'Not provided.'}
 CANDIDATE CV: ${cv}`),
-          PL.callAI(`Review this CV and give 3-5 specific, actionable improvement tips for a "${jobRole}" application. Format as bullet points. Be direct but encouraging.
+          PL.callAI(`Review this CV and give 3-5 specific, actionable improvement tips for a "${jobRole}" application. Format as bullet points using Markdown. Be direct but encouraging.
 DESIRED ROLE: ${jobRole}
 ORIGINAL CV: ${cv}`)
         ]);
-        document.getElementById('optimized-cv').textContent = cvText;
-        document.getElementById('cover-letter').textContent = clText;
-        document.getElementById('cv-tips').textContent = tipsText;
+        document.getElementById('optimized-cv').innerHTML = PL.renderMarkdown(cvText);
+        document.getElementById('cover-letter-text').innerHTML = PL.renderMarkdown(clText);
+        document.getElementById('cv-tips').innerHTML = PL.renderMarkdown(tipsText);
         document.getElementById('results').style.display = 'block';
         document.getElementById('results').scrollIntoView({ behavior: 'smooth' });
 
@@ -216,6 +216,7 @@ ORIGINAL CV: ${cv}`)
         PL.toast('✅ Your career docs are ready!', 'success');
 
         // Save to report history
+        optimizedDocxData = { cv: cvText, letter: clText, tips: tipsText };
         PL.saveReport('cv', jobRole, { cv: cvText, letter: clText, tips: tipsText, jd, jobRole });
       } catch (e) {
         PL.toast(e.message, 'error');
@@ -228,8 +229,10 @@ ORIGINAL CV: ${cv}`)
       document.getElementById('spinner').style.display = on ? 'block' : 'none';
     }
 
+    let optimizedDocxData = { cv: '', letter: '', tips: '' };
+
     function downloadDocx(id, filename, type) {
-      const content = document.getElementById(id).innerText;
+      const content = optimizedDocxData[type === 'cv' ? 'cv' : type === 'letter' ? 'letter' : 'tips'] || document.getElementById(id).innerText;
       PL.downloadDocx(content, filename, type);
     }
 

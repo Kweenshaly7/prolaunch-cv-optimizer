@@ -3,11 +3,28 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ProLaunch Careers | AI Career Tools</title>
+  <title>LaunchIQ | CV Optimization Agent</title>
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;800&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
   <style>
-    :root{--green:#7bb640;--green-dark:#6aa335;--green-pale:#f0f7e8;--teal:#19a08c;--teal-dark:#158f7d;--forest:#124745;--forest-light:#1a5f5c;--cream:#f7f9f4;--white:#fff;--gray:#6b7280;--border:#e2ead8;}
-    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+    
+    :root {
+      --primary: #0A84FF; 
+      --navy: #1E3A6E; 
+      --teal: #19A08C; 
+      --light-blue: #E8F3FF; 
+      --white: #FFFFFF;
+      --gray: #6B7280;
+      --border: #e2ead8;
+      /* Mapped legacy colors to new palette to prevent layout breaking */
+      --green: #0A84FF; 
+      --green-dark: #0066CC; 
+      --green-pale: #E8F3FF;
+      --forest: #1E3A6E; 
+      --forest-light: #2A4D8C;
+      --cream: #FFFFFF;
+    }
+    @media (max-width: 768px) { .hide-mobile { display: none !important; } }
+    
     html{scroll-behavior:smooth;}
     body{font-family:'Lato',sans-serif;background:var(--cream);color:var(--forest);overflow-x:hidden;}
     h1,h2,h3,h4,h5{font-family:'Playfair Display',serif;}
@@ -17,7 +34,7 @@
     .nav-brand span{font-family:'Playfair Display',serif;font-weight:800;font-size:1rem;color:var(--forest);}
     .nav-btn{background:var(--green);color:white;font-family:'Playfair Display',serif;font-weight:700;font-size:0.85rem;padding:0.55rem 1.4rem;border-radius:50px;text-decoration:none;border:none;cursor:pointer;transition:all 0.2s;}
     .nav-btn:hover{background:var(--green-dark);transform:translateY(-1px);}
-    .hero{min-height:100vh;display:grid;grid-template-columns:1fr 1fr;align-items:center;gap:3rem;padding:7rem 4rem 4rem;max-width:1200px;margin:0 auto;}
+    .hero{min-height:100vh;display:grid;grid-template-columns:1fr 1fr;align-items:flex-start;gap:3rem;padding:7rem 4rem 4rem;max-width:1200px;margin:0 auto;}
     .hero h1{font-size:clamp(2.4rem,4.5vw,3.6rem);font-weight:800;line-height:1.08;letter-spacing:-0.03em;margin-bottom:1.25rem;}
     .hero h1 em{font-style:normal;color:var(--green);}
     .hero-sub{font-size:1.05rem;color:var(--gray);line-height:1.65;max-width:440px;margin-bottom:2rem;}
@@ -91,16 +108,15 @@
 </head>
 <body>
   <nav>
-    <a href="index.html" class="nav-brand">
-      <img src="logo2.png" alt="ProLaunch Careers">
-      <span>ProLaunch Careers</span>
+    <a href="index.html" class="nav-brand" style="flex-direction: column; align-items: flex-start; gap: 0;">
+      <span style="color: var(--primary); font-size: 1.5rem; font-weight: 900; letter-spacing: -0.03em; display: block;">LaunchIQ</span>
     </a>
     <button class="nav-btn" onclick="document.getElementById('signup-form').scrollIntoView({behavior:'smooth'})">Get Started Free</button>
   </nav>
 
   <section class="hero">
     <div class="hero-left">
-      <h1 class="fade-1">Your Career,<br><em>Launched</em><br>with ProLaunch Careers</h1>
+      <h1 class="fade-1">Your Career,<br><em>Launched</em><br>with LaunchIQ</h1>
       <p class="hero-sub fade-2">Free CV analysis plus premium tools for resume building, cover letters, interview prep, and career insights — built for professionals.</p>
       <div class="hero-features fade-3">
         <div class="hero-feat"><div class="feat-dot">✓</div> Free CV Analyzer — no payment needed</div>
@@ -120,10 +136,23 @@
         <button class="btn-return" onclick="toggleReturnPanel()">👋 I have an account</button>
       </div>
 
+      <div class="fade-4" style="background: var(--light-blue); border-left: 4px solid var(--primary); padding: 12px; border-radius: 4px; margin-bottom: 2rem; max-width: 440px;">
+        <p style="font-size: 0.85rem; color: var(--navy); margin: 0; line-height: 1.5;">
+          <strong>🚀 Upgrade to LaunchIQ Premium:</strong> Get ATS-optimized rewrites, Cover Letters, and Interview Prep for just <strong>₦1,000</strong>.
+        </p>
+      </div>
+
+      <div class="fade-4" style="display: flex; gap: 1rem; align-items: center; max-width: 440px; margin-bottom: 2rem;">
+        <div style="background: var(--white); padding: 1rem; border-radius: 12px; border: 1px solid var(--border); box-shadow: 0 4px 10px rgba(0,0,0,0.03);">
+          <p style="font-size: 0.85rem; font-style: italic; color: var(--navy); margin-bottom: 6px;">"The resume builder helped me bypass the ATS and land my desired role in 3 weeks!"</p>
+          <p style="font-size: 0.75rem; font-weight: 700; color: var(--primary);">— Ayodele I., Project Manager</p>
+        </div>
+      </div>
+
       <div class="return-panel" id="return-panel">
         <label for="return-email">Enter your email to restore your session</label>
         <input type="email" id="return-email" placeholder="yourname@email.com">
-        <button class="btn-lookup" id="lookup-btn" onclick="handleLookup()">
+        <button class="btn-lookup" id="lookup-btn" onclick="handleLookup();">
           <span id="lookup-text">🔍 Find My Account</span>
         </button>
       </div>
@@ -164,7 +193,7 @@
         <div class="upload-zone" id="upload-zone">
           <input type="file" id="cvUpload" accept=".pdf,.doc,.docx,.txt" onchange="handleFileSelect(this)">
           <div class="upload-icon">📎</div>
-          <div class="upload-text"><strong>Click to upload</strong> or drag & drop<br>PDF, DOC, DOCX or TXT · Max 5MB</div>
+          <div class="upload-text"><strong>Tap to upload</strong> <span class="hide-mobile">or drag & drop</span><br>PDF, DOC, DOCX or TXT · Max 10MB</div>
         </div>
         <div class="upload-filename" id="upload-filename">
           <span>📄</span><span id="filename-text"></span>
@@ -172,10 +201,22 @@
         </div>
       </div>
 
-      <button class="btn-submit" id="submit-btn" onclick="handleSignup()">
-        <span id="submit-text">🚀 Access Free CV Analyzer</span>
+      <<div id="progress-container" style="display: none; margin-bottom: 15px;">
+        <div style="width: 100%; background: var(--light-blue); border-radius: 8px; height: 8px; overflow: hidden;">
+          <div id="progress-bar" style="width: 0%; height: 100%; background: var(--primary); transition: width 0.4s ease;"></div>
+        </div>
+        <p id="progress-status" style="font-size: 0.8rem; color: var(--navy); text-align: center; margin-top: 5px; font-weight: 600;">Processing...</p>
+      </div>
+
+      <button class="btn-submit" id="submit-btn" onclick="handleSignup()" style="background: var(--primary); box-shadow: 0 4px 16px rgba(10, 132, 255, 0.3);">
+        <span id="submit-text">Free CV Analysis</span>
       </button>
-      <p class="form-note">🔒 Your name must match the name on your CV. No spam. Upgrade to premium anytime for ₦1,000.</p>
+      
+      <p class="form-note">
+        🔒 <strong>Privacy First:</strong> Your CV data is securely processed and never shared. <br>
+        <em>⚠️ Ensure your entered name matches the name on your CV.</em><br>
+        <span style="color: var(--navy); margin-top: 4px; display: inline-block;">Premium upgrade (₦1,000) is triggered via Selar <strong>only after</strong> your free analysis.</span>
+      </p>
     </div>
   </section>
 
@@ -210,8 +251,8 @@
   </section>
 
   <footer>
-    <p>Built by <span>Mary-Queen Uchechukwu</span> for ProLaunch Careers</p>
-    <p style="margin-top:0.3rem">&copy; <script>document.write(new Date().getFullYear())</script> ProLaunch Careers. All rights reserved.</p>
+    <p>Product of <span>ProLaunch Group</span></p>
+    <p style="margin-top:0.3rem">&copy; <script>document.write(new Date().getFullYear())</script> LaunchIQ. All rights reserved.</p>
   </footer>
 
   <script src="shared.js"></script>
@@ -259,7 +300,7 @@
 
     function handleFileSelect(input) {
       const file = input.files[0]; if (!file) return;
-      if (file.size > 5 * 1024 * 1024) { PL.toast('File too large. Max 5MB.', 'error'); input.value = ''; return; }
+      if (file.size > 10 * 1024 * 1024) { PL.toast('File too large. Max 10MB.', 'error'); input.value = ''; return; }
       const ext = file.name.split('.').pop().toLowerCase();
       if (!['pdf','doc','docx','txt'].includes(ext)) { PL.toast('Unsupported file type. Please upload PDF, DOC, DOCX or TXT.', 'error'); input.value = ''; return; }
       cvFileName = file.name; cvFileText = null;
@@ -333,7 +374,14 @@
 
       const btn = document.getElementById('submit-btn');
       const text = document.getElementById('submit-text');
-      btn.disabled = true; text.textContent = 'Parsing CV...';
+      const progCont = document.getElementById('progress-container');
+      const progBar = document.getElementById('progress-bar');
+      const progStat = document.getElementById('progress-status');
+      
+      btn.style.display = 'none'; // Hide button during processing
+      progCont.style.display = 'block';
+      progBar.style.width = '20%';
+      progStat.textContent = 'Parsing CV Document...';
 
       try {
         // Step 1 — Parse CV
@@ -341,7 +389,8 @@
         cvFileText = parsedText;
 
         // Step 2 — Verify name matches CV
-        text.textContent = 'Verifying identity...';
+        progBar.style.width = '60%';
+        progStat.textContent = 'Verifying Identity & Extracting Data...';
         const fullName = fname + ' ' + lname;
         const nameCheck = await verifyCVName(fullName, parsedText);
 
@@ -358,7 +407,8 @@
         }
 
         // Step 3 — Save & sync
-        text.textContent = 'Saving your profile...';
+        progBar.style.width = '90%';
+        progStat.textContent = 'Securing Profile & Syncing...';
 
         // Build the full user object — cvText is kept here for localStorage only
         const userData = { name: fullName, fname, lname, email, role, level, cvFileName: fileInput.files[0].name, cvText: cvFileText, joinedAt: new Date().toISOString() };
@@ -394,7 +444,9 @@
           setTimeout(() => { window.location.href = 'pages/dashboard.html'; }, 2500);
         }
       } finally {
-        btn.disabled = false; text.textContent = '🚀 Access Free CV Analyzer';
+        progCont.style.display = 'none';
+        btn.style.display = 'flex';
+        btn.disabled = false; text.textContent = 'Free CV Analysis';
       }
     }
   </script>
