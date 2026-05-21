@@ -4,33 +4,33 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>CV Analyzer | LaunchIQ</title>
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;800&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;800&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
   <style>
     :root{--primary:#0A84FF;--navy:#1E3A6E;--teal:#19A08C;--teal-dark:#158f7d;--light-blue:#E8F3FF;--white:#FFFFFF;--gray:#6B7280;--border:#e2ead8;--green:#0A84FF;--green-dark:#0066CC;--green-pale:#E8F3FF;--forest:#1E3A6E;--forest-light:#2A4D8C;--cream:#FFFFFF;--amber:#f59e0b;}
     *{box-sizing:border-box;margin:0;padding:0;}
-    body{font-family:'Lato',sans-serif;background:var(--cream);color:var(--forest);}
-    h1,h2,h3,h4{font-family:'Playfair Display',sans-serif;}
+    body{font-family: 'Poppins',sans-serif;background:var(--cream);color:var(--forest);}
+    h1, h2, h3, h4 { font-family: 'Playfair Display', serif;}
     nav{background:white;border-bottom:1.5px solid var(--border);padding:0.85rem 2rem;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;box-shadow:0 2px 10px rgba(18,71,69,0.05);flex-wrap:wrap;gap:0.5rem;}
-    .nav-brand{display:flex;align-items:center;gap:0.6rem;text-decoration:none;}
+    .nav-brand{display:flex;align-items:center;gap: 0.1rem;text-decoration:none;}
     .nav-brand img{height:36px;}
-    .nav-brand span{font-family:'Playfair Display',sans-serif;font-weight:800;font-size:0.95rem;color:var(--forest);}
+    .nav-brand span { margin-left: -0.25rem;font-family: 'Poppins', sans-serif;font-weight:800;font-size:0.95rem;color:var(--forest);}
     .nav-links{display:flex;align-items:center;gap:0.5rem;flex-wrap:wrap;}
-    .nav-pill{font-family:'Playfair Display',sans-serif;font-size:0.76rem;font-weight:700;color:var(--forest);text-decoration:none;padding:0.32rem 0.8rem;border-radius:50px;border:1.5px solid var(--border);transition:all 0.2s;white-space:nowrap;}
+    .nav-pill{font-family: 'Poppins', sans-serif;font-size:0.76rem;font-weight:700;color:var(--forest);text-decoration:none;padding:0.32rem 0.8rem;border-radius:50px;border:1.5px solid var(--border);transition:all 0.2s;white-space:nowrap;}
     .nav-pill:hover{background:var(--forest);color:white;border-color:var(--forest);}
     .nav-pill.active{background:var(--green);color:white;border-color:var(--green);}
     .page-header{background:linear-gradient(135deg,#1a3d1a 0%,var(--forest) 50%,var(--forest-light) 100%);color:white;padding:2.75rem 2rem 2.25rem;text-align:center;}
     .badge{display:inline-flex;align-items:center;gap:0.4rem;background:rgba(123,182,64,0.2);border:1px solid rgba(123,182,64,0.4);color:#a8d96b;font-size:0.7rem;font-weight:700;padding:0.28rem 0.85rem;border-radius:50px;margin-bottom:0.85rem;letter-spacing:0.07em;text-transform:uppercase;}
     .page-header h1{font-size:clamp(1.75rem,4vw,2.6rem);font-weight:800;margin-bottom:0.5rem;}
     .page-header p{color:rgba(255,255,255,0.65);font-size:0.92rem;max-width:460px;margin:0 auto;line-height:1.6;}
-    main{max-width:860px;margin:0 auto;padding:2.5rem 1.5rem;}
+    main{max-width:860px;margin:0 auto;padding: 1.5rem 1.5rem;}
     .card{background:white;border-radius:20px;padding:2rem;border:2px solid var(--border);margin-bottom:1.5rem;}
-    label{display:block;font-family:'Playfair Display',sans-serif;font-weight:700;font-size:0.85rem;color:var(--forest);margin-bottom:0.4rem;}
+    label{display:block;font-family: 'Poppins', sans-serif;font-weight:700;font-size:0.85rem;color:var(--forest);margin-bottom:0.4rem;}
     .req{color:var(--green);}
-    input[type=text],textarea{width:100%;padding:0.75rem 1rem;border:2px solid #e2e8e2;border-radius:12px;font-family:'Lato',sans-serif;font-size:0.9rem;color:var(--forest);outline:none;transition:border-color 0.2s;resize:vertical;}
+    input[type=text],textarea{width:100%;padding:0.75rem 1rem;border:2px solid #e2e8e2;border-radius:12px;font-family: 'Poppins',sans-serif;font-size:0.9rem;color:var(--forest);outline:none;transition:border-color 0.2s;resize:vertical;}
     input[type=text]:focus,textarea:focus{border-color:var(--green);}
     .hint{font-size:0.78rem;color:#9ca3af;margin-bottom:0.45rem;}
-    .btn-analyze{width:100%;background:var(--green);color:white;font-family:'Playfair Display',sans-serif;font-weight:800;font-size:1.05rem;padding:1rem;border-radius:50px;border:none;cursor:pointer;transition:all 0.2s;display:flex;align-items:center;justify-content:center;gap:0.6rem;box-shadow:0 4px 18px rgba(123,182,64,0.28);}
+    .btn-analyze{width:100%;background:var(--green);color:white;font-family: 'Poppins', sans-serif;font-weight:800;font-size:1.05rem;padding:1rem;border-radius:50px;border:none;cursor:pointer;transition:all 0.2s;display:flex;align-items:center;justify-content:center;gap: 0.1rem;box-shadow:0 4px 18px rgba(123,182,64,0.28);}
     .btn-analyze:hover:not(:disabled){background:var(--green-dark);transform:translateY(-2px);}
     .btn-analyze:disabled{opacity:0.7;cursor:not-allowed;}
     .spinner{width:18px;height:18px;border:2.5px solid rgba(255,255,255,0.3);border-top-color:white;border-radius:50%;animation:spin 0.7s linear infinite;display:none;}
@@ -40,7 +40,7 @@
     /* Score card */
     .score-card{background:linear-gradient(135deg,var(--forest) 0%,var(--forest-light) 100%);border-radius:20px;padding:2rem;color:white;margin-bottom:1.25rem;display:flex;align-items:center;gap:2rem;flex-wrap:wrap;}
     .score-circle{min-width:90px;height:90px;border-radius:50%;display:flex;flex-direction:column;align-items:center;justify-content:center;border:4px solid rgba(255,255,255,0.2);background:rgba(255,255,255,0.08);}
-    .score-num{font-family:'Playfair Display',sans-serif;font-size:1.8rem;font-weight:800;line-height:1;}
+    .score-num{font-family: 'Poppins', sans-serif;font-size:1.8rem;font-weight:800;line-height:1;}
     .score-label{font-size:0.65rem;color:rgba(255,255,255,0.6);text-transform:uppercase;letter-spacing:0.05em;margin-top:0.15rem;}
     .score-meta h3{font-size:1.1rem;font-weight:800;margin-bottom:0.25rem;}
     .score-meta p{font-size:0.875rem;color:rgba(255,255,255,0.65);line-height:1.5;}
@@ -56,22 +56,32 @@
     .full-width{grid-column:1/-1;}
 
     /* CTA to premium */
-    .premium-cta{background:linear-gradient(135deg,#2d1f00,#7a4f00);border-radius:20px;padding:1.75rem 2rem;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1.25rem;margin-top:1.5rem;}
+    .premium-cta{background:linear-gradient(135deg,#2d1f00,#7a4f00);border-radius:20px;padding: 1.25rem 2rem;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1.25rem;margin-top:1.5rem;}
     .premium-cta h3{font-size:1.05rem;font-weight:800;color:white;margin-bottom:0.25rem;}
     .premium-cta p{font-size:0.84rem;color:rgba(255,255,255,0.65);}
-    .btn-premium{background:var(--amber);color:white;font-family:'Playfair Display',sans-serif;font-weight:800;font-size:0.92rem;padding:0.7rem 1.6rem;border-radius:50px;border:none;cursor:pointer;white-space:nowrap;transition:all 0.2s;box-shadow:0 4px 14px rgba(245,158,11,0.3);}
+    .btn-premium{background:var(--amber);color:white;font-family: 'Poppins', sans-serif;font-weight:800;font-size:0.92rem;padding:0.7rem 1.6rem;border-radius:50px;border:none;cursor:pointer;white-space:nowrap;transition:all 0.2s;box-shadow:0 4px 14px rgba(245,158,11,0.3);}
     .btn-premium:hover{background:#d97706;}
 
-    footer{background:var(--forest);color:white;padding:1.75rem;text-align:center;margin-top:3rem;}
-    footer p{font-size:0.82rem;color:rgba(255,255,255,0.5);}
-    footer span{color:var(--green);font-weight:700;}
-    @media(max-width:500px){.nav-brand span{display:none;}.nav-pill{font-size:0.7rem;padding:0.27rem 0.65rem;}}
+    footer { background: var(--forest, #132547); color: white; padding: 1.5rem 2rem; text-align: center; margin-top: 1.5rem; }
+    .footer-links { display: flex; justify-content: center; gap: 1.5rem; margin-bottom: 1.5rem; }
+    .footer-links a { color: rgba(255,255,255,0.7); text-decoration: none; font-size: 0.9rem; transition: color 0.2s; font-family: var(--font-family, 'Poppins', sans-serif); }
+    .footer-links a:hover { color: white; }
+    footer p { font-size: 0.9rem; color: rgba(255,255,255,0.5); margin: 0.25rem 0; }
+    footer a.footer-brand { color: var(--primary, #0A84FF); font-weight: 600; text-decoration: none; }
+    footer a.footer-brand:hover { text-decoration: underline; }
+    @media(max-width:500px){.nav-brand span { margin-left: -0.25rem;display:none;}.nav-pill{font-size:0.7rem;padding:0.27rem 0.65rem;}}
+  
+    .nav-wordmark { margin-left: -0.25rem; font-family: 'Poppins', sans-serif; font-weight: 800; font-size: 1.05rem; letter-spacing: -0.02em; }
+    .wm-launch { color: var(--forest, var(--navy, #1E3A6E)); }
+    .wm-iq { color: var(--green, var(--primary, #0A84FF)); }
+
   </style>
 </head>
 <body>
   <nav>
     <a href="../index.html" class="nav-brand">
-      <span>LaunchIQ</span>
+      <img src="../assets/images/launchiq-icon.png" alt="LaunchIQ Icon">
+      <span class="nav-wordmark"><span class="wm-launch">Launch</span><span class="wm-iq">IQ</span></span>
     </a>
     <div class="nav-links">
       <a href="dashboard.html" class="nav-pill">🏠 Dashboard</a>
@@ -172,7 +182,7 @@
 
       <!-- Download button -->
       <div style="display:flex;gap:0.75rem;flex-wrap:wrap;margin-bottom:1.25rem;">
-        <button onclick="downloadAnalysis()" style="background:var(--teal);color:white;font-family:'Playfair Display',sans-serif;font-weight:700;font-size:0.82rem;padding:0.55rem 1.25rem;border-radius:50px;border:none;cursor:pointer;">⬇ Download Analysis (.docx)</button>
+        <button onclick="downloadAnalysis()" style="background:var(--teal);color:white;font-family: 'Poppins', sans-serif;font-weight:700;font-size:0.82rem;padding:0.55rem 1.25rem;border-radius:50px;border:none;cursor:pointer;">⬇ Download Analysis (.docx)</button>
       </div>
 
       <!-- Upgrade CTA -->
@@ -189,16 +199,21 @@
       <!-- Career Grooming Camp Recommendation -->
       <div id="cgc-inline" style="display:none;margin-top:1.5rem;background:linear-gradient(135deg,#124745,#1a5f5c);border-radius:18px;padding:1.5rem 1.75rem;color:white;">
         <p style="font-size:0.7rem;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:#7bb640;margin-bottom:0.3rem;">Recommended For You</p>
-        <h3 id="cgc-inline-headline" style="font-family:'Playfair Display',sans-serif;font-size:1.05rem;font-weight:800;margin-bottom:0.35rem;"></h3>
+        <h3 id="cgc-inline-headline" style="font-family: 'Playfair Display', serif;font-size:1.05rem;font-weight:800;margin-bottom:0.35rem;"></h3>
         <p id="cgc-inline-body" style="font-size:0.85rem;color:rgba(255,255,255,0.7);line-height:1.55;margin-bottom:1rem;"></p>
-        <a id="cgc-inline-cta" href="#" target="_blank" style="display:inline-block;background:#7bb640;color:white;font-family:'Playfair Display',sans-serif;font-weight:800;font-size:0.85rem;padding:0.55rem 1.25rem;border-radius:50px;text-decoration:none;"></a>
+        <a id="cgc-inline-cta" href="#" target="_blank" style="display:inline-block;background:#7bb640;color:white;font-family: 'Poppins', sans-serif;font-weight:800;font-size:0.85rem;padding:0.55rem 1.25rem;border-radius:50px;text-decoration:none;"></a>
       </div>
 
   </main>
 
-  <footer>
-    <p>Product of <span>ProLaunch Group</span></p>
-    <p style="margin-top:0.3rem">&copy; <script>document.write(new Date().getFullYear())</script> LaunchIQ. All rights reserved.</p>
+    <footer>
+    <div class="footer-links">
+      <a href="mailto:hello@prolaunchgroup.org">Email Us</a>
+      <a href="#">Terms</a>
+      <a href="#">Privacy Policy</a>
+    </div>
+    <p>Product of <a href="https://prolaunchgroup.org" target="_blank" rel="noopener noreferrer" class="footer-brand">ProLaunch Group</a></p>
+    <p style="margin-top:0.5rem">&copy; 2026 LaunchIQ. All rights reserved.</p>
   </footer>
 
   <script src="../shared.js"></script>

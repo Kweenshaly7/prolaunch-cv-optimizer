@@ -4,34 +4,34 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Cover Letter Generator | LaunchIQ</title>
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;800&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;800&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
   <style>
     :root{--primary:#0A84FF;--navy:#1E3A6E;--teal:#19A08C;--teal-dark:#158f7d;--light-blue:#E8F3FF;--white:#FFFFFF;--gray:#6B7280;--border:#e2ead8;--green:#0A84FF;--green-dark:#0066CC;--green-pale:#E8F3FF;--forest:#1E3A6E;--forest-light:#2A4D8C;--cream:#FFFFFF;--amber:#f59e0b;}
     *{box-sizing:border-box;margin:0;padding:0;}
-    body{font-family:'Lato',sans-serif;background:var(--cream);color:var(--forest);}
-    h1,h2,h3{font-family:'Playfair Display',sans-serif;}
+    body{font-family: 'Poppins',sans-serif;background:var(--cream);color:var(--forest);}
+    h1, h2, h3, h4 { font-family: 'Playfair Display', serif;}
     nav{background:white;border-bottom:2px solid var(--border);padding:0.85rem 2rem;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;box-shadow:0 2px 12px rgba(18,71,69,0.06);flex-wrap:wrap;gap:0.5rem;}
-    .nav-logo{display:flex;align-items:center;gap:0.65rem;text-decoration:none;}
+    .nav-logo{display:flex;align-items:center;gap: 0.1rem;text-decoration:none;}
     .nav-logo img{height:40px;}
-    .nav-logo span{font-family:'Playfair Display',sans-serif;font-weight:800;font-size:1rem;color:var(--forest);}
+    .nav-logo span { margin-left: -0.25rem;font-family: 'Poppins', sans-serif;font-weight:800;font-size:1rem;color:var(--forest);}
     .nav-links{display:flex;align-items:center;gap:0.5rem;flex-wrap:wrap;}
-    .nav-pill{font-family:'Playfair Display',sans-serif;font-size:0.78rem;font-weight:700;color:var(--forest);text-decoration:none;padding:0.35rem 0.85rem;border-radius:50px;border:1.5px solid var(--border);transition:all 0.2s;white-space:nowrap;}
+    .nav-pill{font-family: 'Poppins', sans-serif;font-size:0.78rem;font-weight:700;color:var(--forest);text-decoration:none;padding:0.35rem 0.85rem;border-radius:50px;border:1.5px solid var(--border);transition:all 0.2s;white-space:nowrap;}
     .nav-pill:hover,.nav-pill.active{background:var(--teal);color:white;border-color:var(--teal);}
     .page-header{background:linear-gradient(135deg,#0f3d3b 0%,var(--teal-dark) 100%);color:white;padding:3rem 2rem 2.5rem;text-align:center;}
     .badge{display:inline-block;background:rgba(25,160,140,0.25);border:1px solid rgba(25,160,140,0.5);color:#6ee7d8;font-size:0.72rem;font-weight:700;padding:0.3rem 0.9rem;border-radius:50px;margin-bottom:1rem;letter-spacing:0.07em;text-transform:uppercase;}
     .page-header h1{font-size:clamp(1.8rem,4vw,2.8rem);font-weight:800;margin-bottom:0.6rem;}
     .page-header p{color:rgba(255,255,255,0.7);font-size:0.95rem;max-width:480px;margin:0 auto;line-height:1.6;}
-    main{max-width:860px;margin:0 auto;padding:2.5rem 1.5rem;}
+    main{max-width:860px;margin:0 auto;padding: 1.5rem 1.5rem;}
     .card{background:white;border-radius:20px;padding:2rem;border:2px solid var(--border);margin-bottom:1.5rem;}
-    label{display:block;font-family:'Playfair Display',sans-serif;font-weight:700;font-size:0.9rem;color:var(--forest);margin-bottom:0.5rem;}
+    label{display:block;font-family: 'Poppins', sans-serif;font-weight:700;font-size:0.9rem;color:var(--forest);margin-bottom:0.5rem;}
     .req{color:var(--teal);}
-    input[type=text],textarea,select{width:100%;padding:0.8rem 1rem;border:2px solid #e2e8f0;border-radius:12px;font-family:'Lato',sans-serif;font-size:0.9rem;color:var(--forest);outline:none;transition:border-color 0.2s;resize:vertical;appearance:none;}
+    input[type=text],textarea,select{width:100%;padding:0.8rem 1rem;border:2px solid #e2e8f0;border-radius:12px;font-family: 'Poppins',sans-serif;font-size:0.9rem;color:var(--forest);outline:none;transition:border-color 0.2s;resize:vertical;appearance:none;}
     input[type=text]:focus,textarea:focus,select:focus{border-color:var(--teal);}
     .hint{font-size:0.8rem;color:#9ca3af;margin-bottom:0.5rem;}
     .two-col{display:grid;grid-template-columns:1fr 1fr;gap:1.25rem;}
     @media(max-width:540px){.two-col{grid-template-columns:1fr;}}
-    .btn-generate{width:100%;background:var(--teal);color:white;font-family:'Playfair Display',sans-serif;font-weight:800;font-size:1.05rem;padding:1rem 2rem;border-radius:50px;border:none;cursor:pointer;transition:all 0.2s;display:flex;align-items:center;justify-content:center;gap:0.75rem;box-shadow:0 4px 20px rgba(25,160,140,0.3);}
+    .btn-generate{width:100%;background:var(--teal);color:white;font-family: 'Poppins', sans-serif;font-weight:800;font-size:1.05rem;padding:1rem 2rem;border-radius:50px;border:none;cursor:pointer;transition:all 0.2s;display:flex;align-items:center;justify-content:center;gap:0.75rem;box-shadow:0 4px 20px rgba(25,160,140,0.3);}
     .btn-generate:hover:not(:disabled){background:var(--teal-dark);transform:translateY(-2px);}
     .btn-generate:disabled{opacity:0.7;cursor:not-allowed;}
     .spinner{width:20px;height:20px;border:3px solid rgba(255,255,255,0.3);border-top-color:white;border-radius:50%;animation:spin 0.7s linear infinite;display:none;}
@@ -40,19 +40,29 @@
     .result-block{background:white;border-radius:20px;border:2px solid var(--border);overflow:hidden;margin-bottom:1.5rem;}
     .result-header{display:flex;align-items:center;justify-content:space-between;padding:1.25rem 1.5rem;border-bottom:2px solid var(--border);}
     .result-header h3{font-size:1rem;font-weight:700;color:var(--forest);}
-    .btn-download{background:var(--teal);color:white;font-family:'Playfair Display',sans-serif;font-weight:700;font-size:0.8rem;padding:0.45rem 1rem;border-radius:50px;border:none;cursor:pointer;transition:all 0.2s;}
+    .btn-download{background:var(--teal);color:white;font-family: 'Poppins', sans-serif;font-weight:700;font-size:0.8rem;padding:0.45rem 1rem;border-radius:50px;border:none;cursor:pointer;transition:all 0.2s;}
     .btn-download:hover{background:var(--teal-dark);}
     .result-body{padding:1.5rem;font-size:0.875rem;line-height:1.8;white-space:pre-wrap;color:#374151;max-height:500px;overflow-y:auto;background:#fafafa;}
-    footer{background:var(--forest);color:white;padding:1.75rem 2rem;text-align:center;margin-top:3rem;}
-    footer p{font-size:0.83rem;color:rgba(255,255,255,0.6);}
-    footer span{color:var(--green);font-weight:700;}
-    @media(max-width:500px){.nav-logo span{display:none;}.nav-pill{font-size:0.7rem;padding:0.28rem 0.65rem;}}
+    footer { background: var(--forest, #132547); color: white; padding: 1.5rem 2rem; text-align: center; margin-top: 1.5rem; }
+    .footer-links { display: flex; justify-content: center; gap: 1.5rem; margin-bottom: 1.5rem; }
+    .footer-links a { color: rgba(255,255,255,0.7); text-decoration: none; font-size: 0.9rem; transition: color 0.2s; font-family: var(--font-family, 'Poppins', sans-serif); }
+    .footer-links a:hover { color: white; }
+    footer p { font-size: 0.9rem; color: rgba(255,255,255,0.5); margin: 0.25rem 0; }
+    footer a.footer-brand { color: var(--primary, #0A84FF); font-weight: 600; text-decoration: none; }
+    footer a.footer-brand:hover { text-decoration: underline; }
+    @media(max-width:500px){.nav-logo span { margin-left: -0.25rem;display:none;}.nav-pill{font-size:0.7rem;padding:0.28rem 0.65rem;}}
+  
+    .nav-wordmark { margin-left: -0.25rem; font-family: 'Poppins', sans-serif; font-weight: 800; font-size: 1.05rem; letter-spacing: -0.02em; }
+    .wm-launch { color: var(--forest, var(--navy, #1E3A6E)); }
+    .wm-iq { color: var(--green, var(--primary, #0A84FF)); }
+
   </style>
 </head>
 <body>
   <nav>
     <a href="dashboard.html" class="nav-logo">
-      <span>LaunchIQ</span>
+      <img src="../assets/images/launchiq-icon.png" alt="LaunchIQ Icon">
+      <span class="nav-wordmark"><span class="wm-launch">Launch</span><span class="wm-iq">IQ</span></span>
     </a>
     <div class="nav-links">
       <a href="cv-optimizer.html" class="nav-pill">📄 Resume</a>
@@ -117,16 +127,21 @@
       <!-- Career Grooming Camp Recommendation -->
       <div id="cgc-inline" style="display:none;margin-top:1.5rem;background:linear-gradient(135deg,#124745,#1a5f5c);border-radius:18px;padding:1.5rem 1.75rem;color:white;">
         <p style="font-size:0.7rem;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:#7bb640;margin-bottom:0.3rem;">Recommended For You</p>
-        <h3 id="cgc-inline-headline" style="font-family:'Playfair Display',sans-serif;font-size:1.05rem;font-weight:800;margin-bottom:0.35rem;"></h3>
+        <h3 id="cgc-inline-headline" style="font-family: 'Playfair Display', serif;font-size:1.05rem;font-weight:800;margin-bottom:0.35rem;"></h3>
         <p id="cgc-inline-body" style="font-size:0.85rem;color:rgba(255,255,255,0.7);line-height:1.55;margin-bottom:1rem;"></p>
-        <a id="cgc-inline-cta" href="#" target="_blank" style="display:inline-block;background:#7bb640;color:white;font-family:'Playfair Display',sans-serif;font-weight:800;font-size:0.85rem;padding:0.55rem 1.25rem;border-radius:50px;text-decoration:none;"></a>
+        <a id="cgc-inline-cta" href="#" target="_blank" style="display:inline-block;background:#7bb640;color:white;font-family: 'Poppins', sans-serif;font-weight:800;font-size:0.85rem;padding:0.55rem 1.25rem;border-radius:50px;text-decoration:none;"></a>
       </div>
 
   </main>
 
-  <footer>
-    <p>Product of <span>ProLaunch Group</span></p>
-    <p style="margin-top:0.3rem;">&copy; <script>document.write(new Date().getFullYear())</script> LaunchIQ. All rights reserved.</p>
+    <footer>
+    <div class="footer-links">
+      <a href="mailto:hello@prolaunchgroup.org">Email Us</a>
+      <a href="#">Terms</a>
+      <a href="#">Privacy Policy</a>
+    </div>
+    <p>Product of <a href="https://prolaunchgroup.org" target="_blank" rel="noopener noreferrer" class="footer-brand">ProLaunch Group</a></p>
+    <p style="margin-top:0.5rem">&copy; 2026 LaunchIQ. All rights reserved.</p>
   </footer>
 
   <script src="../shared.js"></script>
