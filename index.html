@@ -3,162 +3,267 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>LaunchIQ | CV Optimization Agent</title>
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;800&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+  <title>LaunchIQ | ATS CV Optimization Agent</title>
+  <link rel="icon" type="image/png" src="/assets/images/launchiq-icon.png" alt="LaunchIQ Icon">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;800&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <style>
-    
     :root {
-      --primary: #0A84FF; 
-      --navy: #1E3A6E; 
-      --teal: #19A08C; 
-      --light-blue: #E8F3FF; 
+      --primary: #0A84FF;
+      --navy: #1E3A6E;
+      --teal: #19A08C;
+      --light-blue: #E8F3FF;
       --white: #FFFFFF;
       --gray: #6B7280;
       --border: #e2ead8;
-      /* Mapped legacy colors to new palette to prevent layout breaking */
-      --green: #0A84FF; 
-      --green-dark: #0066CC; 
+      --green: #0A84FF;
+      --green-dark: #0066CC;
       --green-pale: #E8F3FF;
-      --forest: #1E3A6E; 
+      --forest: #1E3A6E;
       --forest-light: #2A4D8C;
       --cream: #FFFFFF;
     }
     @media (max-width: 768px) { .hide-mobile { display: none !important; } }
-    
-    html{scroll-behavior:smooth;}
-    body{font-family:'Lato',sans-serif;background:var(--cream);color:var(--forest);overflow-x:hidden;}
-    h1,h2,h3,h4,h5{font-family:'Playfair Display',serif;}
-    nav{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(255,255,255,0.95);backdrop-filter:blur(12px);border-bottom:1.5px solid var(--border);padding:0.9rem 2rem;display:flex;align-items:center;justify-content:space-between;}
-    .nav-brand{display:flex;align-items:center;gap:0.65rem;text-decoration:none;}
-    .nav-brand img{height:38px;}
-    .nav-brand span{font-family:'Playfair Display',serif;font-weight:800;font-size:1rem;color:var(--forest);}
-    .nav-btn{background:var(--green);color:white;font-family:'Playfair Display',serif;font-weight:700;font-size:0.85rem;padding:0.55rem 1.4rem;border-radius:50px;text-decoration:none;border:none;cursor:pointer;transition:all 0.2s;}
-    .nav-btn:hover{background:var(--green-dark);transform:translateY(-1px);}
-    .hero{min-height:100vh;display:grid;grid-template-columns:1fr 1fr;align-items:flex-start;gap:3rem;padding:7rem 4rem 4rem;max-width:1200px;margin:0 auto;}
-    .hero h1{font-size:clamp(2.4rem,4.5vw,3.6rem);font-weight:800;line-height:1.08;letter-spacing:-0.03em;margin-bottom:1.25rem;}
-    .hero h1 em{font-style:normal;color:var(--green);}
-    .hero-sub{font-size:1.05rem;color:var(--gray);line-height:1.65;max-width:440px;margin-bottom:2rem;}
-    .hero-features{display:flex;flex-direction:column;gap:0.6rem;margin-bottom:2rem;}
-    .hero-feat{display:flex;align-items:center;gap:0.6rem;font-size:0.9rem;color:var(--forest);font-weight:500;}
-    .feat-dot{width:20px;height:20px;min-width:20px;background:var(--green);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:0.65rem;color:white;}
-    .hero-scroll{font-size:0.8rem;color:var(--gray);}
-    .form-card{background:white;border-radius:24px;border:2px solid var(--border);padding:2.25rem 2rem;box-shadow:0 20px 60px rgba(18,71,69,0.1);position:relative;overflow:hidden;}
-    .form-card::before{content:'';position:absolute;top:0;left:0;right:0;height:4px;background:linear-gradient(90deg,var(--green),var(--teal));}
-    .form-card h3{font-size:1.25rem;font-weight:800;margin-bottom:0.35rem;}
-    .form-card>p{font-size:0.85rem;color:var(--gray);margin-bottom:1.25rem;}
-    .form-group{margin-bottom:1.1rem;}
-    .form-group label{display:block;font-family:'Playfair Display',serif;font-weight:700;font-size:0.82rem;color:var(--forest);margin-bottom:0.4rem;}
-    .form-group label span{color:var(--green);}
-    .form-group input,.form-group select{width:100%;padding:0.75rem 1rem;border:2px solid var(--border);border-radius:12px;font-family:'Lato',sans-serif;font-size:0.9rem;color:var(--forest);outline:none;transition:border-color 0.2s;background:white;appearance:none;}
-    .form-group input:focus,.form-group select:focus{border-color:var(--green);}
-    .form-group input::placeholder{color:#b0bab0;}
-    .two-col{display:grid;grid-template-columns:1fr 1fr;gap:0.85rem;}
-    .return-toggle{text-align:center;margin-bottom:1.25rem;padding-bottom:1.25rem;border-bottom:1.5px solid var(--border);}
-    .return-toggle p{font-size:0.82rem;color:var(--gray);margin-bottom:0.5rem;}
-    .btn-return{background:transparent;border:1.5px solid var(--border);color:var(--forest);font-family:'Playfair Display',serif;font-weight:700;font-size:0.82rem;padding:0.55rem 1.2rem;border-radius:50px;cursor:pointer;transition:all 0.2s;}
-    .btn-return:hover{border-color:var(--teal);color:var(--teal);}
-    .return-panel{display:none;background:#f0fdf9;border:1.5px solid rgba(25,160,140,0.3);border-radius:14px;padding:1.25rem;margin-bottom:1.25rem;}
-    .return-panel label{font-family:'Playfair Display',serif;font-weight:700;font-size:0.82rem;color:var(--teal);display:block;margin-bottom:0.4rem;}
-    .return-panel input{width:100%;padding:0.75rem 1rem;border:2px solid rgba(25,160,140,0.35);border-radius:12px;font-family:'Lato',sans-serif;font-size:0.9rem;color:var(--forest);outline:none;transition:border-color 0.2s;margin-bottom:0.75rem;}
-    .return-panel input:focus{border-color:var(--teal);}
-    .btn-lookup{width:100%;background:var(--teal);color:white;font-family:'Playfair Display',serif;font-weight:700;font-size:0.9rem;padding:0.75rem;border-radius:50px;border:none;cursor:pointer;transition:all 0.2s;}
-    .btn-lookup:hover{background:var(--teal-dark);}
-    .btn-lookup:disabled{opacity:0.7;cursor:not-allowed;}
-    .divider-or{display:flex;align-items:center;gap:0.75rem;margin:1rem 0;color:var(--gray);font-size:0.78rem;font-weight:600;}
-    .divider-or::before,.divider-or::after{content:'';flex:1;height:1px;background:var(--border);}
-    .upload-zone{width:100%;border:2px dashed var(--border);border-radius:12px;padding:1.25rem 1rem;text-align:center;cursor:pointer;transition:all 0.2s;background:var(--cream);position:relative;}
-    .upload-zone:hover,.upload-zone.dragover{border-color:var(--green);background:var(--green-pale);}
-    .upload-zone input[type=file]{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%;}
-    .upload-icon{font-size:1.5rem;margin-bottom:0.35rem;}
-    .upload-text{font-size:0.82rem;color:var(--gray);line-height:1.4;}
-    .upload-text strong{color:var(--green);}
-    .upload-filename{display:none;align-items:center;gap:0.5rem;background:var(--green-pale);border:1.5px solid rgba(123,182,64,0.35);border-radius:10px;padding:0.6rem 0.9rem;font-size:0.82rem;color:var(--forest);font-weight:600;margin-top:0.5rem;}
-    .upload-filename.show{display:flex;}
-    .upload-clear{background:none;border:none;cursor:pointer;color:#9ca3af;font-size:1rem;margin-left:auto;line-height:1;}
-    .upload-clear:hover{color:#ef4444;}
-    .btn-submit{width:100%;background:var(--forest);color:white;font-family:'Playfair Display',serif;font-weight:800;font-size:1rem;padding:0.95rem;border-radius:50px;border:none;cursor:pointer;transition:all 0.2s;margin-top:0.5rem;display:flex;align-items:center;justify-content:center;gap:0.5rem;box-shadow:0 4px 16px rgba(18,71,69,0.2);}
-    .btn-submit:hover:not(:disabled){background:var(--forest-light);transform:translateY(-2px);}
-    .btn-submit:disabled{opacity:0.7;cursor:not-allowed;}
-    .form-note{font-size:0.75rem;color:var(--gray);text-align:center;margin-top:0.85rem;line-height:1.5;}
-    .tools-section{background:var(--forest);padding:5rem 2rem;}
-    .tools-inner{max-width:1100px;margin:0 auto;}
-    .section-eyebrow{font-family:'Playfair Display',serif;font-size:0.72rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:rgba(123,182,64,0.8);margin-bottom:0.75rem;}
-    .section-title-light{font-size:clamp(1.8rem,3vw,2.5rem);font-weight:800;color:white;margin-bottom:0.75rem;}
-    .section-sub-light{font-size:0.95rem;color:rgba(255,255,255,0.55);max-width:460px;line-height:1.6;margin-bottom:3rem;}
-    .tools-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:1.25rem;}
-    .tool-tile{border-radius:16px;padding:1.5rem;border:1.5px solid rgba(255,255,255,0.08);background:rgba(255,255,255,0.04);transition:all 0.2s;}
-    .tool-tile:hover{background:rgba(255,255,255,0.08);border-color:rgba(123,182,64,0.3);}
-    .tool-tile.free-tool{background:rgba(123,182,64,0.1);border-color:rgba(123,182,64,0.35);}
-    .tile-icon{font-size:1.6rem;margin-bottom:0.85rem;}
-    .tile-badge{display:inline-block;font-size:0.65rem;font-weight:800;padding:0.2rem 0.55rem;border-radius:50px;margin-bottom:0.6rem;letter-spacing:0.07em;text-transform:uppercase;}
-    .badge-free{background:rgba(123,182,64,0.25);color:#a8d96b;}
-    .badge-premium{background:rgba(245,158,11,0.2);color:#fcd34d;}
-    .tool-tile h4{font-size:0.95rem;font-weight:700;color:white;margin-bottom:0.4rem;}
-    .tool-tile p{font-size:0.82rem;color:rgba(255,255,255,0.5);line-height:1.5;}
-    footer{background:#0a2e2d;color:white;padding:2rem;text-align:center;}
-    footer p{font-size:0.82rem;color:rgba(255,255,255,0.45);}
-    footer span{color:var(--green);font-weight:700;}
-    @keyframes fadeUp{from{opacity:0;transform:translateY(20px);}to{opacity:1;transform:translateY(0);}}
-    .fade-1{animation:fadeUp 0.5s 0.1s ease both;}
-    .fade-2{animation:fadeUp 0.5s 0.2s ease both;}
-    .fade-3{animation:fadeUp 0.5s 0.3s ease both;}
-    .fade-4{animation:fadeUp 0.5s 0.4s ease both;}
-    @media(max-width:768px){.hero{grid-template-columns:1fr;padding:6rem 1.5rem 3rem;gap:2rem;min-height:auto;}.hero-sub,.hero-features{display:none;}nav{padding:0.75rem 1rem;}.nav-brand span{display:none;}}
+    html { scroll-behavior: smooth; }
+    body { font-family: 'Poppins', sans-serif; background: var(--cream); color: var(--forest); overflow-x: hidden; margin: 0; }
+    h1, h2, h3, h4, h5 { font-family: 'Playfair Display', serif; }
+    nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; background: rgba(255,255,255,0.95); backdrop-filter: blur(12px); border-bottom: 1.5px solid var(--border); padding: 0.7rem 2rem; display: flex; align-items: center; justify-content: space-between; }
+    .nav-brand { display: flex; align-items: center; gap: 0.1rem; text-decoration: none; }
+    .nav-brand img { height: 40px; width: auto; }
+    .nav-wordmark { margin-left: -0.25rem; font-family: 'Poppins', sans-serif; font-weight: 800; font-size: 1.15rem; letter-spacing: -0.02em; }
+    .wm-launch { color: var(--navy); }
+    .wm-iq { color: var(--primary); }
+    .nav-btn { background: var(--primary); color: white; font-family: 'Poppins', sans-serif; font-weight: 600; font-size: 0.9rem; padding: 0.55rem 1.4rem; border-radius: 50px; text-decoration: none; border: none; cursor: pointer; transition: all 0.2s; }
+    .nav-btn:hover { background: var(--green-dark); transform: translateY(-1px); }
+    .hero { min-height: 100vh; display: flex; flex-direction: column; align-items: center; text-align: center; gap: 2rem; padding: 6rem 2rem 3.5rem; max-width: 1000px; margin: 0 auto; }
+    .hero-left { display: flex; flex-direction: column; align-items: center; width: 100%; }
+    .hero h1 { font-size: clamp(2.8rem, 5vw, 4.5rem); font-weight: 800; line-height: 1.15; letter-spacing: -0.02em; margin-bottom: 1.25rem; color: var(--navy); }
+    .hero h1 em { font-style: normal; color: var(--primary); }
+    .hero-sub { font-size: 1.15rem; color: var(--gray); line-height: 1.6; max-width: 700px; margin: 0 auto 2.5rem; font-weight: 400; }
+    .social-proof-badge { display: inline-flex; align-items: center; gap: 1rem; background: var(--light-blue); padding: 0.8rem 1.5rem; border-radius: 50px; border: 1px solid rgba(10, 132, 255, 0.2); margin-bottom: 1.5rem; justify-content: center; }
+    .social-proof-stars { color: #F59E0B; font-size: 1.2rem; letter-spacing: 2px; line-height: 1; }
+    .social-proof-text { font-size: 0.85rem; margin: 0; font-weight: 500; color: var(--navy); }
+    .social-proof-author { color: var(--gray); font-weight: 400; }
+    .hero-features { display: flex; flex-direction: row; justify-content: center; flex-wrap: wrap; gap: 1.5rem; margin-bottom: 2rem; }
+    .hero-feat { display: flex; align-items: center; gap: 0.8rem; font-size: 0.95rem; color: var(--navy); font-weight: 500; }
+    .feat-dot { width: 22px; height: 22px; min-width: 22px; background: var(--primary); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.75rem; color: white; }
+    .form-card { background: white; border-radius: 24px; border: 1px solid var(--border); padding: 1.5rem 2rem; box-shadow: 0 24px 80px rgba(30, 58, 110, 0.08); position: relative; overflow: hidden; max-width: 650px; width: 100%; margin: 0 auto; text-align: left; }
+    .form-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 5px; background: var(--primary); }
+    .form-card h3 { font-size: 1.5rem; font-weight: 800; margin-bottom: 0.5rem; color: var(--navy); }
+    .form-card > p { font-size: 0.9rem; color: var(--gray); margin-bottom: 1.5rem; }
+    .form-group { margin-bottom: 1.25rem; }
+    .form-group label { display: block; font-weight: 600; font-size: 0.85rem; color: var(--navy); margin-bottom: 0.5rem; }
+    .form-group label span { color: var(--primary); }
+    .form-group input, .form-group select { width: 100%; padding: 0.85rem 1rem; border: 1.5px solid var(--border); border-radius: 12px; font-family: 'Poppins', sans-serif; font-size: 0.9rem; color: var(--navy); outline: none; transition: border-color 0.2s; background: #FAFAFA; appearance: none; box-sizing: border-box; }
+    .form-group input:focus, .form-group select:focus { border-color: var(--primary); background: white; box-shadow: 0 0 0 4px var(--light-blue); }
+    .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+    .upload-zone { width: 100%; border: 2.5px dashed var(--primary); border-radius: 16px; padding: 2rem 1rem; text-align: center; cursor: pointer; transition: all 0.2s; background: var(--light-blue); position: relative; box-sizing: border-box; }
+    .upload-zone:hover { background: #ddebfa; border-color: var(--green-dark); }
+    .upload-zone input[type=file] { position: absolute; inset: 0; opacity: 0; cursor: pointer; width: 100%; height: 100%; }
+    .upload-icon { font-size: 2.2rem; margin-bottom: 0.5rem; }
+    .upload-text { font-size: 0.9rem; color: var(--navy); line-height: 1.5; }
+    .upload-text strong { color: var(--primary); font-weight: 700; font-size: 1.05rem; }
+    .upload-filename { display: none; align-items: center; gap: 0.5rem; background: var(--light-blue); border: 1.5px solid rgba(10,132,255,0.35); border-radius: 10px; padding: 0.8rem 1rem; font-size: 0.85rem; color: var(--navy); font-weight: 600; margin-top: 0.75rem; }
+    .upload-filename.show { display: flex; }
+    .upload-clear { background: none; border: none; cursor: pointer; color: #9ca3af; font-size: 1.2rem; margin-left: auto; line-height: 1; }
+    .btn-submit { width: 100%; background: var(--primary); color: white; font-family: 'Poppins', sans-serif; font-weight: 600; font-size: 1.05rem; padding: 1.1rem; border-radius: 14px; border: none; cursor: pointer; transition: all 0.2s; margin-top: 1rem; display: flex; align-items: center; justify-content: center; gap: 0.5rem; box-shadow: 0 8px 24px rgba(10, 132, 255, 0.25); }
+    .btn-submit:hover { background: var(--green-dark); transform: translateY(-2px); box-shadow: 0 12px 28px rgba(10, 132, 255, 0.3); }
+    .premium-banner { background: var(--light-blue); border: 2px dashed var(--primary); padding: 1rem; border-radius: 12px; margin-bottom: 1.5rem; position: relative; }
+    .premium-badge { position: absolute; top: -10px; right: 15px; background: var(--primary); color: white; font-size: 0.65rem; font-weight: 700; padding: 0.2rem 0.6rem; border-radius: 50px; text-transform: uppercase; letter-spacing: 0.05em; }
+    .return-toggle { text-align: center; margin-bottom: 1.5rem; padding-bottom: 1.5rem; border-bottom: 1px solid var(--border); }
+    .btn-return { background: transparent; border: 1.5px solid var(--border); color: var(--navy); font-family: 'Poppins', sans-serif; font-weight: 600; font-size: 0.85rem; padding: 0.6rem 1.4rem; border-radius: 50px; cursor: pointer; transition: all 0.2s; }
+    .btn-return:hover { border-color: var(--primary); color: var(--primary); }
+    .tools-section { background: var(--navy); padding: 3.5rem 2rem; }
+    .tools-inner { max-width: 1100px; margin: 0 auto; }
+    .section-eyebrow { font-family: 'Poppins', sans-serif; font-size: 0.8rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--primary); margin-bottom: 0.75rem; }
+    .section-title-light { font-size: clamp(2rem, 3vw, 2.8rem); font-weight: 800; color: white; margin-bottom: 0.75rem; }
+    .section-sub-light { font-family: 'Poppins', sans-serif; font-size: 1rem; color: rgba(255,255,255,0.7); max-width: 460px; line-height: 1.6; margin-bottom: 2rem; }
+    .tools-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1.5rem; }
+    .tool-tile { border-radius: 16px; padding: 1.8rem; border: 1px solid rgba(255,255,255,0.08); background: rgba(255,255,255,0.03); transition: all 0.2s; }
+    .tool-tile:hover { background: rgba(255,255,255,0.06); border-color: var(--primary); transform: translateY(-4px); }
+    .tool-tile.free-tool { background: rgba(10, 132, 255, 0.1); border-color: rgba(10, 132, 255, 0.3); }
+    .tile-icon { font-size: 1.8rem; margin-bottom: 1rem; }
+    .tile-badge { display: inline-block; font-size: 0.7rem; font-weight: 700; padding: 0.25rem 0.6rem; border-radius: 50px; margin-bottom: 0.8rem; letter-spacing: 0.05em; text-transform: uppercase; }
+    .badge-free { background: rgba(10, 132, 255, 0.2); color: #60A5FA; }
+    .badge-premium { background: rgba(245, 158, 11, 0.2); color: #FCD34D; }
+    .tool-tile h4 { font-family: 'Poppins', sans-serif; font-size: 1.1rem; font-weight: 600; color: white; margin-bottom: 0.5rem; }
+    .tool-tile p { font-size: 0.85rem; color: rgba(255,255,255,0.6); line-height: 1.6; margin: 0; }
+    footer { background: #132547; color: white; padding: 2.5rem; text-align: center; }
+    footer p { font-size: 0.9rem; color: rgba(255,255,255,0.5); margin: 0.25rem 0; }
+    footer span { color: var(--primary); font-weight: 600; }
+    @keyframes fadeUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+    .fade-1 { animation: fadeUp 0.5s 0.1s ease both; }
+    .fade-2 { animation: fadeUp 0.5s 0.2s ease both; }
+    .fade-3 { animation: fadeUp 0.5s 0.3s ease both; }
+    .fade-4 { animation: fadeUp 0.5s 0.4s ease both; }
+    @media(max-width: 768px) {
+      .hero { padding: 6rem 1.5rem 3rem; gap: 2rem; }
+      .hero h1 { font-size: clamp(2.2rem, 8vw, 3rem); }
+      .social-proof-badge { flex-direction: column; gap: 0.5rem; text-align: center; }
+      .hero-features { flex-direction: column; align-items: flex-start; gap: 1rem; margin-bottom: 2rem; }
+    }
+  
+    .nav-left { display: flex; align-items: center; gap: 2.5rem; }
+    .nav-links-main { display: flex; gap: 1.5rem; }
+    .nav-dropdown { position: relative; }
+    .nav-dropdown-btn { background: none; border: none; font-family: 'Poppins', sans-serif; font-size: 0.9rem; font-weight: 500; color: var(--navy); cursor: pointer; display: flex; align-items: center; gap: 0.3rem; }
+    .nav-dropdown-btn:hover { color: var(--primary); }
+    .nav-dropdown-content { display: none; position: absolute; top: 100%; left: 0; background: white; min-width: 220px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); border-radius: 12px; padding: 0.8rem 0; z-index: 1000; border: 1px solid var(--border); }
+    /* Invisible bridge to keep hover active */
+    .nav-dropdown::after { content: ''; position: absolute; top: 100%; left: 0; right: 0; height: 1rem; display: none; }
+    .nav-dropdown:hover::after { display: block; }
+    .nav-dropdown:hover .nav-dropdown-content { display: block; top: calc(100% + 0.5rem); }
+    .nav-dropdown-content a { display: block; padding: 0.6rem 1.2rem; color: var(--navy); text-decoration: none; font-size: 0.85rem; font-weight: 500; transition: background 0.2s; }
+    .nav-dropdown-content a:hover { background: var(--light-blue); color: var(--primary); }
+    .nav-right-actions { display: flex; align-items: center; gap: 1.5rem; }
+    .nav-signin { color: var(--navy); text-decoration: none; font-family: 'Poppins', sans-serif; font-weight: 600; font-size: 0.9rem; transition: color 0.2s; }
+    .nav-signin:hover { color: var(--primary); }
+    @media (max-width: 768px) { .nav-links-main { display: none; } }
+
+  
+    .how-it-works-steps { display: flex; justify-content: space-between; gap: 1rem; margin: 1rem auto 2.5rem; max-width: 800px; width: 100%; position: relative; }
+    .hiw-step { display: flex; flex-direction: column; align-items: center; text-align: center; gap: 1rem; flex: 1; position: relative; }
+    .hiw-step:not(:last-child)::after { content: ''; position: absolute; top: 16px; left: calc(50% + 24px); width: calc(100% - 24px); height: 2px; background: var(--light-blue); z-index: 1; }
+    .hiw-number { width: 34px; height: 34px; min-width: 34px; background: var(--light-blue); color: var(--primary); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 0.95rem; z-index: 2; position: relative; border: 3px solid var(--cream); }
+    .hiw-title { font-weight: 700; color: var(--navy); font-size: 1.05rem; margin-bottom: 0.3rem; }
+    .hiw-desc { font-size: 0.85rem; color: var(--gray); line-height: 1.5; margin: 0; max-width: 220px; }
+    @media (max-width: 768px) { 
+      .how-it-works-steps { flex-direction: column; gap: 2rem; align-items: flex-start; margin: 2rem auto 3rem; }
+      .hiw-step { flex-direction: row; text-align: left; align-items: flex-start; width: 100%; gap: 1.25rem; }
+      .hiw-step:not(:last-child)::after { display: none; }
+      .hiw-desc { max-width: none; }
+    }
+
+  
+    .faq-section { background: var(--cream); padding: 3.5rem 2rem; border-top: 1px solid var(--border); }
+    .faq-inner { max-width: 800px; margin: 0 auto; text-align: center; }
+    .section-title { font-size: clamp(2rem, 3vw, 2.5rem); font-weight: 800; color: var(--navy); margin-bottom: 2rem; }
+    .faq-list { text-align: left; }
+    .faq-item { background: white; border: 1px solid var(--border); border-radius: 12px; margin-bottom: 1rem; overflow: hidden; }
+    .faq-item summary { font-family: 'Poppins', sans-serif; font-weight: 600; font-size: 1rem; color: var(--navy); padding: 1.25rem 1.5rem; cursor: pointer; list-style: none; position: relative; }
+    .faq-item summary::after { content: '+'; position: absolute; right: 1.5rem; top: 1.25rem; font-size: 1.2rem; color: var(--primary); transition: transform 0.3s; }
+    .faq-item[open] summary::after { content: '−'; }
+    .faq-content { padding: 0 1.5rem 1.25rem; font-size: 0.9rem; color: var(--gray); line-height: 1.6; }
+
+  
+    .footer-links { display: flex; justify-content: center; gap: 2rem; margin-bottom: 1.5rem; flex-wrap: wrap; }
+    .footer-links a { color: rgba(255,255,255,0.7); text-decoration: none; font-size: 0.9rem; transition: color 0.2s; }
+    .footer-links a:hover { color: white; }
+    .footer-brand { color: var(--primary) !important; text-decoration: none; }
+    .footer-brand:hover { text-decoration: underline; }
+
+  
+    .modal-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(19, 37, 71, 0.6); backdrop-filter: blur(4px); display: none; align-items: center; justify-content: center; z-index: 999; opacity: 0; transition: opacity 0.3s ease; }
+    .modal-overlay.show { display: flex; opacity: 1; }
+    .modal-content { background: white; border-radius: 20px; padding: 2.5rem; width: 90%; max-width: 400px; text-align: center; box-shadow: 0 10px 40px rgba(0,0,0,0.2); transform: translateY(20px); transition: transform 0.3s ease; position: relative; }
+    .modal-overlay.show .modal-content { transform: translateY(0); }
+    .modal-close { position: absolute; top: 1rem; right: 1.2rem; font-size: 1.5rem; color: var(--gray); cursor: pointer; border: none; background: transparent; }
+    .modal-close:hover { color: var(--navy); }
+    .modal-content h3 { font-size: 1.4rem; font-weight: 800; color: var(--navy); margin-bottom: 0.5rem; font-family: 'Playfair Display', serif; }
+    .modal-content p { font-size: 0.9rem; color: var(--gray); margin-bottom: 1.5rem; line-height: 1.5; }
+    .modal-input { width: 100%; padding: 0.8rem 1rem; border: 2px solid #e2e8f0; border-radius: 12px; font-family: 'Poppins', sans-serif; font-size: 0.95rem; margin-bottom: 1rem; outline: none; transition: border-color 0.2s; box-sizing: border-box; }
+    .modal-input:focus { border-color: var(--primary); }
+    .modal-btn { width: 100%; background: var(--primary); color: white; border: none; padding: 0.9rem; border-radius: 50px; font-family: 'Poppins', sans-serif; font-weight: 600; font-size: 1rem; cursor: pointer; transition: background 0.2s; display: flex; align-items: center; justify-content: center; gap: 0.5rem; }
+    .modal-btn:hover { background: var(--green-dark); }
+    .modal-btn:disabled { opacity: 0.7; cursor: not-allowed; }
+    .spinner-small { width: 18px; height: 18px; border: 2px solid rgba(255,255,255,0.4); border-top-color: white; border-radius: 50%; animation: spin 0.8s linear infinite; display: none; }
+
   </style>
 </head>
 <body>
+  
   <nav>
-    <a href="index.html" class="nav-brand" style="flex-direction: column; align-items: flex-start; gap: 0;">
-      <span style="color: var(--primary); font-size: 1.5rem; font-weight: 900; letter-spacing: -0.03em; display: block;">LaunchIQ</span>
-    </a>
-    <button class="nav-btn" onclick="document.getElementById('signup-form').scrollIntoView({behavior:'smooth'})">Get Started Free</button>
+    <div class="nav-left">
+      <a href="index.html" class="nav-brand">
+        <img class="nav-icon" src="/assets/images/launchiq-icon.png" alt="LaunchIQ Icon">
+        <span class="nav-wordmark"><span class="wm-launch">Launch</span><span class="wm-iq">IQ</span></span>
+      </a>
+      <div class="nav-links-main">
+        <div class="nav-dropdown">
+          <button class="nav-dropdown-btn">Products ▾</button>
+          <div class="nav-dropdown-content">
+            <a href="#" target="_blank" rel="noopener noreferrer">LaunchIQ</a>
+            <a href="#" target="_blank" rel="noopener noreferrer">Mijaa</a>
+            <a href="#" target="_blank" rel="noopener noreferrer">PathCoach</a>
+          </div>
+        </div>
+        <a href="pages/unlock.html" class="nav-dropdown-btn" style="text-decoration:none;">Pricing</a>
+        <div class="nav-dropdown">
+          <button class="nav-dropdown-btn">Company ▾</button>
+          <div class="nav-dropdown-content">
+            <a href="#" target="_blank" rel="noopener noreferrer">ProLaunch Careers</a>
+            <a href="#" target="_blank" rel="noopener noreferrer">ProLaunch Academy</a>
+            <a href="#" target="_blank" rel="noopener noreferrer">ProLaunch Technologies</a>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="nav-right-actions">
+      <a href="#" class="nav-signin" onclick="openSignInModal(event)">Sign In</a>
+      <button class="nav-btn" onclick="document.getElementById('signup-form').scrollIntoView({behavior:'smooth'})">Get Started Free</button>
+    </div>
   </nav>
+
 
   <section class="hero">
     <div class="hero-left">
-      <h1 class="fade-1">Your Career,<br><em>Launched</em><br>with LaunchIQ</h1>
-      <p class="hero-sub fade-2">Free CV analysis plus premium tools for resume building, cover letters, interview prep, and career insights — built for professionals.</p>
-      <div class="hero-features fade-3">
-        <div class="hero-feat"><div class="feat-dot">✓</div> Free CV Analyzer — no payment needed</div>
-        <div class="hero-feat"><div class="feat-dot">✓</div> Premium suite for just ₦1,000</div>
-        <div class="hero-feat"><div class="feat-dot">✓</div> ATS-optimized outputs you can download</div>
-        <div class="hero-feat"><div class="feat-dot">✓</div> Built for Nigerian & African job seekers</div>
+      <h1 class="fade-1">Land More <br><em>Interviews with an</em><br>ATS-Optimized CV</h1>
+      <div class="social-proof-badge fade-2">
+        <div class="social-proof-stars">★★★★★</div>
+        <p class="social-proof-text">"LaunchIQ helped me bypass the ATS and land my dream role in 3 weeks!" <br><span class="social-proof-author">— Ayodele I., Project Manager</span></p>
       </div>
-      <div class="hero-scroll fade-4">↓ Fill the form to get started</div>
-    </div>
+      <p class="hero-sub fade-3">LaunchIQ instantly analyzes your resume, scores it against real recruiter filters, and generates tailored rewrites to bypass hiring algorithms.</p>
 
-    <div class="form-card fade-3" id="signup-form">
-      <h3>Start Your Career Journey</h3>
-      <p>Fill in your details to access your free CV Analysis tool.</p>
-
-      <div class="return-toggle">
-        <p>Already registered before?</p>
-        <button class="btn-return" onclick="toggleReturnPanel()">👋 I have an account</button>
-      </div>
-
-      <div class="fade-4" style="background: var(--light-blue); border-left: 4px solid var(--primary); padding: 12px; border-radius: 4px; margin-bottom: 2rem; max-width: 440px;">
-        <p style="font-size: 0.85rem; color: var(--navy); margin: 0; line-height: 1.5;">
-          <strong>🚀 Upgrade to LaunchIQ Premium:</strong> Get ATS-optimized rewrites, Cover Letters, and Interview Prep for just <strong>₦1,000</strong>.
-        </p>
-      </div>
-
-      <div class="fade-4" style="display: flex; gap: 1rem; align-items: center; max-width: 440px; margin-bottom: 2rem;">
-        <div style="background: var(--white); padding: 1rem; border-radius: 12px; border: 1px solid var(--border); box-shadow: 0 4px 10px rgba(0,0,0,0.03);">
-          <p style="font-size: 0.85rem; font-style: italic; color: var(--navy); margin-bottom: 6px;">"The resume builder helped me bypass the ATS and land my desired role in 3 weeks!"</p>
-          <p style="font-size: 0.75rem; font-weight: 700; color: var(--primary);">— Ayodele I., Project Manager</p>
+      <div class="how-it-works-steps fade-3">
+        <div class="hiw-step">
+          <div class="hiw-number">1</div>
+          <div class="hiw-text-block">
+            <div class="hiw-title">Upload CV</div>
+            <p class="hiw-desc">Drop your current resume into our secure scanner.</p>
+          </div>
+        </div>
+        <div class="hiw-step">
+          <div class="hiw-number">2</div>
+          <div class="hiw-text-block">
+            <div class="hiw-title">Get Analysis</div>
+            <p class="hiw-desc">Our AI scores your CV against real recruiter filters.</p>
+          </div>
+        </div>
+        <div class="hiw-step">
+          <div class="hiw-number">3</div>
+          <div class="hiw-text-block">
+            <div class="hiw-title">Bypass ATS</div>
+            <p class="hiw-desc">Get tailored rewrites that land you more interviews.</p>
+          </div>
         </div>
       </div>
 
-      <div class="return-panel" id="return-panel">
-        <label for="return-email">Enter your email to restore your session</label>
-        <input type="email" id="return-email" placeholder="yourname@email.com">
-        <button class="btn-lookup" id="lookup-btn" onclick="handleLookup();">
-          <span id="lookup-text">🔍 Find My Account</span>
-        </button>
+      <div class="hero-features fade-4">
+        <div class="hero-feat"><div class="feat-dot">✓</div> Free Instant CV Analysis</div>
+        <div class="hero-feat"><div class="feat-dot">✓</div> Premium ATS Rewrites from as low as ₦1,000</div>
+        <div class="hero-feat"><div class="feat-dot">✓</div> Custom Cover Letters & Interview Prep</div>
       </div>
+    </div>
 
-      <div class="divider-or" id="divider-or">or sign up below</div>
-
+    <div class="form-card fade-3" id="signup-form">
+      <h3>Get Your Free ATS Score</h3>
+      <p>Upload your CV below to instantly reveal your match rate.</p>
+      <div class="premium-banner">
+        <div class="premium-badge">Launch Pricing</div>
+        <p style="font-size: 0.85rem; color: var(--navy); margin: 0; line-height: 1.5;">
+          <strong>🚀 Upgrade to LaunchIQ Premium:</strong> Unlock complete ATS-optimized rewrites, Cover Letters, and precise Interview Prep for just <strong>₦1,000</strong>.
+        </p>
+      </div>
+      <div class="form-group" style="margin-top: 0.5rem; margin-bottom: 1.5rem;">
+        <div class="upload-zone" id="upload-zone">
+          <input type="file" id="cvUpload" accept=".pdf,.doc,.docx" onchange="handleFileSelect(this)">
+          <div class="upload-icon">📄</div>
+          <div class="upload-text"><strong>Drop your CV here</strong> <span class="hide-mobile">or tap to browse</span><br>PDF, DOC, or DOCX · Max 10MB</div>
+        </div>
+        <div class="upload-filename" id="upload-filename">
+          <span>📎</span><span id="filename-text"></span>
+          <button class="upload-clear" onclick="clearFile(event)" title="Remove file">✕</button>
+        </div>
+      </div>
       <div class="two-col">
         <div class="form-group">
           <label for="fname">First Name <span>*</span></label>
@@ -173,147 +278,171 @@
         <label for="email">Email Address <span>*</span></label>
         <input type="email" id="email" placeholder="yourname@email.com">
       </div>
-      <div class="form-group">
-        <label for="role">Target Job Role <span>*</span></label>
-        <input type="text" id="role" placeholder="e.g. Data Analyst, Product Manager">
-      </div>
-      <div class="form-group">
-        <label for="level">Experience Level <span>*</span></label>
-        <select id="level">
-          <option value="">— Select your level —</option>
-          <option value="Student / Fresh Graduate">Student / Fresh Graduate</option>
-          <option value="Entry-Level (0–2 years)">Entry-Level (0–2 years)</option>
-          <option value="Mid-Level (3–5 years)">Mid-Level (3–5 years)</option>
-          <option value="Senior (6–10 years)">Senior (6–10 years)</option>
-          <option value="Executive / Director">Executive / Director</option>
-        </select>
-      </div>
-      <div class="form-group">
-        <label for="cvUpload">Upload Your CV <span>*</span></label>
-        <div class="upload-zone" id="upload-zone">
-          <input type="file" id="cvUpload" accept=".pdf,.doc,.docx,.txt" onchange="handleFileSelect(this)">
-          <div class="upload-icon">📎</div>
-          <div class="upload-text"><strong>Tap to upload</strong> <span class="hide-mobile">or drag & drop</span><br>PDF, DOC, DOCX or TXT · Max 10MB</div>
+      <div class="two-col">
+        <div class="form-group">
+          <label for="role">Target Job Role <span>*</span></label>
+          <input type="text" id="role" placeholder="e.g. Data Analyst">
         </div>
-        <div class="upload-filename" id="upload-filename">
-          <span>📄</span><span id="filename-text"></span>
-          <button class="upload-clear" onclick="clearFile(event)" title="Remove file">✕</button>
+        <div class="form-group">
+          <label for="level">Experience Level <span>*</span></label>
+          <select id="level">
+            <option value="">— Select —</option>
+            <option value="Student / Fresh Graduate">Fresh Graduate</option>
+            <option value="Entry-Level (0–2 years)">Entry-Level</option>
+            <option value="Mid-Level (3–5 years)">Mid-Level</option>
+            <option value="Senior (6–10 years)">Senior</option>
+          </select>
         </div>
       </div>
-
-      <div id="progress-container" style="display: none; margin-bottom: 15px;">
+      <div id="progress-container" style="display: none; margin-bottom: 15px; margin-top: 10px;">
         <div style="width: 100%; background: var(--light-blue); border-radius: 8px; height: 8px; overflow: hidden;">
           <div id="progress-bar" style="width: 0%; height: 100%; background: var(--primary); transition: width 0.4s ease;"></div>
         </div>
-        <p id="progress-status" style="font-size: 0.8rem; color: var(--navy); text-align: center; margin-top: 5px; font-weight: 600;">Processing...</p>
+        <p id="progress-status" style="font-size: 0.8rem; color: var(--navy); text-align: center; margin-top: 8px; font-weight: 600;">Processing...</p>
       </div>
-
-      <button class="btn-submit" id="submit-btn" onclick="handleSignup()" style="background: var(--primary); box-shadow: 0 4px 16px rgba(10, 132, 255, 0.3);">
-        <span id="submit-text">Free CV Analysis</span>
+      <button class="btn-submit" id="submit-btn" onclick="handleSignup()">
+        <span id="submit-text">✨ Analyze My CV For Free</span>
       </button>
-      
-      <p class="form-note">
-        🔒 <strong>Privacy First:</strong> Your CV data is securely processed and never shared. <br>
-        <em>⚠️ Ensure your entered name matches the name on your CV.</em><br>
-        <span style="color: var(--navy); margin-top: 4px; display: inline-block;">Premium upgrade (₦1,000) is triggered via Selar <strong>only after</strong> your free analysis.</span>
+      <p style="font-size: 0.75rem; color: var(--gray); text-align: center; margin-top: 1rem; line-height: 1.5;">
+        🔒 <strong>Privacy First:</strong> Your CV data is securely processed. <br>
+        <em>Premium upgrades are triggered securely via Selar after your free analysis.</em>
       </p>
+      <div style="margin-top: 1.5rem; border-top: 1px solid var(--border); padding-top: 1.5rem; text-align: center;">
+        <p style="font-size: 0.85rem; color: var(--gray); margin-bottom: 0.8rem;">Already have an account?</p>
+        <button class="btn-return">👋 Sign in to Dashboard</button>
+      </div>
     </div>
   </section>
 
   <section class="tools-section">
     <div class="tools-inner">
-      <div class="section-eyebrow">What's Inside</div>
+      <div class="section-eyebrow">The Ecosystem</div>
       <h2 class="section-title-light">Free Access + Premium Suite</h2>
-      <p class="section-sub-light">Start free, upgrade when you're ready.</p>
+      <p class="section-sub-light">Start free, upgrade when you're ready to accelerate your job hunt.</p>
       <div class="tools-grid">
         <div class="tool-tile free-tool">
           <div class="tile-icon">🔍</div><div class="tile-badge badge-free">Free</div>
           <h4>CV Analyzer</h4><p>Instant feedback on your CV's strengths, weaknesses, and ATS score for your target role.</p>
         </div>
         <div class="tool-tile">
-          <div class="tile-icon">📄</div><div class="tile-badge badge-premium">Premium — ₦1,000</div>
-          <h4>Resume Builder</h4><p>Full ATS-optimized resume rewrite tailored to your exact job description.</p>
+          <div class="tile-icon">📄</div><div class="tile-badge badge-premium">Premium</div>
+          <h4>Resume Builder</h4><p>Full ATS-optimized resume rewrite tailored strictly to your exact job description.</p>
         </div>
         <div class="tool-tile">
           <div class="tile-icon">✉️</div><div class="tile-badge badge-premium">Premium</div>
-          <h4>Cover Letter</h4><p>Job-specific cover letter connecting your experience to the role.</p>
+          <h4>Cover Letter</h4><p>Job-specific cover letter seamlessly connecting your past experience to the target role.</p>
         </div>
         <div class="tool-tile">
           <div class="tile-icon">🎯</div><div class="tile-badge badge-premium">Premium</div>
-          <h4>Interview Prep</h4><p>10 interview-generated questions with model answers for your specific role.</p>
-        </div>
-        <div class="tool-tile">
-          <div class="tile-icon">💡</div><div class="tile-badge badge-premium">Premium</div>
-          <h4>Career Insights</h4><p>Salary benchmarks, in-demand skills, and a personalised 90-day action plan.</p>
+          <h4>Interview Prep</h4><p>10 AI-generated interview questions with model answers designed for your specific role.</p>
         </div>
       </div>
     </div>
   </section>
 
+  <section class="faq-section" id="faq">
+    <div class="faq-inner">
+      <div class="section-eyebrow">Got Questions?</div>
+      <h2 class="section-title">Frequently Asked Questions</h2>
+      <div class="faq-list">
+        <details class="faq-item">
+          <summary>How does the free ATS score work?</summary>
+          <div class="faq-content"><p>Our AI scans your uploaded CV against standard Applicant Tracking System criteria and the specific job role you selected to give you a match score and actionable feedback.</p></div>
+        </details>
+        <details class="faq-item">
+          <summary>What is included in the Premium upgrade?</summary>
+          <div class="faq-content"><p>The Premium tier includes a fully ATS-optimized CV rewrite, a tailored Cover Letter, and AI-generated interview prep questions with model answers, based on your target job description.</p></div>
+        </details>
+        <details class="faq-item">
+          <summary>Is my data secure?</summary>
+          <div class="faq-content"><p>Yes. Your privacy is our top priority. Your CV data is securely processed and never shared with third parties.</p></div>
+        </details>
+        <details class="faq-item">
+          <summary>How do I pay for Premium?</summary>
+          <div class="faq-content"><p>After your initial free analysis, you will have the option to upgrade to Premium via a secure Selar payment link provided on your results dashboard.</p></div>
+        </details>
+      </div>
+    </div>
+  </section>
+
+  
   <footer>
-    <p>Product of <span>ProLaunch Group</span></p>
-    <p style="margin-top:0.3rem">&copy; <script>document.write(new Date().getFullYear())</script> LaunchIQ. All rights reserved.</p>
+    <div class="footer-links">
+      <a href="mailto:hello@prolaunchgroup.org">Email Us</a>
+      <a href="#">Terms</a>
+      <a href="#">Privacy Policy</a>
+    </div>
+    <p>Product of <a href="https://prolaunchgroup.org" target="_blank" rel="noopener noreferrer" class="footer-brand">ProLaunch Group</a></p>
+    <p style="margin-top:0.5rem">&copy; 2026 LaunchIQ. All rights reserved.</p>
   </footer>
 
+
+  
   <script src="shared.js"></script>
   <script>
-    window.addEventListener('DOMContentLoaded', () => {
-      if (PL.hasBiodata()) window.location.href = 'pages/dashboard.html';
-    });
-
-    // ── Returning user panel ──────────────────────────────────────────────────
-    function toggleReturnPanel() {
-      const panel = document.getElementById('return-panel');
-      const divider = document.getElementById('divider-or');
-      const isOpen = panel.style.display === 'block';
-      panel.style.display = isOpen ? 'none' : 'block';
-      divider.textContent = isOpen ? 'or sign up below' : 'or fill in your details below';
-      if (!isOpen) document.getElementById('return-email').focus();
-    }
-
-    async function handleLookup() {
-      const email = document.getElementById('return-email').value.trim();
-      if (!email || !email.includes('@')) { PL.toast('Please enter a valid email address.', 'error'); return; }
-      const btn = document.getElementById('lookup-btn');
-      const text = document.getElementById('lookup-text');
-      btn.disabled = true; text.textContent = 'Searching...';
-      const result = await PL.lookupUser(email);
-      btn.disabled = false; text.textContent = 'Find My Account';
-      if (!result.found) {
-        PL.toast('No account found for that email. Please sign up below.', 'warn');
-        document.getElementById('email').value = email;
-        document.getElementById('return-panel').style.display = 'none';
-        document.getElementById('divider-or').textContent = 'sign up below';
-        document.getElementById('fname').focus();
-        return;
-      }
-      PL.restoreSession(result);
-      const msg = (result.premium && result.premium.active)
-        ? 'Welcome back, ' + result.user.fname + '! Premium access restored (' + result.premium.timeLeft + ' left).'
-        : 'Welcome back, ' + result.user.fname + '! Redirecting to your dashboard.';
-      PL.toast(msg, 'success');
-      setTimeout(() => { window.location.href = 'pages/dashboard.html'; }, 1500);
-    }
-
-    // ── File upload ───────────────────────────────────────────────────────────
-    let cvFileText = null, cvFileName = null;
-
     function handleFileSelect(input) {
-      const file = input.files[0]; if (!file) return;
-      if (file.size > 10 * 1024 * 1024) { PL.toast('File too large. Max 10MB.', 'error'); input.value = ''; return; }
-      const ext = file.name.split('.').pop().toLowerCase();
-      if (!['pdf','doc','docx','txt'].includes(ext)) { PL.toast('Unsupported file type. Please upload PDF, DOC, DOCX or TXT.', 'error'); input.value = ''; return; }
-      cvFileName = file.name; cvFileText = null;
+      const file = input.files[0];
+      if (!file) return;
       document.getElementById('filename-text').textContent = file.name;
       document.getElementById('upload-filename').classList.add('show');
+      document.getElementById('upload-zone').style.display = 'none';
     }
 
     function clearFile(e) {
-      e.preventDefault();
+      if (e) e.preventDefault();
       document.getElementById('cvUpload').value = '';
       document.getElementById('upload-filename').classList.remove('show');
+      document.getElementById('upload-zone').style.display = 'block';
       cvFileText = null; cvFileName = null;
     }
+
+    // Modal Logic
+    function openSignInModal(e) {
+      if (e) e.preventDefault();
+      const user = window.PL ? PL.getBiodata() : null;
+      if (user && user.email) {
+        window.location.href = 'pages/dashboard.html';
+        return;
+      }
+      document.getElementById('signin-modal').classList.add('show');
+    }
+
+    function closeSignInModal() {
+      document.getElementById('signin-modal').classList.remove('show');
+      document.getElementById('signin-email').value = '';
+    }
+
+    async function handleSignIn() {
+      const email = document.getElementById('signin-email').value.trim();
+      if (!email) { PL.toast('Please enter your email address.', 'warn'); return; }
+
+      const btn = document.getElementById('signin-btn');
+      const btnText = document.getElementById('signin-btn-text');
+      const spinner = document.getElementById('signin-spinner');
+
+      btn.disabled = true; btnText.style.display = 'none'; spinner.style.display = 'block';
+
+      try {
+        const result = await PL.lookupUser(email);
+        if (result.found) {
+          PL.restoreSession(result);
+          PL.toast('Welcome back!', 'success');
+          setTimeout(() => { window.location.href = 'pages/dashboard.html'; }, 500);
+        } else {
+          PL.toast('Account not found. Please upload your CV below to create a free account.', 'error');
+          closeSignInModal();
+          document.getElementById('signup-form').scrollIntoView({behavior: 'smooth'});
+        }
+      } catch (err) {
+        PL.toast('An error occurred. Please try again.', 'error');
+      } finally {
+        btn.disabled = false; btnText.style.display = 'block'; spinner.style.display = 'none';
+      }
+    }
+
+    // Signup Logic
+    let cvFileText = null;
+    let cvFileName = null;
 
     async function parseCVFile(file) {
       const formData = new FormData(); formData.append('cv', file);
@@ -324,17 +453,21 @@
     }
 
     const zone = document.getElementById('upload-zone');
-    zone.addEventListener('dragover', (e) => { e.preventDefault(); zone.classList.add('dragover'); });
-    zone.addEventListener('dragleave', () => zone.classList.remove('dragover'));
-    zone.addEventListener('drop', (e) => {
-      e.preventDefault(); zone.classList.remove('dragover');
-      const file = e.dataTransfer.files[0];
-      if (file) { const input = document.getElementById('cvUpload'); const dt = new DataTransfer(); dt.items.add(file); input.files = dt.files; handleFileSelect(input); }
-    });
+    if (zone) {
+      zone.addEventListener('dragover', (e) => { e.preventDefault(); zone.classList.add('dragover'); });
+      zone.addEventListener('dragleave', () => zone.classList.remove('dragover'));
+      zone.addEventListener('drop', (e) => {
+        e.preventDefault(); zone.classList.remove('dragover');
+        const file = e.dataTransfer.files[0];
+        if (file) { 
+          const input = document.getElementById('cvUpload'); 
+          const dt = new DataTransfer(); dt.items.add(file); 
+          input.files = dt.files; 
+          handleFileSelect(input); 
+        }
+      });
+    }
 
-    // ── Name verification ─────────────────────────────────────────────────────
-    // Uses AI to extract the name from the CV and compares against registered name.
-    // Normalises both names (lowercase, alpha-only tokens, sorted) before comparing.
     async function verifyCVName(registeredName, cvText) {
       const prompt = 'Extract the full name of the person this CV belongs to. Return ONLY the name as plain text — no explanation, no punctuation, just the name exactly as it appears at the top of the CV.\n\nCV:\n' + cvText.substring(0, 1500);
       try {
@@ -348,16 +481,14 @@
         const regName  = registeredName.trim().toLowerCase().replace(/[^a-z\s]/g, '');
         const cvTokens  = cvName.split(/\s+/).filter(Boolean).sort();
         const regTokens = regName.split(/\s+/).filter(Boolean).sort();
-        // All tokens in registered name must appear in CV name
         const allMatch = regTokens.every(t => cvTokens.includes(t));
         return { match: allMatch, cvName: data.text.trim() };
       } catch (e) {
         console.warn('Name verify error:', e);
-        return { match: true }; // fail open if AI call itself fails
+        return { match: true }; // fail open if AI call fails
       }
     }
 
-    // ── Signup ────────────────────────────────────────────────────────────────
     async function handleSignup() {
       const fname = document.getElementById('fname').value.trim();
       const lname = document.getElementById('lname').value.trim();
@@ -374,50 +505,25 @@
 
       const btn = document.getElementById('submit-btn');
       const text = document.getElementById('submit-text');
-      const progCont = document.getElementById('progress-container');
-      const progBar = document.getElementById('progress-bar');
-      const progStat = document.getElementById('progress-status');
-      
-      btn.style.display = 'none'; // Hide button during processing
-      progCont.style.display = 'block';
-      progBar.style.width = '20%';
-      progStat.textContent = 'Parsing CV Document...';
+      btn.disabled = true; text.textContent = 'Parsing CV...';
 
       try {
-        // Step 1 — Parse CV
         const parsedText = await parseCVFile(fileInput.files[0]);
         cvFileText = parsedText;
 
-        // Step 2 — Verify name matches CV
-        progBar.style.width = '60%';
-        progStat.textContent = 'Verifying Identity & Extracting Data...';
+        text.textContent = 'Verifying identity...';
         const fullName = fname + ' ' + lname;
         const nameCheck = await verifyCVName(fullName, parsedText);
 
         if (!nameCheck.match) {
-          btn.disabled = false; text.textContent = '🚀 Access Free CV Analyzer';
-          PL.toast('The name on your CV ("' + nameCheck.cvName + '") does not match your registered name ("' + fullName + '"). Please upload your own CV.', 'error');
-          document.getElementById('fname').style.borderColor = '#ef4444';
-          document.getElementById('lname').style.borderColor = '#ef4444';
-          setTimeout(() => {
-            document.getElementById('fname').style.borderColor = '';
-            document.getElementById('lname').style.borderColor = '';
-          }, 5000);
+          btn.disabled = false; text.textContent = '✨ Analyze My CV For Free';
+          PL.toast('The name on your CV ("' + nameCheck.cvName + '") does not match your registered name. Please upload your own CV.', 'error');
           return;
         }
 
-        // Step 3 — Save & sync
-        progBar.style.width = '90%';
-        progStat.textContent = 'Securing Profile & Syncing...';
-
-        // Build the full user object — cvText is kept here for localStorage only
+        text.textContent = 'Saving your profile...';
         const userData = { name: fullName, fname, lname, email, role, level, cvFileName: fileInput.files[0].name, cvText: cvFileText, joinedAt: new Date().toISOString() };
 
-        // FIX (Bug 1, 2, 7):
-        //   Bug 1 — action:'register' added so Apps Script knows what to do
-        //   Bug 2 — cvText stripped from Sheets payload (stays in localStorage via saveBiodata)
-        //            to prevent Google Sheets 50k-char cell limit overflow causing silent failures
-        //   Bug 7 — await added so errors are caught and shown to the user
         PL.saveBiodata(userData);
         const { cvText: _drop, ...sheetPayload } = userData;
         await PL.sendToSheets({ action: 'register', ...sheetPayload });
@@ -427,28 +533,36 @@
 
       } catch (err) {
         console.warn('Signup error:', err.message);
-
-        // If biodata was already saved locally, Sheets sync failed — let user in with warning
         if (PL.hasBiodata()) {
           PL.toast('Profile saved! Cloud sync failed — your data is stored locally.', 'warn');
           setTimeout(() => { window.location.href = 'pages/dashboard.html'; }, 2000);
         } else {
-          // CV parsing failed before anything was saved — graceful fallback
           PL.toast('CV parsing failed: ' + err.message + '. You can paste your CV manually.', 'warn');
           const fallbackData = { name: fname + ' ' + lname, fname, lname, email, role, level, cvFileName: fileInput.files[0].name, cvText: '', joinedAt: new Date().toISOString() };
           PL.saveBiodata(fallbackData);
-          // FIX (Bug 1): action:'register' on fallback path too
           const { cvText: _fd, ...fallbackSheet } = fallbackData;
-          PL.sendToSheets({ action: 'register', ...fallbackSheet })
-            .catch(e => console.warn('Fallback Sheets sync failed:', e.message));
+          PL.sendToSheets({ action: 'register', ...fallbackSheet }).catch(e => console.warn('Fallback sync failed:', e.message));
           setTimeout(() => { window.location.href = 'pages/dashboard.html'; }, 2500);
         }
       } finally {
-        progCont.style.display = 'none';
-        btn.style.display = 'flex';
-        btn.disabled = false; text.textContent = 'Free CV Analysis';
+        btn.disabled = false; text.textContent = '✨ Analyze My CV For Free';
       }
     }
   </script>
+
+
+  <div class="modal-overlay" id="signin-modal">
+    <div class="modal-content">
+      <button class="modal-close" onclick="closeSignInModal()">×</button>
+      <h3>Welcome Back</h3>
+      <p>Enter your email to sign in and access your LaunchIQ dashboard.</p>
+      <input type="email" id="signin-email" class="modal-input" placeholder="name@example.com">
+      <button class="modal-btn" id="signin-btn" onclick="handleSignIn()">
+        <span id="signin-btn-text">Sign In</span>
+        <div class="spinner-small" id="signin-spinner"></div>
+      </button>
+    </div>
+  </div>
+
 </body>
 </html>

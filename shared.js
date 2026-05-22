@@ -36,7 +36,7 @@ const PL = {
   // ── Biodata ──────────────────────────────────────────────────────────────
   saveBiodata(data) { localStorage.setItem('pl_user', JSON.stringify(data)); },
   getBiodata() { try { return JSON.parse(localStorage.getItem('pl_user')) || null; } catch { return null; } },
-  hasBiodata() { const u = this.getBiodata(); return !!(u && u.name && u.email && u.level && u.role); },
+  hasBiodata() { const u = this.getBiodata(); return !!(u && u.email); },
 
   // ── Premium ───────────────────────────────────────────────────────────────
   // Called by the webhook handler (server-side) which writes plan+ts to Sheets.

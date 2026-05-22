@@ -6,7 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Unlock Premium | LaunchIQ</title>
   <link
-    href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;800&family=Lato:wght@300;400;700&display=swap"
+    href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;800&family=Poppins:wght@300;400;500;600;700&display=swap"
     rel="stylesheet">
   <style>
     :root {
@@ -34,18 +34,14 @@
     }
 
     body {
-      font-family: 'Lato', sans-serif;
+      font-family: 'Poppins', sans-serif;
       background: var(--cream);
       color: var(--forest);
       min-height: 100vh;
       padding-bottom: 3rem;
     }
 
-    h1,
-    h2,
-    h3,
-    h4 {
-      font-family: 'Playfair Display', sans-serif;
+    h1, h2, h3, h4 { font-family: 'Playfair Display', serif;
     }
 
     nav {
@@ -64,7 +60,7 @@
     .nav-brand {
       display: flex;
       align-items: center;
-      gap: 0.6rem;
+      gap: 0.1rem;
       text-decoration: none;
     }
 
@@ -72,15 +68,15 @@
       height: 36px;
     }
 
-    .nav-brand span {
-      font-family: 'Playfair Display', sans-serif;
+    .nav-brand span { margin-left: -0.25rem;
+      font-family: 'Poppins', sans-serif;
       font-weight: 800;
       font-size: 0.95rem;
       color: var(--forest);
     }
 
     .btn-back {
-      font-family: 'Playfair Display', sans-serif;
+      font-family: 'Poppins', sans-serif;
       font-weight: 700;
       font-size: 0.8rem;
       color: var(--gray);
@@ -166,7 +162,7 @@
 
     .timer-num {
       display: block;
-      font-family: 'Playfair Display', sans-serif;
+      font-family: 'Poppins', sans-serif;
       font-size: 1.6rem;
       font-weight: 800;
       line-height: 1;
@@ -234,7 +230,7 @@
       transform: translateX(-50%);
       background: var(--green);
       color: white;
-      font-family: 'Playfair Display', sans-serif;
+      font-family: 'Poppins', sans-serif;
       font-weight: 800;
       font-size: 0.7rem;
       padding: 0.25rem 0.9rem;
@@ -272,7 +268,7 @@
     }
 
     .now-price {
-      font-family: 'Playfair Display', sans-serif;
+      font-family: 'Poppins', sans-serif;
       font-size: 2rem;
       font-weight: 800;
       color: var(--forest);
@@ -333,7 +329,7 @@
       width: 100%;
       background: var(--forest);
       color: white;
-      font-family: 'Playfair Display', sans-serif;
+      font-family: 'Poppins', sans-serif;
       font-weight: 800;
       font-size: 0.95rem;
       padding: 0.85rem;
@@ -381,7 +377,7 @@
       gap: 0.5rem;
       background: var(--forest);
       color: white;
-      font-family: 'Playfair Display', sans-serif;
+      font-family: 'Poppins', sans-serif;
       font-weight: 800;
       font-size: 1.05rem;
       padding: 0.95rem 2.5rem;
@@ -431,7 +427,7 @@
     .tools-row {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(145px, 1fr));
-      gap: 0.6rem;
+      gap: 0.1rem;
     }
 
     .tool-chip {
@@ -450,9 +446,9 @@
       background: white;
       border-radius: 22px;
       border: 2px solid var(--border);
-      padding: 3rem 2rem;
+      padding: 2rem 2rem;
       max-width: 440px;
-      margin: 3rem auto;
+      margin: 2rem auto;
       text-align: center;
       display: none;
     }
@@ -490,9 +486,9 @@
       background: white;
       border-radius: 22px;
       border: 2px solid rgba(123, 182, 64, 0.4);
-      padding: 3rem 2rem;
+      padding: 2rem 2rem;
       max-width: 460px;
-      margin: 3rem auto;
+      margin: 2rem auto;
       text-align: center;
       display: none;
     }
@@ -538,7 +534,7 @@
     }
 
     .plan-granted strong {
-      font-family: 'Playfair Display', sans-serif;
+      font-family: 'Poppins', sans-serif;
       font-size: 1.05rem;
       color: var(--forest);
     }
@@ -559,7 +555,7 @@
     }
 
     .access-countdown {
-      font-family: 'Playfair Display', sans-serif;
+      font-family: 'Poppins', sans-serif;
       font-size: 1.3rem;
       font-weight: 800;
       color: var(--amber);
@@ -569,7 +565,7 @@
       display: block;
       background: var(--green);
       color: white;
-      font-family: 'Playfair Display', sans-serif;
+      font-family: 'Poppins', sans-serif;
       font-weight: 800;
       font-size: 1rem;
       padding: 0.9rem;
@@ -583,34 +579,51 @@
       background: var(--green-dark);
     }
 
-    footer {
-      background: var(--forest);
-      color: white;
-      padding: 1.75rem;
-      text-align: center;
-      margin-top: 3rem;
-    }
+    footer { background: var(--forest, #132547); color: white; padding: 1.5rem 2rem; text-align: center; margin-top: 1.5rem; }
+    .footer-links { display: flex; justify-content: center; gap: 1.5rem; margin-bottom: 1.5rem; }
+    .footer-links a { color: rgba(255,255,255,0.7); text-decoration: none; font-size: 0.9rem; transition: color 0.2s; font-family: var(--font-family, 'Poppins', sans-serif); }
+    .footer-links a:hover { color: white; }
+    footer p { font-size: 0.9rem; color: rgba(255,255,255,0.5); margin: 0.25rem 0; }
+    footer a.footer-brand { color: var(--primary, #0A84FF); font-weight: 600; text-decoration: none; }
+    footer a.footer-brand:hover { text-decoration: underline; }
+  
+    .modal-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(19, 37, 71, 0.6); backdrop-filter: blur(4px); display: none; align-items: center; justify-content: center; z-index: 999; opacity: 0; transition: opacity 0.3s ease; }
+    .modal-overlay.show { display: flex; opacity: 1; }
+    .modal-content { background: white; border-radius: 20px; padding: 2.5rem; width: 90%; max-width: 400px; text-align: center; box-shadow: 0 10px 40px rgba(0,0,0,0.2); transform: translateY(20px); transition: transform 0.3s ease; position: relative; }
+    .modal-overlay.show .modal-content { transform: translateY(0); }
+    .modal-close { position: absolute; top: 1rem; right: 1.2rem; font-size: 1.5rem; color: var(--gray); cursor: pointer; border: none; background: transparent; }
+    .modal-close:hover { color: var(--navy); }
+    .modal-content h3 { font-size: 1.4rem; font-weight: 800; color: var(--navy); margin-bottom: 0.5rem; font-family: 'Playfair Display', serif; }
+    .modal-content p { font-size: 0.9rem; color: var(--gray); margin-bottom: 1.5rem; line-height: 1.5; }
+    .modal-input { width: 100%; padding: 0.8rem 1rem; border: 2px solid #e2e8f0; border-radius: 12px; font-family: 'Poppins', sans-serif; font-size: 0.95rem; margin-bottom: 1rem; outline: none; transition: border-color 0.2s; box-sizing: border-box; }
+    .modal-input:focus { border-color: var(--primary); }
+    .modal-btn { width: 100%; background: var(--primary); color: white; border: none; padding: 0.9rem; border-radius: 50px; font-family: 'Playfair Display', serif; font-weight: 800; font-size: 1rem; cursor: pointer; transition: background 0.2s; display: flex; align-items: center; justify-content: center; gap: 0.5rem; }
+    .modal-btn:hover { background: var(--green-dark); }
+    .modal-btn:disabled { opacity: 0.7; cursor: not-allowed; }
+    .spinner-small { width: 18px; height: 18px; border: 2px solid rgba(255,255,255,0.4); border-top-color: white; border-radius: 50%; animation: spin 0.8s linear infinite; display: none; }
 
-    footer p {
-      font-size: 0.82rem;
-      color: rgba(255, 255, 255, 0.5);
-    }
+  
+    .nav-wordmark { margin-left: -0.25rem; font-family: 'Poppins', sans-serif; font-weight: 800; font-size: 1.05rem; letter-spacing: -0.02em; }
+    .wm-launch { color: var(--forest, var(--navy, #1E3A6E)); }
+    .wm-iq { color: var(--green, var(--primary, #0A84FF)); }
 
-    footer span {
-      color: var(--green);
-      font-weight: 700;
-    }
   </style>
 </head>
 
 <body>
 
+  
   <nav>
     <a href="../index.html" class="nav-brand">
-      <span>LaunchIQ</span>
+      <img src="../assets/images/launchiq-icon.png" alt="LaunchIQ Icon">
+      <span class="nav-wordmark"><span class="wm-launch">Launch</span><span class="wm-iq">IQ</span></span>
     </a>
-    <a href="dashboard.html" class="btn-back">← Dashboard</a>
+    <div style="margin-left:auto; display:flex; gap:1rem; align-items:center;">
+      <a href="#" class="btn-back" id="nav-signin-btn" onclick="openSignInModal(event)" style="display:none; border:none; color:var(--navy);">Sign In</a>
+      <a href="dashboard.html" class="btn-back">← Dashboard</a>
+    </div>
   </nav>
+
 
   <!-- ── PRICING VIEW ────────────────────────────────────────────────────── -->
   <div id="pricing-view">
@@ -720,7 +733,7 @@
     <p style="margin-top:0.75rem;font-size:0.8rem;color:#9ca3af;">This page will update automatically — no need to
       refresh.</p>
     <button id="manual-check-btn" onclick="manualCheck()"
-      style="display:none;margin-top:1.5rem;background:var(--forest);color:white;font-family:'Playfair Display',sans-serif;font-weight:700;font-size:0.875rem;padding:0.65rem 1.5rem;border-radius:50px;border:none;cursor:pointer;">
+      style="display:none;margin-top:1.5rem;background:var(--forest);color:white;font-family: 'Poppins', sans-serif;font-weight:700;font-size:0.875rem;padding:0.65rem 1.5rem;border-radius:50px;border:none;cursor:pointer;">
       I've paid — check now
     </button>
   </div>
@@ -740,12 +753,30 @@
     <a href="dashboard.html" class="btn-go">🚀 Go to My Dashboard</a>
   </div>
 
-  <footer>
-    <p>Product of <span>ProLaunch Group</span></p>
-    <p style="margin-top:0.3rem">&copy;
-      <script>document.write(new Date().getFullYear())</script> LaunchIQ. All rights reserved.
-    </p>
+    <footer>
+    <div class="footer-links">
+      <a href="mailto:hello@prolaunchgroup.org">Email Us</a>
+      <a href="#">Terms</a>
+      <a href="#">Privacy Policy</a>
+    </div>
+    <p>Product of <a href="https://prolaunchgroup.org" target="_blank" rel="noopener noreferrer" class="footer-brand">ProLaunch Group</a></p>
+    <p style="margin-top:0.5rem">&copy; 2026 LaunchIQ. All rights reserved.</p>
   </footer>
+
+  
+  <!-- Sign In Modal -->
+  <div class="modal-overlay" id="signin-modal">
+    <div class="modal-content">
+      <button class="modal-close" onclick="closeSignInModal()">×</button>
+      <h3>Sign In Required</h3>
+      <p>Enter your email to verify your account before upgrading.</p>
+      <input type="email" id="signin-email" class="modal-input" placeholder="name@example.com">
+      <button class="modal-btn" id="signin-btn" onclick="handleSignIn()">
+        <span id="signin-btn-text">Sign In & Continue</span>
+        <div class="spinner-small" id="signin-spinner"></div>
+      </button>
+    </div>
+  </div>
 
   <script src="../shared.js"></script>
   <script>
@@ -801,12 +832,55 @@
     }
 
     // ── Go to Selar for selected plan ─────────────────────────────────────────
+    
+    let pendingPlanToCheckout = null;
+
     function goToPlan(plan) {
-      // Save the chosen plan to sessionStorage before leaving — used as a
-      // fallback if the redirect URL loses the ?plan param for any reason
+      if (!PL.hasBiodata()) {
+        pendingPlanToCheckout = plan;
+        document.getElementById('signin-modal').classList.add('show');
+        return;
+      }
       sessionStorage.setItem('pl_pending_plan', plan);
       window.location.href = getSelarLink(plan);
     }
+
+    function closeSignInModal() {
+      document.getElementById('signin-modal').classList.remove('show');
+      document.getElementById('signin-email').value = '';
+      pendingPlanToCheckout = null;
+    }
+
+    async function handleSignIn() {
+      const email = document.getElementById('signin-email').value.trim();
+      if (!email) { PL.toast('Please enter your email.', 'warn'); return; }
+
+      const btn = document.getElementById('signin-btn');
+      const btnText = document.getElementById('signin-btn-text');
+      const spinner = document.getElementById('signin-spinner');
+
+      btn.disabled = true; btnText.style.display = 'none'; spinner.style.display = 'block';
+
+      try {
+        const result = await PL.lookupUser(email);
+        if (result.found) {
+          PL.restoreSession(result);
+          PL.toast('Verified! Redirecting to checkout...', 'success');
+          setTimeout(() => { 
+            if (pendingPlanToCheckout) goToPlan(pendingPlanToCheckout); 
+            else window.location.reload();
+          }, 1000);
+        } else {
+          PL.toast('Account not found. Please create a free account on the homepage first.', 'error');
+          setTimeout(() => { window.location.href = '../index.html#signup-form'; }, 2000);
+        }
+      } catch (err) {
+        PL.toast('An error occurred. Please try again.', 'error');
+      } finally {
+        btn.disabled = false; btnText.style.display = 'block'; spinner.style.display = 'none';
+      }
+    }
+
 
     // ── Grant access on redirect return ───────────────────────────────────────
     // Selar appends ?plan=7day&email=xxx to the redirect URL.
@@ -870,9 +944,21 @@
     }
 
     // ── Init ──────────────────────────────────────────────────────────────────
-    if (!PL.hasBiodata()) {
-      window.location.href = '../index.html';
-    } else {
+    if (false) { } else { // Allow guests to view pricing
+
+      
+    function openSignInModal(e) {
+      if (e) e.preventDefault();
+      document.getElementById('signin-modal').classList.add('show');
+    }
+    
+    // Automatically show "Sign In" button if guest
+    window.addEventListener('DOMContentLoaded', () => {
+      if (!PL.hasBiodata()) {
+        const btn = document.getElementById('nav-signin-btn');
+        if (btn) btn.style.display = 'inline-block';
+      }
+    });
 
       const params = new URLSearchParams(location.search);
       const planFromUrl = params.get('plan');
