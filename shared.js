@@ -319,3 +319,34 @@ const PL = {
     return text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>').replace(/\n/g, '<br>');
   }
 };
+
+// ── Admin & Support Tools ───────────────────────────────────────────────
+(function initAccessTools() {
+  if (typeof window === 'undefined') return;
+  const urlParams = new URLSearchParams(window.location.search);
+  
+  // 1. Admin Unlock: Grants 10 years of 30-day (highest tier) premium access
+  if (urlParams.get('admin_unlock') === 'true') {
+    if (window.PL && window.PL.grantPremium) {
+      const tenYearsMs = 10 * 365 * 24 * 60 * 60 * 1000;
+      window.PL.grantPremium('30day', Date.now() + tenYearsMs);
+      window.PL.toast('Admin Access Granted. All Premium Features Unlocked.', 'success');
+      
+      const newUrl = window.location.pathname;
+      window.history.replaceState({}, document.title, newUrl);
+      setTimeout(() => window.location.reload(), 1500);
+    }
+  }
+  
+  // 2. Restore Access: Grants 24-hour access for affected users
+  if (urlParams.get('restore_access') === 'true') {
+    if (window.PL && window.PL.grantPremium) {
+      window.PL.grantPremium('24h', Date.now());
+      window.PL.toast('Premium Access Restored Successfully!', 'success');
+      
+      const newUrl = window.location.pathname;
+      window.history.replaceState({}, document.title, newUrl);
+      setTimeout(() => window.location.reload(), 1500);
+    }
+  }
+})();
