@@ -13,12 +13,11 @@
     body{font-family: 'Poppins',sans-serif;background:var(--cream);color:var(--forest);}
     h1, h2, h3, h4 { font-family: 'Playfair Display', serif;}
     nav{background:white;border-bottom:2px solid var(--border);padding:0.85rem 2rem;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;box-shadow:0 2px 12px rgba(18,71,69,0.06);flex-wrap:wrap;gap:0.5rem;}
-    .nav-logo{display:flex;align-items:center;gap: 0.1rem;text-decoration:none;}
-    .nav-logo img { height: 80px; width: auto; }
+    .nav-brand{display:flex;align-items:center;gap: 0.1rem;text-decoration:none;}
+    .nav-brand img { height: 36px; width: auto; }
     .nav-wordmark { margin-left: -0.25rem; font-family: 'Poppins', sans-serif; font-weight: 800; font-size: 1.15rem; letter-spacing: -0.02em; }
     .wm-launch { color: var(--navy); }
     .wm-iq { color: var(--primary); }
-    .nav-logo span { margin-left: -0.25rem;font-family: 'Poppins', sans-serif;font-weight:800;font-size:1rem;color:var(--forest);}
     .nav-links{display:flex;align-items:center;gap:0.5rem;flex-wrap:wrap;}
     .nav-pill{font-family: 'Poppins', sans-serif;font-size:0.78rem;font-weight:700;color:var(--forest);text-decoration:none;padding:0.35rem 0.85rem;border-radius:50px;border:1.5px solid var(--border);transition:all 0.2s;white-space:nowrap;}
     .nav-pill:hover,.nav-pill.active{background:var(--forest);color:white;border-color:var(--forest);}
@@ -60,14 +59,14 @@
     footer p { font-size: 0.9rem; color: rgba(255,255,255,0.5); margin: 0.25rem 0; }
     footer a.footer-brand { color: var(--primary, #0A84FF); font-weight: 600; text-decoration: none; }
     footer a.footer-brand:hover { text-decoration: underline; }
-    @media(max-width:500px){.nav-logo span { margin-left: -0.25rem;display:none;}.nav-pill{font-size:0.7rem;padding:0.28rem 0.65rem;}}
+    @media(max-width:500px){.nav-wordmark { display: none; }.nav-pill{font-size:0.7rem;padding:0.28rem 0.65rem;}}
 
   </style>
 </head>
 <body>
   <nav>
-    <a href="dashboard.html" class="nav-logo">
-      <img src="../assets/images/launchiq-icon.png" alt="LaunchIQ Icon">
+    <a href="../index.html" class="nav-brand">
+      <img class="nav-icon" src="../assets/images/launchiq-icon.png" alt="LaunchIQ Icon">
       <span class="nav-wordmark"><span class="wm-launch">Launch</span><span class="wm-iq">IQ</span></span>
     </a>
     <div class="nav-links">
@@ -210,7 +209,7 @@ Format as valid JSON only — no markdown fences, no explanation:
               <div class="q-text">${item.question}
                 <span style="display:inline-block;margin-left:0.5rem;font-size:0.7rem;font-weight:700;padding:0.15rem 0.5rem;border-radius:50px;background:${color}22;color:${color};">${item.type}</span>
               </div>
-              <div class="q-toggle" id="toggle-${i}">▼ Show Answer</div>
+              <div class="q-toggle" id="toggle-${i}">â–¼ Show Answer</div>
             </div>
             <div class="q-answer" id="answer-${i}"><strong style="font-family: 'Poppins', sans-serif;font-size:0.8rem;color:#19a08c;letter-spacing:0.05em;text-transform:uppercase;">Model Answer</strong><br><br>${PL.renderMarkdown(item.answer)}</div>
           </div>`;
@@ -222,14 +221,14 @@ Format as valid JSON only — no markdown fences, no explanation:
       const tog = document.getElementById('toggle-'+i);
       const open = ans.style.display === 'block';
       ans.style.display = open ? 'none' : 'block';
-      tog.textContent = open ? '▼ Show Answer' : '▲ Hide Answer';
+      tog.textContent = open ? 'â–¼ Show Answer' : 'â–² Hide Answer';
     }
 
     function toggleAll() {
       allExpanded = !allExpanded;
       questionsData.forEach((_, i) => {
         document.getElementById('answer-'+i).style.display = allExpanded ? 'block' : 'none';
-        document.getElementById('toggle-'+i).textContent = allExpanded ? '▲ Hide Answer' : '▼ Show Answer';
+        document.getElementById('toggle-'+i).textContent = allExpanded ? 'â–² Hide Answer' : 'â–¼ Show Answer';
       });
       document.querySelector('.expand-all-btn').textContent = allExpanded ? 'Collapse All' : 'Expand All';
     }
@@ -265,3 +264,4 @@ Format as valid JSON only — no markdown fences, no explanation:
   </script>
 </body>
 </html>
+

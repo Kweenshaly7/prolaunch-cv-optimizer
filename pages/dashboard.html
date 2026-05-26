@@ -33,11 +33,10 @@
     /* NAV */
     nav { background: white; border-bottom: 1.5px solid var(--border); padding: 0.85rem 2rem; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 100; box-shadow: 0 2px 12px rgba(18,71,69,0.05); }
     .nav-brand { display: flex; align-items: center; gap: 0.1rem; text-decoration: none; }
-    .nav-brand img { height: 80px; width: auto; }
+    .nav-brand img { height: 36px; width: auto; }
     .nav-wordmark { margin-left: -0.25rem; font-family: 'Poppins', sans-serif; font-weight: 800; font-size: 1.15rem; letter-spacing: -0.02em; }
     .wm-launch { color: var(--navy); }
     .wm-iq { color: var(--primary); }
-    .nav-brand span { margin-left: -0.25rem; font-family: 'Poppins', sans-serif; font-weight: 800; font-size: 0.95rem; color: var(--forest); }
     .nav-right { display: flex; align-items: center; gap: 0.75rem; }
     .user-chip { background: var(--green-pale); border: 1.5px solid rgba(123,182,64,0.3); padding: 0.35rem 0.9rem; border-radius: 50px; font-size: 0.8rem; font-weight: 600; color: var(--forest); }
     .premium-badge { background: var(--amber); color: white; font-family: 'Poppins', sans-serif; font-weight: 700; font-size: 0.72rem; padding: 0.3rem 0.75rem; border-radius: 50px; letter-spacing: 0.04em; }
@@ -151,7 +150,7 @@
 
     @media(max-width:600px) {
       nav { padding: 0.7rem 1rem; }
-      .nav-brand span { margin-left: -0.25rem; display: none; }
+      .nav-wordmark { display: none; }
       .dash-header { padding: 2rem 1.25rem; }
       .free-card { flex-direction: column; align-items: flex-start; }
       .perk-card { flex-direction: column; align-items: flex-start; }
@@ -164,12 +163,12 @@
 
   <nav>
     <a href="../index.html" class="nav-brand">
-      <img class="nav-icon" src="/assets/images/launchiq-icon.png" alt="LaunchIQ Icon">
+      <img class="nav-icon" src="../assets/images/launchiq-icon.png" alt="LaunchIQ Icon">
       <span class="nav-wordmark"><span class="wm-launch">Launch</span><span class="wm-iq">IQ</span></span>
     </a>
     <div class="nav-right">
       <span class="user-chip" id="user-chip">👤 Loading...</span>
-      <span class="premium-badge" id="premium-badge" style="display:none;">⚡ Premium</span>
+      <span class="premium-badge" id="premium-badge" style="display:none;">âš¡ Premium</span>
       <button class="btn-logout" onclick="handleLogout()">Log Out</button>
     </div>
   </nav>
@@ -205,7 +204,7 @@
 
     <!-- PREMIUM SECTION -->
     <div class="premium-section">
-      <h2>⚡ Premium Tools</h2>
+      <h2>âš¡ Premium Tools</h2>
 
       <!-- Upgrade banner (shown when not premium) -->
       <div class="upgrade-banner" id="upgrade-banner">
