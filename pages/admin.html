@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Dashboard | LaunchIQ</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <script src="/config.js"></script>
+  <style>
+    :root {
+      --bg-dark: #0a0a0f;
+      --card-bg: rgba(20, 20, 30, 0.6);
+      --primary: #6366f1;
+      --primary-hover: #4f46e5;
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
+      --border-color: rgba(255, 255, 255, 0.1);
+      --glass-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Outfit', sans-serif;
+      background-color: var(--bg-dark);
+      color: var(--text-main);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      overflow-x: hidden;
+      background-image: 
+        radial-gradient(circle at 15% 50%, rgba(99, 102, 241, 0.15), transparent 25%),
+        radial-gradient(circle at 85% 30%, rgba(139, 92, 246, 0.15), transparent 25%);
+    }
+
+    /* ── Clerk Auth UI ── */
+    #auth-container {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      width: 100%;
+    }
+
+    /* ── Dashboard Layout ── */
+    #dashboard-container {
+      display: none;
+      padding: 2rem 4rem;
+      max-width: 1400px;
+      margin: 0 auto;
+      width: 100%;
+      animation: fadeIn 0.5s ease-out;
+    }
+
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 3rem;
+      padding-bottom: 1rem;
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    h1 {
+      font-weight: 600;
+      font-size: 2rem;
+      background: linear-gradient(to right, #a855f7, #6366f1);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    #user-button {
+      background: transparent;
+      border: none;
+    }
+
+    /* ── Stats Grid ── */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 1.5rem;
+      margin-bottom: 3rem;
+    }
+
+    .stat-card {
+      background: var(--card-bg);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid var(--border-color);
+      border-radius: 16px;
+      padding: 1.5rem;
+      box-shadow: var(--glass-shadow);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .stat-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 12px 40px 0 rgba(99, 102, 241, 0.2);
+    }
+
+    .stat-card h3 {
+      font-size: 0.875rem;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 0.5rem;
+    }
+
+    .stat-card .value {
+      font-size: 2.5rem;
+      font-weight: 700;
+      color: var(--text-main);
+    }
+
+    /* ── Users Table ── */
+    .table-container {
+      background: var(--card-bg);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid var(--border-color);
+      border-radius: 16px;
+      box-shadow: var(--glass-shadow);
+      overflow: hidden;
+    }
+
+    .table-header {
+      padding: 1.5rem;
+      border-bottom: 1px solid var(--border-color);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .table-header h2 {
+      font-size: 1.25rem;
+      font-weight: 500;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: left;
+    }
+
+    th {
+      padding: 1rem 1.5rem;
+      font-size: 0.875rem;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      background: rgba(255, 255, 255, 0.02);
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    td {
+      padding: 1rem 1.5rem;
+      border-bottom: 1px solid var(--border-color);
+      font-size: 0.95rem;
+    }
+
+    tr:last-child td {
+      border-bottom: none;
+    }
+
+    tr {
+      transition: background 0.2s ease;
+    }
+
+    tr:hover {
+      background: rgba(255, 255, 255, 0.03);
+    }
+
+    .badge {
+      padding: 0.25rem 0.75rem;
+      border-radius: 999px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      text-transform: uppercase;
+    }
+
+    .badge.premium {
+      background: rgba(168, 85, 247, 0.15);
+      color: #d8b4fe;
+      border: 1px solid rgba(168, 85, 247, 0.3);
+    }
+
+    .badge.free {
+      background: rgba(148, 163, 184, 0.1);
+      color: var(--text-muted);
+      border: 1px solid rgba(148, 163, 184, 0.2);
+    }
+
+    /* ── Loading Spinner ── */
+    .loader {
+      border: 3px solid rgba(255, 255, 255, 0.1);
+      border-top-color: var(--primary);
+      border-radius: 50%;
+      width: 24px;
+      height: 24px;
+      animation: spin 1s linear infinite;
+      margin: 0 auto;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+  </style>
+  <meta property="og:title" content="LaunchIQ | ATS CV Optimization Agent">
+  <meta property="og:description" content="Get instant AI feedback on your CV — strengths, gaps, ATS score, and quick-win recommendations.">
+  <meta property="og:image" content="/assets/images/launchiq-icon.png">
+  <meta name="twitter:card" content="summary_large_image">
+</head>
+<body>
+
+  <!-- Clerk Auth UI -->
+  <div id="auth-container">
+    <div id="sign-in-button"></div>
+  </div>
+
+  <!-- Dashboard UI -->
+  <div id="dashboard-container">
+    <header>
+      <h1>LaunchIQ Admin</h1>
+      <div id="user-button"></div>
+    </header>
+
+    <div class="stats-grid">
+      <div class="stat-card">
+        <h3>Total Users</h3>
+        <div class="value" id="stat-total-users"><div class="loader"></div></div>
+      </div>
+      <div class="stat-card">
+        <h3>Premium Subscribers</h3>
+        <div class="value" id="stat-premium-users"><div class="loader"></div></div>
+      </div>
+      <div class="stat-card">
+        <h3>Estimated Revenue (NGN)</h3>
+        <div class="value" id="stat-revenue"><div class="loader"></div></div>
+      </div>
+    </div>
+
+    <div class="table-container">
+      <div class="table-header">
+        <h2>Recent Users</h2>
+      </div>
+      <div style="overflow-x: auto;">
+        <table>
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Email</th>
+              <th>Role / Level</th>
+              <th>Status</th>
+              <th>Joined</th>
+            </tr>
+          </thead>
+          <tbody id="users-table-body">
+            <tr>
+              <td colspan="5" style="text-align: center; padding: 2rem;"><div class="loader"></div></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- Clerk UI Components Bundle -->
+  <script
+    async
+    crossorigin="anonymous"
+    data-clerk-publishable-key="pk_test_cHJvZm91bmQtYW5lbW9uZS02MC5jbGVyay5hY2NvdW50cy5kZXYk"
+    src="https://cdn.jsdelivr.net/npm/@clerk/clerk-js@5/dist/clerk.browser.js"
+  ></script>
+  
+  <script>
+    window.addEventListener('load', async function() {
+      try {
+        await window.Clerk.load({
+          appearance: {
+            variables: { colorPrimary: '#6366f1' }
+          }
+        });
+
+        if (window.Clerk.user) {
+          // User is logged in
+          document.getElementById('auth-container').style.display = 'none';
+          document.getElementById('dashboard-container').style.display = 'block';
+          
+          window.Clerk.mountUserButton(document.getElementById('user-button'));
+          
+          loadDashboardData();
+        } else {
+          // Show Sign In and force it to stay on the admin page after logging in
+          window.Clerk.mountSignIn(document.getElementById('sign-in-button'), {
+            forceRedirectUrl: '/pages/admin.html'
+          });
+        }
+      } catch (err) {
+        document.getElementById('auth-container').innerHTML = '<div style="color: white; font-family: monospace; padding: 20px;"><h2>Error Initializing Clerk</h2><p>' + err.message + '</p><pre>' + err.stack + '</pre></div>';
+        console.error("Clerk Init Error:", err);
+      }
+    });
+
+    async function loadDashboardData() {
+      try {
+        const token = await window.Clerk.session.getToken();
+        const headers = { 'Authorization': `Bearer ${token}` };
+
+        // Load stats
+        const statsRes = await fetch((window.API_BASE_URL || '') + '/api/admin/stats', { headers });
+        if (statsRes.ok) {
+          const stats = await statsRes.json();
+          document.getElementById('stat-total-users').innerText = stats.totalUsers.toLocaleString();
+          document.getElementById('stat-premium-users').innerText = stats.premiumUsers.toLocaleString();
+          document.getElementById('stat-revenue').innerText = '₦' + stats.estimatedRevenue.toLocaleString();
+        }
+
+        // Load users
+        const usersRes = await fetch((window.API_BASE_URL || '') + '/api/admin/users', { headers });
+        if (usersRes.ok) {
+          const data = await usersRes.json();
+          const tbody = document.getElementById('users-table-body');
+          tbody.innerHTML = '';
+          
+          if (data.users.length === 0) {
+            tbody.innerHTML = '<tr><td colspan="5" style="text-align: center;">No users found.</td></tr>';
+            return;
+          }
+
+          data.users.forEach(user => {
+            const tr = document.createElement('tr');
+            
+            // Format date
+            const date = new Date(user.createdAt).toLocaleDateString(undefined, { 
+              year: 'numeric', month: 'short', day: 'numeric' 
+            });
+
+            // Badge
+            let badgeHTML = `<span class="badge free">Free</span>`;
+            if (user.premiumPlan) {
+              badgeHTML = `<span class="badge premium">${user.premiumPlan}</span>`;
+            }
+
+            tr.innerHTML = `
+              <td style="font-weight: 500;">${user.name}</td>
+              <td style="color: var(--text-muted);">${user.email}</td>
+              <td>${user.role} <span style="opacity:0.5">•</span> ${user.level}</td>
+              <td>${badgeHTML}</td>
+              <td style="color: var(--text-muted); font-size: 0.85rem;">${date}</td>
+            `;
+            tbody.appendChild(tr);
+          });
+        }
+      } catch (err) {
+        console.error('Failed to load dashboard data:', err);
+      }
+    }
+  </script>
+</body>
+</html>

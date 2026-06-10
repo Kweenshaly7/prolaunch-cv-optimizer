@@ -1,5 +1,6 @@
-// api/save-sheet/route.js
-// Vercel serverless function — receives user data and forwards to Google Apps Script
+import { PrismaClient } from '@prisma/client';
+
+const prisma = new PrismaClient();
 
 export default async function handler(req, res) {
   res.setHeader('Access-Control-Allow-Origin', '*');
@@ -11,7 +12,6 @@ export default async function handler(req, res) {
 
   let body = req.body;
 
-  // Vercel may not auto-parse JSON for all routes — handle both cases
   if (typeof body === 'string') {
     try { body = JSON.parse(body); } catch {
       return res.status(400).json({ error: 'Invalid JSON body' });
@@ -22,33 +22,35 @@ export default async function handler(req, res) {
     return res.status(400).json({ error: 'Invalid JSON body' });
   }
 
-  const scriptUrl = process.env.GOOGLE_SCRIPT_URL || process.env.SHEETS_URL;
-  if (!scriptUrl) {
-    console.error('Missing Google Script URL in environment variables.');
-    return res.status(500).json({ error: 'Server misconfiguration.' });
+  const { email, name, fname, lname, role, level } = body;
+
+  if (!email) {
+    return res.status(400).json({ error: 'Email is required' });
   }
 
   try {
-    const response = await fetch(scriptUrl, {
-      method: 'POST',
-      headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-      body: JSON.stringify(body),
+    const user = await prisma.user.upsert({
+      where: { email: email.toLowerCase().trim() },
+      update: {
+        name: name || '',
+        fname: fname || '',
+        lname: lname || '',
+        role: role || '',
+        level: level || '',
+      },
+      create: {
+        email: email.toLowerCase().trim(),
+        name: name || '',
+        fname: fname || '',
+        lname: lname || '',
+        role: role || '',
+        level: level || '',
+      }
     });
 
-    const text = await response.text();
-    let result;
-
-    try {
-      result = JSON.parse(text);
-    } catch (parseError) {
-      console.error('Failed to parse Google Apps Script response. Raw:', text);
-      return res.status(502).json({ error: 'Database format error.' });
-    }
-
-    return res.status(200).json(result);
-
+    return res.status(200).json({ success: true, user });
   } catch (error) {
-    console.error('Error forwarding to Sheets:', error);
-    return res.status(500).json({ error: 'Failed to connect to the database.' });
+    console.error('Error saving user:', error);
+    return res.status(500).json({ error: 'Failed to save to the database.' });
   }
 }

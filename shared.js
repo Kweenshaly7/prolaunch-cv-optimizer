@@ -141,8 +141,22 @@ const PL = {
   isPromoActive() { return true; },
 
   promoTimeLeft() {
-    const SEVEN_DAYS = 7 * 24 * 60 * 60 * 1000;
-    const remaining = SEVEN_DAYS - (Date.now() % SEVEN_DAYS);
+    const TWENTY_FOUR_HOURS = 24 * 60 * 60 * 1000;
+    let promoStart = localStorage.getItem('pl_promo_start');
+    if (!promoStart) {
+      promoStart = Date.now();
+      localStorage.setItem('pl_promo_start', promoStart);
+    }
+    
+    let remaining = TWENTY_FOUR_HOURS - (Date.now() - parseInt(promoStart, 10));
+    
+    // If it expired, let's reset it to give them another 24h as a "second chance" coupon
+    if (remaining <= 0) {
+      promoStart = Date.now();
+      localStorage.setItem('pl_promo_start', promoStart);
+      remaining = TWENTY_FOUR_HOURS;
+    }
+    
     return {
       d: Math.floor(remaining / 86400000),
       h: Math.floor((remaining % 86400000) / 3600000),
@@ -161,7 +175,7 @@ const PL = {
   // ── User lookup ───────────────────────────────────────────────────────────
   async lookupUser(email) {
     try {
-      const res  = await fetch('/api/lookup-user', {
+      const res  = await fetch((window.API_BASE_URL || '') + '/api/lookup-user', {
         method: 'POST', headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email: email.toLowerCase().trim() })
       });
@@ -183,7 +197,7 @@ const PL = {
 
   // ── Sheets ────────────────────────────────────────────────────────────────
   async sendToSheets(data) {
-    const res = await fetch('/api/save-sheet', {
+    const res = await fetch((window.API_BASE_URL || '') + '/api/save-sheet', {
       method: 'POST', headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(data)
     });
@@ -194,7 +208,7 @@ const PL = {
 
   // ── AI call ───────────────────────────────────────────────────────────────
   async callAI(prompt) {
-    const res  = await fetch('/api/generate', {
+    const res  = await fetch((window.API_BASE_URL || '') + '/api/generate', {
       method: 'POST', headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ prompt })
     });
@@ -222,7 +236,7 @@ const PL = {
   // ── DOCX download via /api/generate-docx ─────────────────────────────────
   async downloadDocx(content, filename, type = 'default') {
     try {
-      const res = await fetch('/api/generate-docx', {
+      const res = await fetch((window.API_BASE_URL || '') + '/api/generate-docx', {
         method: 'POST', headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ content, filename, type }),
       });

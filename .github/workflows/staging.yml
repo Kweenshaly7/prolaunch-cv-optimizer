@@ -1,0 +1,70 @@
+name: Deploy to Staging
+
+on:
+  push:
+    branches:
+      - staging
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '20'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v2
+        with:
+          terraform_version: "1.5.0"
+
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: us-east-1
+
+      - name: Package Lambda
+        run: |
+          zip -r lambda.zip . -x "*.git*" "terraform/*" ".github/*"
+
+      - name: Terraform Init
+        working-directory: ./terraform
+        run: terraform init
+
+      - name: Terraform Apply (Staging)
+        working-directory: ./terraform
+        run: |
+          terraform workspace select -or-create staging
+          terraform apply -auto-approve -var="environment=staging"
+          
+      - name: Update Lambda Code
+        run: |
+          aws lambda update-function-code \
+            --function-name prolaunch-cv-optimizer-staging-api \
+            --zip-file fileb://lambda.zip
+
+      - name: Inject API URL into Frontend
+        run: |
+          API_URL=$(cd terraform && terraform output -raw api_endpoint)
+          echo "window.API_BASE_URL = '$API_URL';" > config.js
+
+      - name: Sync Frontend to S3
+        run: |
+          BUCKET_NAME=$(cd terraform && terraform output -raw s3_bucket_name)
+          aws s3 sync . s3://$BUCKET_NAME \
+            --exclude ".git/*" --exclude "terraform/*" --exclude "node_modules/*" --exclude "api/*" --exclude "server.js" --exclude "*.zip" --exclude ".github/*"
+
+      - name: Invalidate CloudFront Cache
+        run: |
+          DIST_ID=$(cd terraform && terraform output -raw cloudfront_distribution_id)
+          aws cloudfront create-invalidation --distribution-id $DIST_ID --paths "/*"

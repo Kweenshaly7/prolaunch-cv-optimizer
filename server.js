@@ -10,6 +10,7 @@ import promMiddleware from 'express-prometheus-middleware';
 import path          from 'path';
 import { fileURLToPath } from 'url';
 import 'dotenv/config';
+import { clerkMiddleware, requireAuth } from '@clerk/express';
 
 // ── Route handlers (direct imports from existing api/ files) ─────────────────
 import generateHandler     from './api/generate.js';
@@ -19,12 +20,19 @@ import saveSheetHandler    from './api/save-sheet/index.js';
 import lookupUserHandler   from './api/lookup-user/index.js';
 import selarWebhookHandler from './api/selar-webhook.js';
 
+// Admin routes
+import adminStatsHandler   from './api/admin/stats.js';
+import adminUsersHandler   from './api/admin/users.js';
+
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const app  = express();
 const PORT = process.env.PORT || 3000;
 
 // ── Middleware ────────────────────────────────────────────────────────────────
 app.use(cors({ origin: '*' }));
+
+// Clerk authentication middleware
+app.use(clerkMiddleware());
 
 // Prometheus metrics — exposes /metrics endpoint scraped by Prometheus every 15s
 // Tracks: HTTP request count, duration, status codes per route
@@ -63,6 +71,10 @@ app.all('/api/save-sheet',     saveSheetHandler);
 app.all('/api/lookup-user',    lookupUserHandler);
 app.all('/api/selar-webhook',  selarWebhookHandler);
 
+// Admin routes (Protected by Clerk)
+app.get('/api/admin/stats', requireAuth(), adminStatsHandler);
+app.get('/api/admin/users', requireAuth(), adminUsersHandler);
+
 // ── Static frontend ───────────────────────────────────────────────────────────
 // Serves index.html at /, /pages/*.html, logo, shared.js etc.
 app.use(express.static(__dirname, {
@@ -75,8 +87,18 @@ app.get('*', (_req, res) => {
   res.sendFile(path.join(__dirname, 'index.html'));
 });
 
-// ── Start ─────────────────────────────────────────────────────────────────────
-app.listen(PORT, () => {
-  console.log(`[LaunchIQ] Server running on port ${PORT}`);
-  console.log(`[LaunchIQ] Health: http://localhost:${PORT}/health`);
-});
+import serverless from 'serverless-http';
+
+// ── Start / Export ─────────────────────────────────────────────────────────────
+if (process.env.NODE_ENV === 'staging' || process.env.NODE_ENV === 'prod') {
+  // We are running in AWS Lambda
+  console.log(`[LaunchIQ] Initializing Serverless handler for environment: ${process.env.NODE_ENV}`);
+} else {
+  // We are running locally
+  app.listen(PORT, () => {
+    console.log(`[LaunchIQ] Server running on port ${PORT}`);
+    console.log(`[LaunchIQ] Health: http://localhost:${PORT}/health`);
+  });
+}
+
+export const handler = serverless(app);

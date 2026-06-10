@@ -4,8 +4,13 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>LaunchIQ | ATS CV Optimization Agent</title>
+  <meta property="og:title" content="LaunchIQ | ATS CV Optimization Agent">
+  <meta property="og:description" content="Get instant AI feedback on your CV — strengths, gaps, ATS score, and quick-win recommendations.">
+  <meta property="og:image" content="/assets/images/launchiq-icon.png">
+  <meta name="twitter:card" content="summary_large_image">
   <link rel="icon" type="image/png" href="assets/images/launchiq-icon.png">
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;800&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <script src="/config.js"></script>
   <style>
     :root {
       --primary: #0A84FF;
@@ -100,6 +105,7 @@
       .hero h1 { font-size: clamp(2.2rem, 8vw, 3rem); }
       .social-proof-badge { flex-direction: column; gap: 0.5rem; text-align: center; }
       .hero-features { flex-direction: column; align-items: flex-start; gap: 1rem; margin-bottom: 2rem; }
+      .two-col { grid-template-columns: 1fr; }
     }
   
     .nav-left { display: flex; align-items: center; gap: 2.5rem; }
@@ -260,18 +266,17 @@
         <div class="nav-dropdown">
           <button class="nav-dropdown-btn">Products ▾</button>
           <div class="nav-dropdown-content">
-            <a href="#" target="_blank" rel="noopener noreferrer">LaunchIQ</a>
-            <a href="#" target="_blank" rel="noopener noreferrer">Mijaa</a>
-            <a href="#" target="_blank" rel="noopener noreferrer">PathCoach</a>
+            <a href="#" style="pointer-events:none;color:#9ca3af;">Mijaa Resume <span style="font-size:0.65rem;background:var(--primary);color:white;padding:0.1rem 0.4rem;border-radius:10px;margin-left:0.3rem;">Coming Soon</span></a>
+            <a href="#" style="pointer-events:none;color:#9ca3af;">PathCoach <span style="font-size:0.65rem;background:var(--primary);color:white;padding:0.1rem 0.4rem;border-radius:10px;margin-left:0.3rem;">Coming Soon</span></a>
           </div>
         </div>
         <a href="pages/unlock.html" class="nav-dropdown-btn" style="text-decoration:none;">Pricing</a>
         <div class="nav-dropdown">
           <button class="nav-dropdown-btn">Company ▾</button>
           <div class="nav-dropdown-content">
-            <a href="#" target="_blank" rel="noopener noreferrer">ProLaunch Careers</a>
-            <a href="#" target="_blank" rel="noopener noreferrer">ProLaunch Academy</a>
-            <a href="#" target="_blank" rel="noopener noreferrer">ProLaunch Technologies</a>
+            <a href="#" style="pointer-events:none;color:#9ca3af;">ProLaunch Careers <span style="font-size:0.65rem;background:var(--primary);color:white;padding:0.1rem 0.4rem;border-radius:10px;margin-left:0.3rem;">Coming Soon</span></a>
+            <a href="#" style="pointer-events:none;color:#9ca3af;">ProLaunch Academy <span style="font-size:0.65rem;background:var(--primary);color:white;padding:0.1rem 0.4rem;border-radius:10px;margin-left:0.3rem;">Coming Soon</span></a>
+            <a href="#">Contact Us</a>
           </div>
         </div>
       </div>
@@ -440,72 +445,48 @@
       </div>
     </div>
 
-    <div class="form-card fade-3" id="signup-form">
-      <h3>Get Your Free ATS Score</h3>
-      <p>Upload your CV below to instantly reveal your match rate.</p>
-      <div class="premium-banner">
-        <div class="premium-badge">Launch Pricing</div>
-        <p style="font-size: 0.85rem; color: var(--navy); margin: 0; line-height: 1.5;">
-          <strong>🚀 Upgrade to LaunchIQ Premium:</strong> Unlock complete ATS-optimized rewrites, Cover Letters, and precise Interview Prep for just <strong>₦1,000</strong>.
-        </p>
-      </div>
-      <div class="form-group" style="margin-top: 0.5rem; margin-bottom: 1.5rem;">
-        <div class="upload-zone" id="upload-zone">
-          <input type="file" id="cvUpload" accept=".pdf,.doc,.docx" onchange="handleFileSelect(this)">
-          <div class="upload-icon">📄</div>
-          <div class="upload-text"><strong>Drop your CV here</strong> <span class="hide-mobile">or tap to browse</span><br>PDF, DOC, or DOCX · Max 10MB</div>
-        </div>
-        <div class="upload-filename" id="upload-filename">
-          <span>📎</span><span id="filename-text"></span>
-          <button class="upload-clear" onclick="clearFile(event)" title="Remove file">✕</button>
-        </div>
-      </div>
-      <div class="two-col">
+    <div class="form-card fade-3" id="signup-form" style="text-align: center; padding: 2.5rem 2rem;">
+      <h3 style="margin-bottom: 1rem;">Get Your Free ATS Score</h3>
+      <p style="margin-bottom: 2rem;">Upload your CV and instantly reveal your match rate.</p>
+      <div class="two-col" style="text-align: left;">
         <div class="form-group">
-          <label for="fname">First Name <span>*</span></label>
-          <input type="text" id="fname" placeholder="e.g. Adaeze">
+          <label for="fname">First Name <span style="color:var(--primary)">*</span></label>
+          <input type="text" id="fname" placeholder="e.g. Adaeze" required>
         </div>
         <div class="form-group">
-          <label for="lname">Last Name <span>*</span></label>
-          <input type="text" id="lname" placeholder="e.g. Okonkwo">
+          <label for="lname">Last Name <span style="color:var(--primary)">*</span></label>
+          <input type="text" id="lname" placeholder="e.g. Okonkwo" required>
         </div>
       </div>
-      <div class="form-group">
-        <label for="email">Email Address <span>*</span></label>
-        <input type="email" id="email" placeholder="yourname@email.com">
+      <div class="form-group" style="text-align: left;">
+        <label for="email">Email Address <span style="color:var(--primary)">*</span></label>
+        <input type="email" id="email" placeholder="yourname@email.com" required>
       </div>
-      <div class="two-col">
-        <div class="form-group">
-          <label for="role">Target Job Role <span>*</span></label>
-          <input type="text" id="role" placeholder="e.g. Data Analyst">
-        </div>
-        <div class="form-group">
-          <label for="level">Experience Level <span>*</span></label>
-          <select id="level">
-            <option value="">— Select —</option>
-            <option value="Student / Fresh Graduate">Fresh Graduate</option>
-            <option value="Entry-Level (0–2 years)">Entry-Level</option>
-            <option value="Mid-Level (3–5 years)">Mid-Level</option>
-            <option value="Senior (6–10 years)">Senior</option>
-          </select>
-        </div>
-      </div>
-      <div id="progress-container" style="display: none; margin-bottom: 15px; margin-top: 10px;">
-        <div style="width: 100%; background: var(--light-blue); border-radius: 8px; height: 8px; overflow: hidden;">
-          <div id="progress-bar" style="width: 0%; height: 100%; background: var(--primary); transition: width 0.4s ease;"></div>
-        </div>
-        <p id="progress-status" style="font-size: 0.8rem; color: var(--navy); text-align: center; margin-top: 8px; font-weight: 600;">Processing...</p>
-      </div>
-      <button class="btn-submit" id="submit-btn" onclick="handleSignup()">
-        <span id="submit-text">✨ Analyze My CV For Free</span>
+      
+      <button class="btn-submit" onclick="routeToAnalyzer()" style="max-width:350px; margin: 0 auto; display: flex;">
+        <span style="margin: 0 auto;">✨ Analyze My CV Free →</span>
       </button>
-      <p style="font-size: 0.75rem; color: var(--gray); text-align: center; margin-top: 1rem; line-height: 1.5;">
-        🔒 <strong>Privacy First:</strong> Your CV data is securely processed. <br>
-        <em>Premium upgrades are triggered securely via Selar after your free analysis.</em>
+
+      <script>
+        function routeToAnalyzer() {
+          const fname = document.getElementById('fname').value.trim();
+          const lname = document.getElementById('lname').value.trim();
+          const email = document.getElementById('email').value.trim();
+          if (!fname || !lname || !email) {
+            alert('Please enter your name and email to proceed.');
+            return;
+          }
+          const params = new URLSearchParams({ fname, lname, email });
+          window.location.href = `pages/cv-analyzer.html?${params.toString()}`;
+        }
+      </script>
+      
+      <p style="font-size: 0.75rem; color: var(--gray); text-align: center; margin-top: 1.5rem; line-height: 1.5;">
+        🔒 <strong>Privacy First:</strong> Your CV data is securely processed.
       </p>
       <div style="margin-top: 1.5rem; border-top: 1px solid var(--border); padding-top: 1.5rem; text-align: center;">
         <p style="font-size: 0.85rem; color: var(--gray); margin-bottom: 0.8rem;">Already have an account?</p>
-        <button class="btn-return">👋 Sign in to Dashboard</button>
+        <button class="btn-return" onclick="window.location.href='pages/dashboard.html'">👋 Sign in to Dashboard</button>
       </div>
     </div>
   </section>
@@ -565,8 +546,8 @@
   <footer>
     <div class="footer-links">
       <a href="mailto:hello@prolaunchgroup.org">Email Us</a>
-      <a href="#">Terms</a>
-      <a href="#">Privacy Policy</a>
+      <a href="pages/terms.html">Terms</a>
+      <a href="pages/privacy.html">Privacy Policy</a>
     </div>
     <p>Product of <a href="https://prolaunchgroup.org" target="_blank" rel="noopener noreferrer" class="footer-brand">ProLaunch Group</a></p>
     <p style="margin-top:0.5rem">&copy; 2026 LaunchIQ. All rights reserved.</p>
@@ -642,7 +623,7 @@
 
     async function parseCVFile(file) {
       const formData = new FormData(); formData.append('cv', file);
-      const res = await fetch('/api/parse-cv', { method: 'POST', body: formData });
+      const res = await fetch((window.API_BASE_URL || '') + '/api/parse-cv', { method: 'POST', body: formData });
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || 'Could not parse file');
       return data.text;
@@ -667,7 +648,7 @@
     async function verifyCVName(registeredName, cvText) {
       const prompt = 'Extract the full name of the person this CV belongs to. Return ONLY the name as plain text — no explanation, no punctuation, just the name exactly as it appears at the top of the CV.\n\nCV:\n' + cvText.substring(0, 1500);
       try {
-        const res = await fetch('/api/generate', {
+        const res = await fetch((window.API_BASE_URL || '') + '/api/generate', {
           method: 'POST', headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ prompt })
         });

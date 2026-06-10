@@ -1,10 +1,6 @@
-// api/lookup-user/index.js
-// Looks up a returning user by email from Google Sheets and returns
-// their profile + verified premium status (plan + timestamp from server).
-//
-// The client uses this response to call PL.grantPremium(plan, ts) —
-// meaning premium is ONLY granted when the server confirms it,
-// not from any client-side query param that could be spoofed.
+import { PrismaClient } from '@prisma/client';
+
+const prisma = new PrismaClient();
 
 export default async function handler(req, res) {
   res.setHeader('Access-Control-Allow-Origin', '*');
@@ -23,24 +19,13 @@ export default async function handler(req, res) {
     const { email } = body || {};
     if (!email) return res.status(400).json({ error: 'Email is required.' });
 
-    const sheetsUrl = process.env.GOOGLE_SCRIPT_URL || process.env.SHEETS_URL;
-    if (!sheetsUrl) return res.status(500).json({ error: 'Sheets URL not configured.' });
-
-    const profileRes = await fetch(sheetsUrl, {
-      method:  'POST',
-      headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-      body:    JSON.stringify({ action: 'lookup', email: email.toLowerCase().trim() }),
+    const user = await prisma.user.findUnique({
+      where: { email: email.toLowerCase().trim() }
     });
 
-    const text = await profileRes.text();
-    let result;
-    try { result = JSON.parse(text); }
-    catch { return res.status(404).json({ found: false, message: 'Database error.' }); }
-
-    if (!result.found) return res.status(200).json({ found: false });
+    if (!user) return res.status(200).json({ found: false });
 
     // ── Premium status ────────────────────────────────────────────────────
-    // Plan durations in ms — must match shared.js PLANS
     const PLAN_DURATIONS = {
       '24h':   24 * 60 * 60 * 1000,
       '7day':  7  * 24 * 60 * 60 * 1000,
@@ -52,10 +37,9 @@ export default async function handler(req, res) {
     let premiumTimestamp = null;
     let premiumTimeLeft  = null;
 
-    // Sheets stores: premiumPaidAt (Unix ms timestamp) + premiumPlan (plan key)
-    if (result.premiumPaidAt) {
-      const paidAt   = parseInt(result.premiumPaidAt);
-      const plan     = result.premiumPlan || '24h';   // default to 24h for legacy records
+    if (user.premiumPaidAt) {
+      const paidAt   = new Date(user.premiumPaidAt).getTime();
+      const plan     = user.premiumPlan || '24h';
       const duration = PLAN_DURATIONS[plan] || PLAN_DURATIONS['24h'];
       const elapsed  = Date.now() - paidAt;
 
@@ -75,13 +59,13 @@ export default async function handler(req, res) {
     return res.status(200).json({
       found: true,
       user: {
-        name:     result.name     || '',
-        fname:    result.fname    || result.name?.split(' ')[0] || '',
-        lname:    result.lname    || result.name?.split(' ').slice(1).join(' ') || '',
-        email:    result.email    || email,
-        role:     result.role     || '',
-        level:    result.level    || '',
-        joinedAt: result.joinedAt || '',
+        name:     user.name,
+        fname:    user.fname,
+        lname:    user.lname,
+        email:    user.email,
+        role:     user.role,
+        level:    user.level,
+        joinedAt: user.createdAt.toISOString(),
       },
       premium: {
         active:    premiumActive,
