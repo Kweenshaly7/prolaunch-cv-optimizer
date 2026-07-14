@@ -596,6 +596,50 @@
     .modal-btn:disabled { opacity: 0.7; cursor: not-allowed; }
     .spinner-small { width: 18px; height: 18px; border: 2px solid rgba(255,255,255,0.4); border-top-color: white; border-radius: 50%; animation: spin 0.8s linear infinite; display: none; }
 
+    /* Active Premium Status Banner */
+    .active-premium-banner {
+      background: linear-gradient(135deg, #10b981, #059669);
+      color: white;
+      border-radius: 16px;
+      padding: 1.25rem;
+      margin-bottom: 2rem;
+      display: flex;
+      align-items: center;
+      gap: 1.25rem;
+      box-shadow: 0 4px 15px rgba(16, 185, 129, 0.2);
+      text-align: left;
+    }
+    
+    .active-premium-banner .banner-icon {
+      font-size: 2rem;
+    }
+    
+    .active-premium-banner .banner-text {
+      flex: 1;
+      font-size: 0.95rem;
+      line-height: 1.5;
+    }
+    
+    .active-premium-banner .banner-time {
+      font-size: 0.85rem;
+      background: rgba(255, 255, 255, 0.2);
+      padding: 0.35rem 0.75rem;
+      border-radius: 50px;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+
+    @media (max-width: 600px) {
+      .active-premium-banner {
+        flex-direction: column;
+        text-align: center;
+        gap: 0.75rem;
+      }
+      .active-premium-banner .banner-time {
+        align-self: center;
+      }
+    }
+
   </style>
   <meta property="og:title" content="LaunchIQ | ATS CV Optimization Agent">
   <meta property="og:description" content="Get instant AI feedback on your CV — strengths, gaps, ATS score, and quick-win recommendations.">
@@ -625,6 +669,15 @@
       <div class="page-head">
         <h1>Choose Your Premium Plan</h1>
         <p>All plans unlock every career tool. Pick the duration that fits your job search timeline.</p>
+      </div>
+
+      <!-- Active Premium Status Banner -->
+      <div id="active-premium-banner" class="active-premium-banner" style="display: none;">
+        <div class="banner-icon">✨</div>
+        <div class="banner-text">
+          You currently have active <strong id="active-plan-name">—</strong>. Need more time? Upgrade or extend your access below.
+        </div>
+        <div class="banner-time" id="active-plan-time">—</div>
       </div>
 
       <!-- Promo countdown (hidden when promo is over) -->
@@ -659,7 +712,7 @@
             <div class="feat"><span class="feat-check">✓</span> One-time rapid use</div>
             <div class="feat"><span class="feat-check">✓</span> Best for quick applications</div>
           </div>
-          <button class="btn-plan" onclick="goToPlan('24h')">Get 24-Hour Access →</button>
+          <button class="btn-plan" id="btn-24h" onclick="goToPlan('24h')">Get 24-Hour Access →</button>
         </div>
 
         <!-- 7-Day (popular) -->
@@ -679,7 +732,7 @@
             <div class="feat"><span class="feat-check">✓</span> Full report history</div>
             <div class="feat"><span class="feat-bonus">★</span> Free 1:1 Coaching Call</div>
           </div>
-          <button class="btn-plan green" onclick="goToPlan('7day')">Get 7-Day Access →</button>
+          <button class="btn-plan green" id="btn-7day" onclick="goToPlan('7day')">Get 7-Day Access →</button>
         </div>
 
         <!-- 30-Day -->
@@ -699,7 +752,7 @@
             <div class="feat"><span class="feat-bonus">★</span> Free 1:1 Coaching Call</div>
             <div class="feat"><span class="feat-bonus">★</span> Priority 24/7 Email Support</div>
           </div>
-          <button class="btn-plan" onclick="goToPlan('30day')">Get 30-Day Access →</button>
+          <button class="btn-plan" id="btn-30day" onclick="goToPlan('30day')">Get 30-Day Access →</button>
         </div>
 
       </div>
@@ -775,11 +828,15 @@
     // ── Promo timer ─────────────────────────────────────────────────────────
     function tickPromo() {
       const t = PL.promoTimeLeft();
-      if (!t) { document.getElementById('promo-banner').style.display = 'none'; return; }
-      document.getElementById('p-d').textContent = String(t.d).padStart(2, '0');
-      document.getElementById('p-h').textContent = String(t.h).padStart(2, '0');
-      document.getElementById('p-m').textContent = String(t.m).padStart(2, '0');
-      document.getElementById('p-s').textContent = String(t.s).padStart(2, '0');
+      if (!t) { const banner = document.getElementById('promo-banner'); if (banner) banner.style.display = 'none'; return; }
+      const pD = document.getElementById('p-d');
+      const pH = document.getElementById('p-h');
+      const pM = document.getElementById('p-m');
+      const pS = document.getElementById('p-s');
+      if (pD) pD.textContent = String(t.d).padStart(2, '0');
+      if (pH) pH.textContent = String(t.h).padStart(2, '0');
+      if (pM) pM.textContent = String(t.m).padStart(2, '0');
+      if (pS) pS.textContent = String(t.s).padStart(2, '0');
     }
 
     // ── Render promo prices ──────────────────────────────────────────────────
@@ -800,9 +857,50 @@
           document.getElementById(`was-${plan}`).textContent = p.normal;
           document.getElementById(`price-${plan}`).innerHTML = `<sup>₦</sup>${p.promo.slice(1)}`;
           const pill = document.getElementById(`save-${plan}`);
-          pill.textContent = `Save ${p.save} 🔥`;
-          pill.style.display = 'inline-block';
+          if (pill) {
+            pill.textContent = `Save ${p.save} 🔥`;
+            pill.style.display = 'inline-block';
+          }
         }
+      }
+
+      // Restore button labels and remove selected class first
+      const cardIds = { '24h': 'card-24h', '7day': 'card-7day', '30day': 'card-30day' };
+      const btnIds = { '24h': 'btn-24h', '7day': 'btn-7day', '30day': 'btn-30day' };
+      const defaultLabels = { '24h': 'Get 24-Hour Access →', '7day': 'Get 7-Day Access →', '30day': 'Get 30-Day Access →' };
+
+      ['24h', '7day', '30day'].forEach(p => {
+        const cardEl = document.getElementById(cardIds[p]);
+        if (cardEl) cardEl.classList.remove('selected');
+        const btnEl = document.getElementById(btnIds[p]);
+        if (btnEl) {
+          btnEl.textContent = defaultLabels[p];
+          btnEl.disabled = false;
+        }
+      });
+
+      // Highlight active plan if any
+      const hasPremium = PL.isPremium();
+      const currentPlan = PL.premiumPlan();
+      const banner = document.getElementById('active-premium-banner');
+
+      if (hasPremium && currentPlan) {
+        const label = PL.PLANS[currentPlan]?.label || currentPlan;
+        const timeLeft = PL.premiumTimeLeft() || 'Active';
+        document.getElementById('active-plan-name').textContent = label;
+        document.getElementById('active-plan-time').textContent = `Expires in: ${timeLeft}`;
+        banner.style.display = 'flex';
+
+        const activeCard = document.getElementById(cardIds[currentPlan]);
+        if (activeCard) {
+          activeCard.classList.add('selected');
+        }
+        const activeBtn = document.getElementById(btnIds[currentPlan]);
+        if (activeBtn) {
+          activeBtn.textContent = 'Current Plan (Extend) →';
+        }
+      } else {
+        banner.style.display = 'none';
       }
     }
 
@@ -876,55 +974,122 @@
 
     // ── Grant access on redirect return ───────────────────────────────────────
     // Selar appends ?plan=7day&email=xxx to the redirect URL.
-    // We read the plan, grant access immediately, then sync to Sheets async.
-    async function handleRedirectReturn(plan, email) {
+    // We read the plan, verify it with the database, and grant access if confirmed.
+    let verifyPollTimer = null;
+    let verifyPollCount = 0;
+
+    async function handleRedirectReturn(plan, emailFromUrl) {
+      // Hide pricing and success, show verifying spinner
+      document.getElementById('pricing-view').style.display = 'none';
+      document.getElementById('success-view').style.display = 'none';
+      document.getElementById('verifying-view').style.display = 'block';
+
       // Clean the URL — prevents double-grant on manual refresh
       history.replaceState({}, '', location.pathname);
       sessionStorage.removeItem('pl_pending_plan');
 
-      // Grant access in localStorage immediately — user gets in right now
-      PL.grantPremium(plan, Date.now());
+      const user = PL.getBiodata();
+      const emailToVerify = emailFromUrl || user?.email;
 
-      // If Selar returned a different/confirmed email, update biodata
-      if (email) {
-        const user = PL.getBiodata();
-        if (!user?.email) return;
+      if (!emailToVerify) {
+        PL.toast('Verification failed: User email not found. Please log in.', 'error');
+        showPricingView();
+        return;
+      }
 
+      // Ensure manual check button is visible
+      const checkBtn = document.getElementById('manual-check-btn');
+      if (checkBtn) checkBtn.style.display = 'inline-block';
+
+      // Define verify function
+      async function verify() {
+        verifyPollCount++;
         try {
-          const result = await PL.lookupUser(user.email);
-          if (result.premium?.active && result.premium?.plan) {
-            clearInterval(pollTimer);
+          const result = await PL.lookupUser(emailToVerify);
+          if (result.found && result.premium?.active && result.premium?.plan === plan) {
+            // Success! Stop polling and grant access
+            clearInterval(verifyPollTimer);
             PL.grantPremium(result.premium.plan, result.premium.timestamp);
-            showSuccess(result.premium);
-          }
-        } catch (_) { }
+            
+            // Async background sync to Google Sheets — doesn't block the user
+            PL.sendToSheets({
+              action: 'savePremium',
+              email: emailToVerify,
+              plan,
+              paidAt: String(result.premium.timestamp),
+              source: 'selar-redirect',
+            }).catch(e => console.warn('Background Sheets sync failed:', e.message));
 
-        // Stop polling after 5 minutes — user can refresh if needed
-        if (pollCount > 60) {
-          clearInterval(pollTimer);
-          document.getElementById('verifying-view').style.display = 'none';
-          document.getElementById('pricing-view').style.display = 'block';
-          PL.toast('Payment not yet confirmed. If you paid, please wait a moment and refresh the page.', 'warn');
+            showSuccess(result.premium);
+            return true;
+          }
+        } catch (e) {
+          console.warn('Polling check failed:', e.message);
+        }
+
+        // Timeout after 30 polls (approx 90 seconds at 3s intervals)
+        if (verifyPollCount >= 30) {
+          clearInterval(verifyPollTimer);
+          PL.toast('Payment confirmation is taking longer than expected. If you have completed payment, please click "I\'ve paid — check now" or refresh.', 'warn');
+          showPricingView();
+        }
+        return false;
+      }
+
+      // Start polling
+      verifyPollCount = 0;
+      const success = await verify();
+      if (!success) {
+        verifyPollTimer = setInterval(verify, 3000);
+      }
+    }
+
+    // ── Manual Payment Check ──────────────────────────────────────────────────
+    async function manualCheck() {
+      const user = PL.getBiodata();
+      if (!user?.email) {
+        PL.toast('Please sign in to check payment status.', 'error');
+        return;
+      }
+      
+      const checkBtn = document.getElementById('manual-check-btn');
+      if (checkBtn) {
+        checkBtn.disabled = true;
+        checkBtn.textContent = 'Checking...';
+      }
+
+      try {
+        const result = await PL.lookupUser(user.email);
+        if (result.found && result.premium?.active) {
+          if (verifyPollTimer) clearInterval(verifyPollTimer);
+          PL.grantPremium(result.premium.plan, result.premium.timestamp);
+          PL.toast('Payment confirmed! Welcome to Premium.', 'success');
+          showSuccess(result.premium);
+        } else {
+          PL.toast('We could not confirm your premium status in the database yet. Please ensure payment went through.', 'warn');
+        }
+      } catch (err) {
+        PL.toast('Connection error checking database.', 'error');
+      } finally {
+        if (checkBtn) {
+          checkBtn.disabled = false;
+          checkBtn.textContent = "I've paid — check now";
         }
       }
+    }
 
-      // Async background sync to Google Sheets — doesn't block the user
-      const user = PL.getBiodata();
-      if (user?.email) {
-        PL.sendToSheets({
-          action: 'savePremium',
-          email: user.email,
-          plan,
-          paidAt: String(Date.now()),
-          source: 'selar-redirect',
-        }).catch(e => console.warn('Background Sheets sync failed:', e.message));
-      }
-
-      showSuccess({ plan });
+    // ── Show Pricing View (after checkout return or timeout) ──────────────────
+    function showPricingView() {
+      if (verifyPollTimer) clearInterval(verifyPollTimer);
+      document.getElementById('verifying-view').style.display = 'none';
+      document.getElementById('success-view').style.display = 'none';
+      document.getElementById('pricing-view').style.display = 'block';
+      renderPricing();
     }
 
     // ── Show success screen ────────────────────────────────────────────────────
     function showSuccess(premium) {
+      if (verifyPollTimer) clearInterval(verifyPollTimer);
       document.getElementById('verifying-view').style.display = 'none';
       document.getElementById('pricing-view').style.display = 'none';
 
@@ -957,19 +1122,15 @@
       const emailFromUrl = params.get('email') ? decodeURIComponent(params.get('email')) : null;
       const pendingPlan = sessionStorage.getItem('pl_pending_plan');
 
-      // Case 1: User already has active premium
-      if (PL.isPremium()) {
-        showSuccess({ plan: PL.premiumPlan() });
-
-        // Case 2: Selar just redirected back with ?plan=xxx — grant immediately
-      } else if (planFromUrl && PL.PLANS[planFromUrl]) {
+      // Case 1: Selar just redirected back with ?plan=xxx — verify first
+      if (planFromUrl && PL.PLANS[planFromUrl]) {
         handleRedirectReturn(planFromUrl, emailFromUrl);
 
-        // Case 3: Redirect came back but URL param was stripped — use sessionStorage
+      // Case 2: Redirect came back but URL param was stripped — use sessionStorage
       } else if (pendingPlan && PL.PLANS[pendingPlan]) {
         handleRedirectReturn(pendingPlan, emailFromUrl);
 
-        // Case 4: Normal visit — show pricing
+      // Case 3: Normal visit (with or without active premium) — show pricing tiers
       } else {
         renderPricing();
         if (!PL.isPromoActive()) document.getElementById('promo-banner').style.display = 'none';

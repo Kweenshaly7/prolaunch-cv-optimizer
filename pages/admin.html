@@ -293,17 +293,37 @@
         });
 
         if (window.Clerk.user) {
-          // User is logged in
-          document.getElementById('auth-container').style.display = 'none';
-          document.getElementById('dashboard-container').style.display = 'block';
-          
-          window.Clerk.mountUserButton(document.getElementById('user-button'));
-          
-          loadDashboardData();
+          // Check role in user's public metadata
+          const role = window.Clerk.user.publicMetadata?.role;
+          if (role === 'admin' || role === 'staff') {
+            // User is logged in and authorized
+            document.getElementById('auth-container').style.display = 'none';
+            document.getElementById('dashboard-container').style.display = 'block';
+            window.Clerk.mountUserButton(document.getElementById('user-button'));
+            loadDashboardData();
+          } else {
+            // Unauthorized staff member
+            document.getElementById('auth-container').innerHTML = `
+              <div style="color: white; font-family: sans-serif; text-align: center; max-width: 400px; padding: 2.5rem; background: var(--card-bg); border-radius: 20px; border: 1px solid var(--border-color); box-shadow: var(--glass-shadow); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);">
+                <h2 style="color: #ef4444; margin-bottom: 1rem; font-weight: 700; font-size: 1.75rem;">Access Denied</h2>
+                <p style="color: var(--text-muted); margin-bottom: 1.75rem; line-height: 1.6; font-size: 0.95rem;">You do not have the required permissions to access the Admin Dashboard. Please contact your system administrator.</p>
+                <a href="/" style="display: inline-block; background: var(--primary); color: white; padding: 0.8rem 1.8rem; border-radius: 50px; text-decoration: none; font-weight: 600; font-size: 0.95rem; transition: background 0.2s;">Return to Home</a>
+              </div>
+            `;
+            // Mount user button anyway so they can sign out
+            const header = document.querySelector('header');
+            if (header) {
+              const div = document.createElement('div');
+              div.id = 'user-button-container';
+              div.style.marginLeft = 'auto';
+              header.appendChild(div);
+              window.Clerk.mountUserButton(div);
+            }
+          }
         } else {
           // Show Sign In and force it to stay on the admin page after logging in
           window.Clerk.mountSignIn(document.getElementById('sign-in-button'), {
-            forceRedirectUrl: '/pages/admin.html'
+            forceRedirectUrl: '/admin'
           });
         }
       } catch (err) {

@@ -10,7 +10,7 @@ import promMiddleware from 'express-prometheus-middleware';
 import path          from 'path';
 import { fileURLToPath } from 'url';
 import 'dotenv/config';
-import { clerkMiddleware, requireAuth } from '@clerk/express';
+import { clerkMiddleware, requireAuth, clerkClient } from '@clerk/express';
 
 // ── Route handlers (direct imports from existing api/ files) ─────────────────
 import generateHandler     from './api/generate.js';
@@ -71,9 +71,34 @@ app.all('/api/save-sheet',     saveSheetHandler);
 app.all('/api/lookup-user',    lookupUserHandler);
 app.all('/api/selar-webhook',  selarWebhookHandler);
 
-// Admin routes (Protected by Clerk)
-app.get('/api/admin/stats', requireAuth(), adminStatsHandler);
-app.get('/api/admin/users', requireAuth(), adminUsersHandler);
+// Admin role middleware
+const requireAdmin = () => {
+  return async (req, res, next) => {
+    if (!req.auth || !req.auth.userId) {
+      return res.status(401).json({ error: 'Unauthenticated' });
+    }
+    try {
+      const user = await clerkClient.users.getUser(req.auth.userId);
+      const role = user.publicMetadata?.role;
+      if (role === 'admin' || role === 'staff') {
+        return next();
+      }
+      return res.status(403).json({ error: 'Access denied: Admin/Staff role required' });
+    } catch (err) {
+      console.error('Error verifying admin role:', err);
+      return res.status(500).json({ error: 'Internal server error verifying role' });
+    }
+  };
+};
+
+// Admin routes (Protected by Clerk and Admin role verification)
+app.get('/api/admin/stats', requireAuth(), requireAdmin(), adminStatsHandler);
+app.get('/api/admin/users', requireAuth(), requireAdmin(), adminUsersHandler);
+
+// Clean route for admin panel
+app.get('/admin', (_req, res) => {
+  res.sendFile(path.join(__dirname, 'pages/admin.html'));
+});
 
 // ── Static frontend ───────────────────────────────────────────────────────────
 // Serves index.html at /, /pages/*.html, logo, shared.js etc.

@@ -155,7 +155,12 @@ resource "aws_lambda_function" "api_backend" {
 
   environment {
     variables = {
-      NODE_ENV = var.environment
+      NODE_ENV              = var.environment
+      DATABASE_URL          = var.database_url
+      DIRECT_URL            = var.direct_url
+      CLERK_PUBLISHABLE_KEY = var.clerk_publishable_key
+      CLERK_SECRET_KEY      = var.clerk_secret_key
+      ZAPIER_SECRET         = var.zapier_secret
     }
   }
 }
