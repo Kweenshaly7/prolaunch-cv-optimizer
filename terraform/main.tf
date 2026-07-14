@@ -5,8 +5,11 @@ terraform {
       version = "~> 5.0"
     }
   }
-  # Note: Backend configuration is omitted here. 
-  # In a real CI/CD pipeline, you would use an S3 backend for tfstate.
+  backend "s3" {
+    bucket = "prolaunch-cv-optimizer"
+    key    = "state/terraform.tfstate"
+    region = "us-east-1"
+  }
 }
 
 provider "aws" {
