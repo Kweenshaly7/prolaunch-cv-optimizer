@@ -4,7 +4,7 @@
 
 ProLaunch Careers helps users land jobs faster with instant CV analysis, ATS-optimized resume rewrites, tailored cover letters, interview preparation, and personalized career insights.
 
-🔗 **Live app:** https://prolaunch-cv-optimizer.vercel.app
+🔗 **Live app:** https://launch.prolaunchgroup.org
 
 ---
 
