@@ -38,7 +38,7 @@ resource "aws_s3_bucket_public_access_block" "frontend_pab" {
 }
 
 resource "aws_cloudfront_origin_access_control" "oac" {
-  name                              = "${local.app_id}-oac"
+  name                              = "${local.app_id}-oac-v2"
   origin_access_control_origin_type = "s3"
   signing_behavior                  = "always"
   signing_protocol                  = "sigv4"
