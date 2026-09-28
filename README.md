@@ -16,9 +16,6 @@ LaunchIQ helps users land jobs faster with instant CV analysis, ATS-optimized re
 - [Tech Stack](#tech-stack)
 - [Project Structure](#project-structure)
 - [API Reference](#api-reference)
-- [Environment Variables](#environment-variables)
-- [Local Development](#local-development)
-- [Deployment](#deployment)
 - [Roadmap](#roadmap)
 
 ---
