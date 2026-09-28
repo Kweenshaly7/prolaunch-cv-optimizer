@@ -1,10 +1,10 @@
-# ProLaunch Careers CV Optimizer
+# LaunchIQ - AI CV Optimizer
 
 **AI-powered career tools built for job seekers.**
 
-ProLaunch Careers helps users land jobs faster with instant CV analysis, ATS-optimized resume rewrites, tailored cover letters, interview preparation, and personalized career insights.
+LaunchIQ helps users land jobs faster with instant CV analysis, ATS-optimized resume rewrites, tailored cover letters, interview preparation, and personalized career insights.
 
-🔗 **Live app:** https://prolaunch-cv-optimizer.vercel.app
+🔗 **Live app:** https://launchiq.prolaunch.cloud
 
 ---
 
@@ -25,7 +25,7 @@ ProLaunch Careers helps users land jobs faster with instant CV analysis, ATS-opt
 
 ## Overview
 
-ProLaunch Careers operates on a freemium model. Users get one free CV analysis on sign-up, and can unlock the full premium suite for ₦1,000 via a 24-hour access window. The platform is serverless-first — the frontend is plain HTML/CSS/JavaScript, and all backend logic runs as Node.js serverless functions deployed on Vercel.
+LaunchIQ operates on a freemium model. Users get free CV analysis, and can unlock the full premium suite via a 24-hour, 7-days, or 30-days access window. The platform is serverless-first, the frontend is plain HTML/CSS/JavaScript, and all backend logic runs as Node.js serverless functions deployed on Vercel.
 
 User data (registrations, premium payments) is stored in Google Sheets via a Google Apps Script webhook, making the platform lightweight and low-cost to run.
 
@@ -38,7 +38,7 @@ User data (registrations, premium payments) is stored in Google Sheets via a Goo
 |---|---|
 | **CV Analyzer** | Uploads and parses a CV (PDF, DOCX, DOC, TXT), scores it against the user's target role, and returns structured feedback on strengths, weaknesses, and ATS compatibility |
 
-### Premium (₦1,000 / 24-hour access)
+### Premium
 | Feature | Description |
 |---|---|
 | **Resume Builder** | Full ATS-optimized resume rewrite tailored to a specific job description |
@@ -98,11 +98,11 @@ User data (registrations, premium payments) is stored in Google Sheets via a Goo
 5. Output can be downloaded as a `.doc` file
 
 ### Premium Access Flow
-1. User is redirected to Selar (Nigerian payment gateway) with their email prefilled
+1. User is redirected to Selar (payment gateway) with their email prefilled
 2. After payment, Selar redirects back to the app with a callback
 3. `/api/save-sheet` is called with `action: savePremium` and a Unix timestamp
 4. Timestamp is stored in `localStorage` and synced to Google Sheets
-5. All premium pages check `isPremium()` — access expires 24 hours from the payment timestamp
+5. All premium pages check `isPremium()` — access expires after the expected duration from the payment timestamp
 
 ---
 
@@ -114,7 +114,6 @@ User data (registrations, premium payments) is stored in Google Sheets via a Goo
 | Backend | Node.js 18+, Vercel Serverless Functions |
 | AI | Google Gemini 2.5 Flash (`gemini-2.5-flash`) |
 | Database | Google Sheets + Google Apps Script (webhook) |
-| Payments | Selar (Nigerian payment gateway) |
 | File Parsing | `pdf-parse` (PDF), `mammoth` (DOCX/DOC), native fs (TXT) |
 | File Uploads | `formidable` (multipart form handling) |
 | Hosting | Vercel |
@@ -285,74 +284,6 @@ Looks up a returning user by email from Google Sheets and returns their profile 
 
 ---
 
-## Environment Variables
-
-The following environment variables must be set in your Vercel project (or `.env` for local dev):
-
-| Variable | Required | Description |
-|---|---|---|
-| `GOOGLE_API_KEY` | ✅ Yes | Google Gemini API key — used by `/api/generate` |
-| `GOOGLE_SCRIPT_URL` | ✅ Yes | Google Apps Script deployment URL — used by `/api/save-sheet` and `/api/lookup-user` |
-
-> ⚠️ Never commit these values to version control. Add `.env` to your `.gitignore`.
-
----
-
-## Local Development
-
-### Prerequisites
-- Node.js 18 or higher
-- Vercel CLI (`npm install -g vercel`)
-- A Google Gemini API key ([get one here](https://aistudio.google.com/app/apikey))
-- A deployed Google Apps Script URL (connected to your Google Sheet)
-
-### Setup
-
-```bash
-# 1. Clone the repository
-git clone https://github.com/your-username/prolaunch-cv-optimizer.git
-cd prolaunch-cv-optimizer
-
-# 2. Install dependencies
-npm install
-
-# 3. Create your local environment file
-cp .env.example .env
-# Fill in GOOGLE_API_KEY and GOOGLE_SCRIPT_URL
-
-# 4. Start the local development server
-vercel dev
-```
-
-The app will be available at `http://localhost:3000`.
-
-The Vercel CLI handles routing for serverless functions locally, so all `/api/*` routes work the same as in production.
-
----
-
-## Deployment
-
-This project is deployed to Vercel.
-
-### Deploy via Vercel CLI
-
-```bash
-# Deploy to preview
-vercel
-
-# Deploy to production
-vercel --prod
-```
-
-### Deploy via GitHub Integration
-
-1. Push the repository to GitHub
-2. Import the project at Vercel
-3. Add your environment variables in the Vercel dashboard under **Settings → Environment Variables**
-4. Every push to `main` will trigger an automatic production deployment
-
----
-
 ## Roadmap
 
 - [ ] **Docker support** — containerize the app for self-hosting and local dev without Vercel CLI
@@ -362,7 +293,6 @@ vercel --prod
 - [ ] **Rate limiting** — protect `/api/generate` from abuse
 - [ ] **LinkedIn PDF support** — parse LinkedIn-exported CVs (currently limited by image-based PDF format)
 - [ ] **Download PDF Format** — export optimized CVs in PDF (currently limited plain text format)
-- [ ] **Extended premium tiers** — weekly and monthly access options
 
 ---
 
